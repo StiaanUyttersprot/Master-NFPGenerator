@@ -1,6 +1,8 @@
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import javafx.scene.shape.Polygon;
 
@@ -140,27 +142,36 @@ public class MultiPolygon{
         return topCoord;
     }
 
-    public TouchingEdges[] findTouchingEdges(MultiPolygon orbPoly) {
-        
+    public List<TouchingEdgePair> findTouchingEdges(MultiPolygon orbPoly) {
+    	
+    	List<TouchingEdgePair> touchingEdges = new ArrayList<>();
+        Edge statEdge;
+        Edge orbEdge;
+        TouchingEdgePair tEP;
+        //the outer polygon of the orbiting multipolygon
+        Coordinate[] orbOuterPolygon = orbPoly.getOuterPolygon();
         //check for every point of orb if it touches an edge of stat
-        for(Coordinate coord: orbPoly.getOuterPolygon()){
-            
-            //first check for the edge connecting the last coordinate of the array with the first
-            // to avoid need of if statement
-            Coordinate lastCoord = outerPolygon[outerPolygon.length-1];
-            if(coord.dFunction(outerPolygon[outerPolygon.length-1], outerPolygon[0])==0){
+        for(int k = 0; k < orbOuterPolygon.length; k++){
+        	
+        	//the edge of the orbiting Polygon we are going to use for testing if 2 edges touch
+        	if(k == 0){
+        		orbEdge = new Edge(orbOuterPolygon[orbOuterPolygon.length-1], orbOuterPolygon[k], false);	
+        	}
+        	else orbEdge = new Edge(orbOuterPolygon[k-1], orbOuterPolygon[k], false);
+        	
+            for(int i =0; i< outerPolygon.length-1; i++){
+            	//the edge of the stationary Polygon we are going to use for testing if 2 edges touch
+                if(i==0){
+                	statEdge = new Edge(outerPolygon[orbOuterPolygon.length-1], outerPolygon[i], true);
+                }
+                else statEdge = new Edge(outerPolygon[i-1], outerPolygon[i], true);
                 
-                
-                
-            }
-            
-            for(int i =1; i< outerPolygon.length-1; i++){
-                
-                
+                tEP = statEdge.touching(orbEdge);
+                if(tEP != null)touchingEdges.add(tEP);
             }
         }
+        return touchingEdges;
         
-        return null;
     }
 
 }

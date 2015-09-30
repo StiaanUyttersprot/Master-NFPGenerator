@@ -30,8 +30,12 @@ public class Coordinate {
     }
     
 
-    void printCoordinate() {
+    public void printCoordinate() {
         System.out.println("( "+xCoord+" , "+yCoord+" ) ");
+    }
+    
+    public String toString(){
+    	return "( "+xCoord+" , "+yCoord+" ) ";
     }
     
 //    double distanceTo(Coordinate coord){

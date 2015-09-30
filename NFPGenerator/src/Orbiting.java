@@ -1,3 +1,4 @@
+import java.util.List;
 
 public class Orbiting {
     
@@ -8,9 +9,11 @@ public class Orbiting {
         
         orbPoly.translate(bottomCoord.getxCoord()-topCoord.getxCoord(), bottomCoord.getyCoord()-topCoord.getyCoord());
         
-        statPoly.findTouchingEdges(orbPoly);
+        List<TouchingEdgePair> touchingEdges = statPoly.findTouchingEdges(orbPoly);
         
-        
+        for(TouchingEdgePair tEP:touchingEdges){
+        	tEP.print();
+        }
         
         //TODO resultaat hier zetten
         return null;
