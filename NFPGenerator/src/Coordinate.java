@@ -85,5 +85,21 @@ public class Coordinate {
         xCoord += x;
         yCoord += y;
     }
+
+	public boolean equals(Coordinate coord) {
+
+		if (xCoord != coord.getxCoord()) 
+			return false;
+		if (yCoord != coord.getyCoord()) 
+			return false;
+		return true;
+	}
+	//this coordinate minus the given coordinate
+	public Coordinate substract(Coordinate endPoint) {
+		
+		return new Coordinate(xCoord-endPoint.getxCoord(), yCoord - endPoint.getyCoord());
+	}
+    
+    
 }
 

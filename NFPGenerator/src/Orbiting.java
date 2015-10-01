@@ -10,9 +10,15 @@ public class Orbiting {
         
         orbPoly.translate(bottomCoord.getxCoord()-topCoord.getxCoord(), bottomCoord.getyCoord()-topCoord.getyCoord());
         
+		//---------------------------------------------------------------------------------------------------------------------
         //detecting touching edges
         List<TouchingEdgePair> touchingEdges = statPoly.findTouchingEdges(orbPoly);
         
+//        for(TouchingEdgePair tEP:touchingEdges){
+//        	tEP.print();
+//        }
+        
+		//---------------------------------------------------------------------------------------------------------------------
         //create potential translation vectors;
         List<Coordinate> potentialVectors = new ArrayList<>();
         Coordinate potVector;
@@ -23,12 +29,12 @@ public class Orbiting {
         	}
         }
         
-        
-        for(TouchingEdgePair tEP:touchingEdges){
-        	tEP.print();
+        for(Coordinate vect:potentialVectors){
+        	vect.printCoordinate();
         }
         
-        //TODO resultaat hier zetten
-        return null;
+
+        
+        return null;//TODO resultaat hier zetten
     }
 }
