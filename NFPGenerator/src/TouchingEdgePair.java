@@ -4,8 +4,6 @@
  * @author Stiaan
  */
 public class TouchingEdgePair {
-	
-	
 
 	private Edge statEdge;
 	private Edge orbEdge;
@@ -46,6 +44,11 @@ public class TouchingEdgePair {
 		statEdge.print();
 		orbEdge.print();
 		touchPoint.printCoordinate();
+	}
+
+	public Coordinate getPotentialVector() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
     
