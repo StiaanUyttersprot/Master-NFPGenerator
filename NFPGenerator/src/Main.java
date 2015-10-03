@@ -13,13 +13,15 @@ public class Main{
      */
     public static void main(String[] args) throws FileNotFoundException {
         
-        
+    	DrawJavaFX drawTool = new DrawJavaFX();
+    	
         File polygonData = new File("Convex1.txt");
-        MultiPolygon mPolygon = new MultiPolygon(polygonData);
-        DrawJavaFX drawTool = new DrawJavaFX();
-        
-        
         File polygonData2 = new File("Convex2.txt");
+        
+//        File polygonData = new File("Polygon1.txt");
+//        File polygonData2 = new File("Polygon2.txt");
+        
+        MultiPolygon mPolygon = new MultiPolygon(polygonData);
         MultiPolygon mPolygon2 = new MultiPolygon(polygonData2);
         
         
@@ -47,8 +49,8 @@ public class Main{
         
         Orbiting.generateNFP(mPolygons[0], mPolygons[1]);
         
-
+        PolygonPairStages.addPolygonPair(mPolygons);
         
-        drawTool.draw(args, mPolygons);
+        drawTool.launchDrawer(args);
     }
 }

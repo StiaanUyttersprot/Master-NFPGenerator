@@ -44,6 +44,7 @@ public class TouchingEdgePair {
 	}
 	
 	public void print(){
+		System.out.println("touching edge pair: ");
 		statEdge.print();
 		orbEdge.print();
 		touchPoint.printCoordinate();

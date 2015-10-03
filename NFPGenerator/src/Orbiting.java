@@ -14,12 +14,13 @@ public class Orbiting {
         //detecting touching edges
         List<TouchingEdgePair> touchingEdges = statPoly.findTouchingEdges(orbPoly);
         
-//        for(TouchingEdgePair tEP:touchingEdges){
-//        	tEP.print();
-//        }
+        System.out.println("touching edges: " + touchingEdges.size());
+        for(TouchingEdgePair tEP:touchingEdges){
+        	tEP.print();
+        }
         
 		//---------------------------------------------------------------------------------------------------------------------
-        //create potential translation vectors;
+        //create potential translation vectors
         List<Coordinate> potentialVectors = new ArrayList<>();
         Coordinate potVector;
         for(TouchingEdgePair tEP: touchingEdges){
@@ -29,6 +30,8 @@ public class Orbiting {
         	}
         }
         
+        System.out.println();
+        System.out.println("Potential vectors: " + potentialVectors.size());
         for(Coordinate vect:potentialVectors){
         	vect.printCoordinate();
         }

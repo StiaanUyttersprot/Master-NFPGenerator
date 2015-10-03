@@ -99,6 +99,12 @@ public class Coordinate {
 		
 		return new Coordinate(xCoord-endPoint.getxCoord(), yCoord - endPoint.getyCoord());
 	}
+
+	public boolean isBiggerThen(Coordinate biggestCoord) {
+		
+		
+		return false;
+	}
     
     
 }
