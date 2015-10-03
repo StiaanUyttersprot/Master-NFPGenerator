@@ -20,9 +20,8 @@ public class MultiPolygon{
     private Coordinate[][] holes;
     private Scanner input;
     
-    private double biggest = 0;
-    
-    private double sizeFactor = 0.5;
+    private double biggestX = 0;
+    private double biggestY = 0;
     
     //constructor reads file to create a polygon
     MultiPolygon(File file) throws FileNotFoundException{
@@ -46,8 +45,8 @@ public class MultiPolygon{
         	readX = input.nextDouble();
         	readY = input.nextDouble();
             outerPolygon[i] = new Coordinate(readX, readY);
-            if(Math.abs(readX) > biggest)biggest = Math.abs(readX);
-            if(Math.abs(readY) > biggest)biggest = Math.abs(readY);
+            if(Math.abs(readX) > biggestX)biggestX = Math.abs(readX);
+            if(Math.abs(readY) > biggestY)biggestY = Math.abs(readY);
             
         }
         
@@ -64,12 +63,22 @@ public class MultiPolygon{
         input.close();
     }
 
-    public double getBiggest() {
-		return biggest;
+    
+
+	public double getBiggestX() {
+		return biggestX;
 	}
 
-	public void setBiggest(double biggest) {
-		this.biggest = biggest;
+	public void setBiggestX(double biggestX) {
+		this.biggestX = biggestX;
+	}
+
+	public double getBiggestY() {
+		return biggestY;
+	}
+
+	public void setBiggestY(double biggestY) {
+		this.biggestY = biggestY;
 	}
 
 	public Coordinate[] getOuterPolygon() {
@@ -89,7 +98,8 @@ public class MultiPolygon{
     }
     
     public void translate(double x, double y){
-        for(Coordinate coord: outerPolygon){
+    	
+    	for(Coordinate coord: outerPolygon){
             coord.move(x, y);
         }
         
@@ -120,11 +130,12 @@ public class MultiPolygon{
     }
     
     //converting outer polygon into polygon for UI
-    public Polygon makeOuterPolygon(int xSize, int ySize){
+    public Polygon makeOuterPolygon(double xSize, double ySize, double sizeFactor){
         
         Polygon polygon = new Polygon();
         for(Coordinate coord : outerPolygon){
             //add 300 to coord to move axis
+        	
             polygon.getPoints().add(sizeFactor*coord.getxCoord()+xSize/2);
             //yCoord*-1 to invert to normal axis and add 700 to move axis
             polygon.getPoints().add(-1*sizeFactor*coord.getyCoord()+ySize/2);
@@ -134,7 +145,7 @@ public class MultiPolygon{
     }
     
     //converting holes into polygons for UI
-    public Polygon[] makeHoles(int xSize, int ySize) {
+    public Polygon[] makeHoles(double xSize, double ySize, double sizeFactor) {
         Polygon[] polyHoles = new Polygon[nHoles];
         for(int i = 0; i < nHoles; i++){
             polyHoles[i] = new Polygon();
