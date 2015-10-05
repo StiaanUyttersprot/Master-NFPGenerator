@@ -97,38 +97,7 @@ public class MultiPolygon{
         this.holes = holes;
     }
     
-    public void translate(double x, double y){
-    	
-    	for(Coordinate coord: outerPolygon){
-            coord.move(x, y);
-        }
-        
-        
-        for(Coordinate[] hole: holes){
-            for(Coordinate coord: hole){
-                coord.move(x, y);
-            }
-        }
-    }
-
-    public Coordinate findBottomCoord() {
-        Coordinate bottomCoord = outerPolygon[0];
-        for(Coordinate coord: outerPolygon){
-            //if the y-value of coord is lower then the current bottomCoord, replace bottomCoord
-            if(coord.getyCoord()<bottomCoord.getyCoord())bottomCoord = coord;
-        }
-        return bottomCoord;
-    }
-    
-    public Coordinate findTopCoord() {
-        Coordinate topCoord = outerPolygon[0];
-        for(Coordinate coord: outerPolygon){
-            //if the y-value of coord is higher then the current topCoord, replace topCoord
-            if(coord.getyCoord()>topCoord.getyCoord())topCoord = coord;
-        }
-        return topCoord;
-    }
-    
+    //methods for GUI----------------------------------------------------------------------------------------------------------------
     //converting outer polygon into polygon for UI
     public Polygon makeOuterPolygon(double xSize, double ySize, double sizeFactor){
         
@@ -158,7 +127,21 @@ public class MultiPolygon{
         return polyHoles;
     }
     
-    
+    public void translate(double x, double y){
+    	
+    	for(Coordinate coord: outerPolygon){
+            coord.move(x, y);
+        }
+        
+        
+        for(Coordinate[] hole: holes){
+            for(Coordinate coord: hole){
+                coord.move(x, y);
+            }
+        }
+    }
+    //---------------------------------------------------------------------------------------------------------------------------------------
+  
     //print out the data of a polygon
     public void printPolygonData(){
         System.out.println("outer polygon number of points: " + outerPolygon.length);
@@ -172,7 +155,25 @@ public class MultiPolygon{
             }
         }
     }
-
+    
+    public Coordinate findBottomCoord() {
+        Coordinate bottomCoord = outerPolygon[0];
+        for(Coordinate coord: outerPolygon){
+            //if the y-value of coord is lower then the current bottomCoord, replace bottomCoord
+            if(coord.getyCoord()<bottomCoord.getyCoord())bottomCoord = coord;
+        }
+        return bottomCoord;
+    }
+    
+    public Coordinate findTopCoord() {
+        Coordinate topCoord = outerPolygon[0];
+        for(Coordinate coord: outerPolygon){
+            //if the y-value of coord is higher then the current topCoord, replace topCoord
+            if(coord.getyCoord()>topCoord.getyCoord())topCoord = coord;
+        }
+        return topCoord;
+    }
+    
     public List<TouchingEdgePair> findTouchingEdges(MultiPolygon orbPoly) {
     	
     	List<TouchingEdgePair> touchingEdges = new ArrayList<>();
