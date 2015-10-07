@@ -33,7 +33,7 @@ public class Main{
         
         //checking methods of calculations with coordinates
         
-        Coordinate coord1 = new Coordinate(2, 2);
+        Coordinate coord1 = new Coordinate(-2, -2);
         Coordinate coord2 = new Coordinate(4, 3);
         Coordinate coord3 = new Coordinate(5,7);
         double dist = coord1.distanceTo(coord2);
@@ -43,14 +43,20 @@ public class Main{
         
         double dVal = coord2.dFunction(coord1, coord3);
         
-        System.out.println(dist);
-        System.out.println(Math.toDegrees(angle));
-        System.out.println(dVal);
+        
+//        System.out.println(coord1.calculateVectorAngle());
+        
+//        System.out.println(dist);
+//        System.out.println(Math.toDegrees(angle));
+//        System.out.println(dVal);
+        
+        
+        
         
         Orbiting.generateNFP(mPolygons[0], mPolygons[1]);
         
-        PolygonPairStages.addPolygonPair(mPolygons);
+        //PolygonPairStages.addPolygonPair(mPolygons);
         
-        drawTool.launchDrawer(args);
+        //drawTool.launchDrawer(args);
     }
 }

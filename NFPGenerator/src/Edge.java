@@ -121,4 +121,10 @@ public class Edge {
 		return vector;
 	}
 
+	public double getAngle(){
+		//we can't use the method makeFullVector, this will reverse the vector if it's from the orbiting polygon
+		Coordinate vector = endPoint.substract(startPoint);
+		
+		return vector.calculateVectorAngle();
+	}
 }

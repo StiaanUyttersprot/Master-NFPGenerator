@@ -11,12 +11,36 @@ public class TouchingEdgePair {
 	private Edge statEdge;
 	private Edge orbEdge;
 	private Coordinate touchPoint;
+	
+	//booleans saying if the touching point equals a start or end point from an edge
+	private boolean touchStatStart = false;
+	private boolean touchStatEnd = false;
+	
+	private boolean touchOrbStart = false;
+	private boolean touchOrbEnd = false;
+	
+	private double startAngle;
+	private double endAngle;
 
 	public TouchingEdgePair(Edge statEdge, Edge orbEdge, Coordinate touchPoint) {
 		
 		this.statEdge = statEdge;
 		this.orbEdge = orbEdge;
 		this.touchPoint = touchPoint;
+		
+		if(statEdge.getStartPoint().equals(touchPoint)){
+			touchStatStart = true;
+		}
+		else if(statEdge.getEndPoint().equals(touchPoint)){
+			touchStatEnd = true;
+		}
+		
+		if(orbEdge.getStartPoint().equals(touchPoint)){
+			touchOrbStart = true;
+		}
+		else if(orbEdge.getEndPoint().equals(touchPoint)){
+			touchOrbEnd = true;
+		}
 	}
 	
 	public Edge getStatEdge() {
@@ -48,30 +72,11 @@ public class TouchingEdgePair {
 		statEdge.print();
 		orbEdge.print();
 		touchPoint.printCoordinate();
+		System.out.println("start angle: " + Math.toDegrees(startAngle));
+		System.out.println("end angle: " + Math.toDegrees(endAngle));
 	}
 
 	public Coordinate getPotentialVector() {
-		
-		//booleans saying if the touching point equals a start or end point from an edge
-		boolean touchStatStart = false;
-		boolean touchStatEnd = false;
-		
-		boolean touchOrbStart = false;
-		boolean touchOrbEnd = false;
-
-		if(statEdge.getStartPoint().equals(touchPoint)){
-			touchStatStart = true;
-		}
-		else if(statEdge.getEndPoint().equals(touchPoint)){
-			touchStatEnd = true;
-		}
-		
-		if(orbEdge.getStartPoint().equals(touchPoint)){
-			touchOrbStart = true;
-		}
-		else if(orbEdge.getEndPoint().equals(touchPoint)){
-			touchOrbEnd = true;
-		}
 		
 		/*there are four possible ways that end or start points can be touching:
 		*stat	orb
@@ -133,5 +138,194 @@ public class TouchingEdgePair {
 
 		return null;
 	}
+	
+	public void calcFeasibleAngleRange(){
+		
+		double stationaryAngle = statEdge.getAngle();
+		if(stationaryAngle < 0)stationaryAngle = stationaryAngle + Math.PI*2;
+		System.out.println("stationary angle: " + Math.toDegrees(stationaryAngle));
+		
+		double orbitingAngle = orbEdge.getAngle();
+		if(orbitingAngle < 0)orbitingAngle = orbitingAngle + Math.PI*2;
+		System.out.println("orbiting angle: " + Math.toDegrees(orbitingAngle));
+		
+		//situation 1
+		if(!touchStatStart&&!touchStatEnd){
+			startAngle = stationaryAngle - Math.PI;
+			endAngle = stationaryAngle;
+			
+			return;
+		}
+		
+		//situation 2
+		if(!touchOrbStart&&!touchOrbEnd){
+			
+			
+			//stationary edge is located to the left of orbiting edge
+			if(stationaryAngle >= orbitingAngle && 
+					stationaryAngle <= orbitingAngle + Math.PI){
+				
+				startAngle = orbitingAngle - Math.PI;
+				endAngle = orbitingAngle;
+				
+			}
+			//stationary edge is located to the right of orbiting edge
+			else{
+				startAngle = orbitingAngle;
+				endAngle = orbitingAngle + Math.PI;
+			}
+			return;
+		}
+		
+		
+		
+		//both angles are positive
+		//situation 3
+		if(touchStatStart && touchOrbStart){
+			
+			//orbEdge is right of statEdge
+			if(orbEdge.getEndPoint().dFunction(statEdge.getStartPoint(), statEdge.getEndPoint())<0){
+				
+				//I work with the negative angle of orbiting edge
+				orbitingAngle -= 2*Math.PI;
+				
+				startAngle = orbitingAngle - Math.PI;
+				endAngle = stationaryAngle;
+				
+				while(endAngle-2*Math.PI >= startAngle) startAngle += 2*Math.PI;
+				while(endAngle < startAngle)endAngle+= 2*Math.PI;
+			}
+			//orbEdge left of statEdge
+			else{
+				startAngle = stationaryAngle;
+				endAngle = orbitingAngle + Math.PI;
+				
+				while(endAngle < startAngle)startAngle -= 2*Math.PI;
+				while(endAngle-2*Math.PI >= startAngle) startAngle += 2*Math.PI;
+				
+			}
+			return;
+		}
+		
+		//situation 4
+		if(touchStatStart && touchOrbEnd){
+			
+			//orbEdge is right of statEdge
+			if(orbEdge.getStartPoint().dFunction(statEdge.getStartPoint(), statEdge.getEndPoint())<0){
+				
+				startAngle = orbitingAngle;
+				endAngle = stationaryAngle;
+				
+				while(endAngle < startAngle)startAngle -= 2*Math.PI;
+				while(endAngle-2*Math.PI >= startAngle) startAngle += 2*Math.PI;
+			}
+			//orbEdge is left of statEdge
+			else{
+				startAngle = stationaryAngle;
+				endAngle = orbitingAngle;
+				
+				while(endAngle < startAngle)startAngle -= 2*Math.PI;
+				while(endAngle-2*Math.PI >= startAngle) startAngle += 2*Math.PI;
+			}
+			return;
+		}
+		
+		//situation 5
+		if(touchStatEnd && touchOrbEnd){
+			
+			//orbEdge is right of statEdge
+			if(orbEdge.getStartPoint().dFunction(statEdge.getStartPoint(), statEdge.getEndPoint())<0){
+				
+				startAngle = stationaryAngle - Math.PI;
+				endAngle = orbitingAngle;
+				
+				while(endAngle < startAngle)startAngle -= 2*Math.PI;
+				while(endAngle-2*Math.PI >= startAngle) startAngle += 2*Math.PI;
+			}
+			//orbEdge is left of statEdge
+			else{
+				startAngle = orbitingAngle;
+				endAngle = stationaryAngle + Math.PI;
+				
+				while(endAngle < startAngle)startAngle -= 2*Math.PI;
+				while(endAngle-2*Math.PI >= startAngle) startAngle += 2*Math.PI;
+			}
+			return;
+		}
+		
+		//situation 6
+		if(touchStatEnd && touchOrbStart){
+			
+			//orbEdge is right of statEdge
+			if(orbEdge.getEndPoint().dFunction(statEdge.getStartPoint(), statEdge.getEndPoint())<0){
+				
+				startAngle = stationaryAngle - Math.PI;
+				endAngle = orbitingAngle + Math.PI;
+				
+				while(endAngle < startAngle)startAngle -= 2*Math.PI;
+				while(endAngle-2*Math.PI >= startAngle) startAngle += 2*Math.PI;
+			}
+			//orbEdge is left of statEdge
+			else{
+				startAngle = orbitingAngle - Math.PI;
+				endAngle = stationaryAngle + Math.PI;
+				
+				while(endAngle < startAngle)startAngle -= 2*Math.PI;
+				while(endAngle-2*Math.PI >= startAngle) startAngle += 2*Math.PI;
+			}
+			return;
+		}
+		
+		//1st attempt, wrong attempt-----------------------------------------------------------------------------------------------
+		/*
+		//we need the orbiting angle minus 2 * Pi for the next part to more easily obtain the start and end
+ 		orbitingAngle -= 2*Math.PI;
+ 		
+ 		//situation 3 & 4
+		if(touchStatStart && touchOrbStart){	
+			
+			if(orbitingAngle < stationaryAngle - Math.PI*2) orbitingAngle += 2*Math.PI;
+			
+			if(orbitingAngle < stationaryAngle-Math.PI){
+				startAngle = orbitingAngle;
+				endAngle = stationaryAngle;
+			}
+			else{
+				startAngle = orbitingAngle - Math.PI;
+				endAngle = stationaryAngle;
+			}
+		}
+		
+		if(touchStatEnd){
+			stationaryAngle -= Math.PI;
+			
+			if(orbitingAngle < stationaryAngle - Math.PI*2) orbitingAngle += 2*Math.PI;
+			
+			if(orbitingAngle < stationaryAngle-Math.PI){
+				startAngle = orbitingAngle;
+				endAngle = stationaryAngle;
+			}
+			else{
+				startAngle = orbitingAngle - Math.PI;
+				endAngle = stationaryAngle;
+			}
+		}
+		*/
+	}
+	public boolean isFeasibleVector(Coordinate vector){
+		
+		//test all possible ranges
+		double vectorAngle = vector.calculateVectorAngle();
+		if(startAngle < vectorAngle && vectorAngle < endAngle)return true;
+		
+		double rotatedVectorAngle = vectorAngle + 2*Math.PI;
+		if(startAngle < rotatedVectorAngle && rotatedVectorAngle < endAngle) return true;
+		
+		double negativeRotatedVectorAngle = vectorAngle - 2*Math.PI;
+		if(startAngle < negativeRotatedVectorAngle && negativeRotatedVectorAngle < endAngle) return true;
+		
+		return false;
+	}
+	
     
 }

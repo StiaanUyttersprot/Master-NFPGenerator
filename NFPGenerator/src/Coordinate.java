@@ -46,7 +46,7 @@ public class Coordinate {
 //        return distance;
 //    }
     
-    double distanceTo(Coordinate coord){
+    public double distanceTo(Coordinate coord){
         double dX = xCoord-coord.getxCoord();
         double dY = yCoord-coord.getyCoord();
         double distance = Math.sqrt(dX*dX+dY*dY);
@@ -54,7 +54,7 @@ public class Coordinate {
     }
     
     //calculating the angle: the coordinate that calls the method is the one where the angle needs to be calculated
-    double calculateAngle(Coordinate coord2, Coordinate coord3){
+    public double calculateAngle(Coordinate coord2, Coordinate coord3){
         
         double distA = coord2.distanceTo(coord3);
         //System.out.println(distA);
@@ -95,9 +95,9 @@ public class Coordinate {
 		return true;
 	}
 	//this coordinate minus the given coordinate
-	public Coordinate substract(Coordinate endPoint) {
+	public Coordinate substract(Coordinate point) {
 		
-		return new Coordinate(xCoord-endPoint.getxCoord(), yCoord - endPoint.getyCoord());
+		return new Coordinate(xCoord-point.getxCoord(), yCoord - point.getyCoord());
 	}
 
 	public boolean isBiggerThen(Coordinate biggestCoord) {
@@ -106,6 +106,12 @@ public class Coordinate {
 		return false;
 	}
     
-    
+    public double calculateVectorAngle(){
+    	
+    	double angle = Math.atan2(yCoord, xCoord);
+    	
+    	return angle;
+    	
+    }
 }
 
