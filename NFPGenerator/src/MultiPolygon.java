@@ -16,8 +16,13 @@ import javafx.scene.shape.Polygon;
 public class MultiPolygon{
     
     private int nHoles; //the number of holes
+    
     private Coordinate[] outerPolygon; //the polygon that envelops the holes
+    private Edge[] outerPolygonEdges;
+    
     private Coordinate[][] holes;
+    private Edge[][] holeEdges;
+    
     private Scanner input;
     
     private double biggestX = 0;
@@ -30,7 +35,7 @@ public class MultiPolygon{
         
         input = new Scanner(file);
         nHoles = input.nextInt();
-        int nPoints = input.nextInt();//number of points of the polygon
+        int nPoints = input.nextInt();//number of points of the polygon that is currently being read (this value changes when holes are read too)
 
         //used for autoscaling in drawtool
         double readX;
@@ -39,6 +44,8 @@ public class MultiPolygon{
         
         outerPolygon = new Coordinate[nPoints];
         holes = new Coordinate[nHoles][];
+        
+        
         
         for(int i=0; i < nPoints; i++){
         	
@@ -61,6 +68,38 @@ public class MultiPolygon{
             }
         }
         input.close();
+        
+        //now we will make the edge arrays
+      //this array contains the same information but in pairs of coordinates to allow an easier way to use edges
+        outerPolygonEdges = new Edge[outerPolygon.length];
+        holeEdges = new Edge[nHoles][];
+        
+        
+        for(int i = 0; i< outerPolygon.length; i++){
+        	if(i == outerPolygon.length-1){
+        		outerPolygonEdges[i] = new Edge(outerPolygon[i], outerPolygon[0]);
+        	}
+        	else{
+        		System.out.println(i);
+        		outerPolygonEdges[i] = new Edge(outerPolygon[i], outerPolygon[i+1]);
+        	}
+        }
+        
+        for(int i = 0; i< nHoles; i++){
+        	holeEdges[i] = new Edge[holes[i].length];
+        	for(int j = 0; j < holes[i].length; j++){
+        		
+        		if(j == holes[i].length-1){
+            		holeEdges[i][j] = new Edge(holes[i][j], holes[i][0]);
+            	}
+            	else{
+            		holeEdges[i][j] = new Edge(holes[i][j], holes[i][j+1]);
+            	}
+        		
+        	}
+        	
+        }
+        
     }
 
     
@@ -97,6 +136,29 @@ public class MultiPolygon{
         this.holes = holes;
     }
     
+	public int getnHoles() {
+		return nHoles;
+	}
+
+	public void setnHoles(int nHoles) {
+		this.nHoles = nHoles;
+	}
+
+	public Edge[] getOuterPolygonEdges() {
+		return outerPolygonEdges;
+	}
+
+	public void setOuterPolygonEdges(Edge[] outerPolygonEdges) {
+		this.outerPolygonEdges = outerPolygonEdges;
+	}
+
+	public Edge[][] getHoleEdges() {
+		return holeEdges;
+	}
+
+	public void setHoleEdges(Edge[][] holeEdges) {
+		this.holeEdges = holeEdges;
+	}
     //methods for GUI----------------------------------------------------------------------------------------------------------------
     //converting outer polygon into polygon for UI
     public Polygon makeOuterPolygon(double xSize, double ySize, double sizeFactor){
@@ -177,6 +239,25 @@ public class MultiPolygon{
     public List<TouchingEdgePair> findTouchingEdges(MultiPolygon orbPoly) {
     	
     	List<TouchingEdgePair> touchingEdges = new ArrayList<>();
+        TouchingEdgePair tEP;
+        //the outer polygon of the orbiting multipolygon
+        Edge[] orbOuterPolygonEdges = orbPoly.getOuterPolygonEdges();
+        //check for every point of orb if it touches an edge of stat
+        for(Edge orbEdge: orbOuterPolygonEdges){
+        	
+            for(Edge statEdge: outerPolygonEdges){
+                
+                tEP = statEdge.touching(orbEdge);
+                if(tEP != null)touchingEdges.add(tEP);
+            }
+        }
+        return touchingEdges;
+        
+    }
+
+    public List<TouchingEdgePair> oudeVersiefindTouchingEdges(MultiPolygon orbPoly) {
+    	
+    	List<TouchingEdgePair> touchingEdges = new ArrayList<>();
         Edge statEdge;
         Edge orbEdge;
         TouchingEdgePair tEP;
@@ -205,6 +286,18 @@ public class MultiPolygon{
         return touchingEdges;
         
     }
+
+	public void isStationary() {
+		for(Edge e: outerPolygonEdges){
+			e.setStationary(true);
+		}
+		for(Edge[] eA: holeEdges){
+			for(Edge e: eA){
+				e.setStationary(true);
+			}
+		}
+		
+	}
 
 }
 

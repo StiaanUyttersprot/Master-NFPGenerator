@@ -15,11 +15,11 @@ public class Main{
         
     	DrawJavaFX drawTool = new DrawJavaFX();
     	
-        File polygonData = new File("Convex1.txt");
-        File polygonData2 = new File("Convex2.txt");
+//        File polygonData = new File("Convex1.txt");
+//        File polygonData2 = new File("Convex2.txt");
         
-//        File polygonData = new File("Polygon1.txt");
-//        File polygonData2 = new File("Polygon2.txt");
+        File polygonData = new File("Polygon1.txt");
+        File polygonData2 = new File("Polygon2.txt");
         
         MultiPolygon mPolygon = new MultiPolygon(polygonData);
         MultiPolygon mPolygon2 = new MultiPolygon(polygonData2);
@@ -31,8 +31,10 @@ public class Main{
         mPolygons[0] = mPolygon;
         mPolygons[1] = mPolygon2;
         
-        //checking methods of calculations with coordinates
+        //------------------------------------------------------------------------------
         
+        //checking methods of calculations with coordinates
+        /*
         Coordinate coord1 = new Coordinate(-2, -2);
         Coordinate coord2 = new Coordinate(4, 3);
         Coordinate coord3 = new Coordinate(5,7);
@@ -42,7 +44,7 @@ public class Main{
         //angle += coord1.calculateAngle(coord3, coord2);//sum 180° correct
         
         double dVal = coord2.dFunction(coord1, coord3);
-        
+        */
         
 //        System.out.println(coord1.calculateVectorAngle());
         
@@ -55,8 +57,8 @@ public class Main{
         
         Orbiting.generateNFP(mPolygons[0], mPolygons[1]);
         
-        //PolygonPairStages.addPolygonPair(mPolygons);
+        PolygonPairStages.addPolygonPair(mPolygons);
         
-        //drawTool.launchDrawer(args);
+        drawTool.launchDrawer(args);
     }
 }

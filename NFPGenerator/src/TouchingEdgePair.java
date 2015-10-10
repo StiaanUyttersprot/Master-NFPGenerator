@@ -143,11 +143,11 @@ public class TouchingEdgePair {
 		
 		double stationaryAngle = statEdge.getAngle();
 		if(stationaryAngle < 0)stationaryAngle = stationaryAngle + Math.PI*2;
-		System.out.println("stationary angle: " + Math.toDegrees(stationaryAngle));
+//		System.out.println("stationary angle: " + Math.toDegrees(stationaryAngle));
 		
 		double orbitingAngle = orbEdge.getAngle();
 		if(orbitingAngle < 0)orbitingAngle = orbitingAngle + Math.PI*2;
-		System.out.println("orbiting angle: " + Math.toDegrees(orbitingAngle));
+//		System.out.println("orbiting angle: " + Math.toDegrees(orbitingAngle));
 		
 		//situation 1
 		if(!touchStatStart&&!touchStatEnd){
@@ -315,14 +315,16 @@ public class TouchingEdgePair {
 	public boolean isFeasibleVector(Coordinate vector){
 		
 		//test all possible ranges
-		double vectorAngle = vector.calculateVectorAngle();
-		if(startAngle < vectorAngle && vectorAngle < endAngle)return true;
+		double vectorAngle = vector.getVectorAngle();
+//		System.out.println(Math.toDegrees(startAngle)  + " -> " + Math.toDegrees(endAngle));
+//		System.out.println(Math.toDegrees(vectorAngle));
+		if(startAngle <= vectorAngle && vectorAngle <= endAngle)return true;
 		
 		double rotatedVectorAngle = vectorAngle + 2*Math.PI;
-		if(startAngle < rotatedVectorAngle && rotatedVectorAngle < endAngle) return true;
+		if(startAngle <= rotatedVectorAngle && rotatedVectorAngle <= endAngle) return true;
 		
 		double negativeRotatedVectorAngle = vectorAngle - 2*Math.PI;
-		if(startAngle < negativeRotatedVectorAngle && negativeRotatedVectorAngle < endAngle) return true;
+		if(startAngle <= negativeRotatedVectorAngle && negativeRotatedVectorAngle <= endAngle) return true;
 		
 		return false;
 	}

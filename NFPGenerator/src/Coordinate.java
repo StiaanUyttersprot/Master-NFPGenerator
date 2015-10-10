@@ -7,7 +7,7 @@
 public class Coordinate {
     private double xCoord;
     private double yCoord;
-    
+    private double vectorAngle;
     Coordinate(double x, double y){
         xCoord = x;
         yCoord = y;
@@ -29,6 +29,13 @@ public class Coordinate {
         this.yCoord = yCoord;
     }
     
+    public double getVectorAngle() {
+		return vectorAngle;
+	}
+
+	public void setVectorAngle(double vectorAngle) {
+		this.vectorAngle = vectorAngle;
+	}
 
     public void printCoordinate() {
         System.out.println("( "+xCoord+" , "+yCoord+" ) ");
@@ -38,6 +45,38 @@ public class Coordinate {
     	return "( "+xCoord+" , "+yCoord+" ) ";
     }
     
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(vectorAngle);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(xCoord);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(yCoord);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Coordinate other = (Coordinate) obj;
+		if (Double.doubleToLongBits(vectorAngle) != Double.doubleToLongBits(other.vectorAngle))
+			return false;
+		if (Double.doubleToLongBits(xCoord) != Double.doubleToLongBits(other.xCoord))
+			return false;
+		if (Double.doubleToLongBits(yCoord) != Double.doubleToLongBits(other.yCoord))
+			return false;
+		return true;
+	}
+    
 //    double distanceTo(Coordinate coord){
 //        
 //        double distance = Math.sqrt((xCoord-coord.getxCoord())*(xCoord-coord.getxCoord())
@@ -46,7 +85,11 @@ public class Coordinate {
 //        return distance;
 //    }
     
-    public double distanceTo(Coordinate coord){
+    
+
+	
+
+	public double distanceTo(Coordinate coord){
         double dX = xCoord-coord.getxCoord();
         double dY = yCoord-coord.getyCoord();
         double distance = Math.sqrt(dX*dX+dY*dY);
@@ -106,11 +149,9 @@ public class Coordinate {
 		return false;
 	}
     
-    public double calculateVectorAngle(){
+    public void calculateVectorAngle(){
     	
-    	double angle = Math.atan2(yCoord, xCoord);
-    	
-    	return angle;
+    	vectorAngle = Math.atan2(yCoord, xCoord);
     	
     }
 }

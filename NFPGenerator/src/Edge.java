@@ -4,9 +4,14 @@
  * @author Stiaan
  */
 public class Edge {
-    private boolean stationary = true;
+    private boolean stationary = false;
     private Coordinate startPoint;
     private Coordinate endPoint;
+    
+    Edge(Coordinate s, Coordinate e){
+        startPoint = s;
+        endPoint = e;
+    }
     
     Edge(Coordinate s, Coordinate e, boolean stat){
         startPoint = s;
@@ -106,6 +111,7 @@ public class Edge {
 		else{
 			vector = endPoint.substract(startPoint);
 		}
+		vector.calculateVectorAngle();
 		return vector;
 		
 	}
@@ -118,13 +124,15 @@ public class Edge {
 		else{
 			vector = endPoint.substract(touchPoint);
 		}
+		
+		vector.calculateVectorAngle();
 		return vector;
 	}
 
 	public double getAngle(){
 		//we can't use the method makeFullVector, this will reverse the vector if it's from the orbiting polygon
 		Coordinate vector = endPoint.substract(startPoint);
-		
-		return vector.calculateVectorAngle();
+		vector.calculateVectorAngle();
+		return vector.getVectorAngle();
 	}
 }
