@@ -20,34 +20,78 @@ public class PolygonPairStages {
 	static int aantalPolygonPairStages = 0;
 	static List<MultiPolygon[]> MultiPolygonsToDraw = new ArrayList<>();
 	
-	static double sceneSizeX = 800;
-	static double sceneSizeY = 800;
+	static double sceneSizeX = 200;
+	static double sceneSizeY = 200;
 	
-	private static Line xAxis = new Line(0,sceneSizeY/2,10000,sceneSizeY/2);
-    private static Line yAxis = new Line(sceneSizeX/2,0,sceneSizeX/2,10000);
+//	public static void addPolygonPair(MultiPolygon[] multiPolyPair){
+//		aantalPolygonPairStages++;
+//		MultiPolygonsToDraw.add(multiPolyPair);
+//		
+//	}
 	
-	public static void addPolygonPair(MultiPolygon[] multiPolyPair){
+	public static int getAantalPolygonPairStages() {
+		return aantalPolygonPairStages;
+	}
+
+	public static void setAantalPolygonPairStages(int aantalPolygonPairStages) {
+		PolygonPairStages.aantalPolygonPairStages = aantalPolygonPairStages;
+	}
+
+	public static List<MultiPolygon[]> getMultiPolygonsToDraw() {
+		return MultiPolygonsToDraw;
+	}
+
+	public static void setMultiPolygonsToDraw(List<MultiPolygon[]> multiPolygonsToDraw) {
+		MultiPolygonsToDraw = multiPolygonsToDraw;
+	}
+
+	public static double getSceneSizeX() {
+		return sceneSizeX;
+	}
+
+	public static void setSceneSizeX(double sceneSizeX) {
+		PolygonPairStages.sceneSizeX = sceneSizeX;
+	}
+
+	public static double getSceneSizeY() {
+		return sceneSizeY;
+	}
+
+	public static void setSceneSizeY(double sceneSizeY) {
+		PolygonPairStages.sceneSizeY = sceneSizeY;
+	}
+	
+	public static void addPolygonPair(MultiPolygon mp1, MultiPolygon mp2){
+		MultiPolygon[] mPolygonPair = new MultiPolygon[2];
+		mPolygonPair[0] = new MultiPolygon(mp1);
+		mPolygonPair[1] = new MultiPolygon(mp2);
 		aantalPolygonPairStages++;
-		MultiPolygonsToDraw.add(multiPolyPair);
+		MultiPolygonsToDraw.add(mPolygonPair);
 		
 	}
 
-	public static void drawPolygonPairs(){
-		
+	
+
+	public static List<Stage> drawPolygonPairs(){
+		List<Stage> polyPairStageList = new ArrayList<>();
 		for(MultiPolygon[] multiPolys: MultiPolygonsToDraw){
-			
-			drawPair(multiPolys);
+			polyPairStageList.add(drawPair(multiPolys));
+			//drawPair(multiPolys);
 			
 		}
+		return polyPairStageList;
 
 	}
 
-	private static void drawPair(MultiPolygon[] multiPolys) {
+	private static Stage drawPair(MultiPolygon[] multiPolys) {
 		
 		Stage stage = new Stage();
 		
 		Group multiPolygonPairGroup = new Group();
 		Scene scene = new Scene(multiPolygonPairGroup, sceneSizeX, sceneSizeY, Color.GREY);
+		
+		Line xAxis = new Line(0,sceneSizeY/2,10000,sceneSizeY/2);
+	    Line yAxis = new Line(sceneSizeX/2,0,sceneSizeX/2,10000);
         
 		multiPolygonPairGroup.getChildren().add(xAxis);
 		multiPolygonPairGroup.getChildren().add(yAxis);
@@ -56,24 +100,15 @@ public class PolygonPairStages {
 		double biggestYCoordValue = multiPolys[0].getBiggestY() + multiPolys[1].getBiggestY();;
 		double biggestValue = Math.max(biggestXCoordValue, biggestYCoordValue);
 		
-//		if(multiPolys[0].getBiggestX()>multiPolys[1].getBiggestX())biggestXCoordValue = multiPolys[0].getBiggestX();
-//		else biggestXCoordValue = multiPolys[1].getBiggestX();
-//        
-//		if(multiPolys[0].getBiggestY()>multiPolys[1].getBiggestY())biggestYCoordValue = multiPolys[0].getBiggestY();
-//		else biggestYCoordValue = multiPolys[1].getBiggestY();
-		
-//		if(biggestXCoordValue > biggestYCoordValue)biggestValue = biggestXCoordValue;
-//		else biggestValue = biggestYCoordValue;
-		
-		
-		makeScene(multiPolygonPairGroup, multiPolys[0], 0, biggestValue);
-        makeScene(multiPolygonPairGroup, multiPolys[1],1, biggestValue);
+		makeMultiPolygonScene(multiPolygonPairGroup, multiPolys[0], 0, biggestValue);
+		makeMultiPolygonScene(multiPolygonPairGroup, multiPolys[1],1, biggestValue);
         
         stage.setScene(scene);
-        stage.show();
+        //stage.show();
+        return stage;
 	}
 	
-	private static void makeScene(Group group, MultiPolygon mPolygon, int color, double biggestValue) {
+	public static void makeMultiPolygonScene(Group group, MultiPolygon mPolygon, int color, double biggestValue) {
 		
 		//sceneSize divided by 2 because x and y axis are in the middle
 		double resizeFactor = sceneSizeY/biggestValue/2;
