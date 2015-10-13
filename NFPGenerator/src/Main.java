@@ -16,20 +16,23 @@ public class Main {
 
 		DrawJavaFX drawTool = new DrawJavaFX();
 
-//		 File polygonData = new File("Convex1.txt");
-//		 File polygonData2 = new File("Convex2.txt");
+		File convex1Data = new File("Convex1.txt");
+		File convex2Data2 = new File("Convex2.txt");
 
-		File polygonData = new File("Polygon1.txt");
-		File polygonData2 = new File("Polygon2.txt");
+		File concave1Data = new File("Concave1.txt");
+		File concave2Data2 = new File("Concave2.txt");
 
-		MultiPolygon mPolygon = new MultiPolygon(polygonData);
-		MultiPolygon mPolygon2 = new MultiPolygon(polygonData2);
+		MultiPolygon mPolygonConvex1 = new MultiPolygon(convex1Data);
+		MultiPolygon mPolygonConvex2 = new MultiPolygon(convex2Data2);
+		
+		MultiPolygon mPolygonConcave1 = new MultiPolygon(concave1Data);
+		MultiPolygon mPolygonConcave2 = new MultiPolygon(concave2Data2);
 
 		// mPolygon.printPolygonData();
 
-		MultiPolygon[] mPolygons = new MultiPolygon[2];
-		mPolygons[0] = mPolygon;
-		mPolygons[1] = mPolygon2;
+//		MultiPolygon[] mPolygons = new MultiPolygon[2];
+//		mPolygons[0] = mPolygon;
+//		mPolygons[1] = mPolygon2;
 
 		// ------------------------------------------------------------------------------
 		// checking methods of calculations with coordinates
@@ -38,7 +41,7 @@ public class Main {
 
 		// -------------------------------------------------------------------------------------
 		// orbiting method
-		 Orbiting.generateNFP(mPolygon, mPolygon2);
+		 Orbiting.generateNFP(mPolygonConcave1, mPolygonConvex1);
 
 		// ------------------------------------------------------------------------------------
 		// graphical representation

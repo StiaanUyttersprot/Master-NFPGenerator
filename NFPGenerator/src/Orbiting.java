@@ -1,3 +1,4 @@
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -34,15 +35,19 @@ public class Orbiting {
 			for (TouchingEdgePair tEP : touchingEdgeList) {
 				tEP.calcFeasibleAngleRange();
 			}
+			
+			// ---------------------------------------------------------------------------------------------------------------------
+			// printing touching edges
 
+			
 			System.out.println("touching edges: " + touchingEdgeList.size());
 			for (TouchingEdgePair tEP : touchingEdgeList) {
 				tEP.print();
 			}
+			
 
 			// ---------------------------------------------------------------------------------------------------------------------
 			// create potential translation vectors
-			// List<Coordinate> potentialVectorList = new ArrayList<>();
 
 			Set<Coordinate> potentialVectorList = new HashSet<>();
 			Coordinate potVector;
@@ -54,12 +59,17 @@ public class Orbiting {
 					potentialVectorList.add(potVector);
 				}
 			}
+			
+			// ---------------------------------------------------------------------------------------------------------------------
+			// printing potential vectors
+			
 			System.out.println();
 			System.out.println("Potential vectors: " + potentialVectorList.size());
 			for (Coordinate vect : potentialVectorList) {
 				vect.printCoordinate();
 			}
-
+			
+			
 			// ----------------------------------------------------------------------------------------------------------------------
 			// find the feasible vectors
 			boolean feasibleVector;
@@ -85,12 +95,16 @@ public class Orbiting {
 				}
 
 			}
-
-//			System.out.println();
-//			System.out.println("Feasible vectors: " + feasibleVectorList.size());
-//			for (Coordinate vect : feasibleVectorList) {
-//				vect.printCoordinate();
-//			}
+			
+			// ---------------------------------------------------------------------------------------------------------------------
+			//print feasible vectors
+			
+			System.out.println();
+			System.out.println("Feasible vectors: " + feasibleVectorList.size());
+			for (Coordinate vect : feasibleVectorList) {
+				vect.printCoordinate();
+			}
+			
 
 			// -----------------------------------------------------------------------------------------------------------------------
 			// trimming the feasible vectors
@@ -168,7 +182,7 @@ public class Orbiting {
 							// TODO: line intersection, trim vector to that
 							// distance
 							if (edge.lineIntersect(testEdge)) {
-								System.out.println("intersecting lines: " +edge.toString() + " " + testEdge.toString());
+//								System.out.println("intersecting lines: " +edge.toString() + " " + testEdge.toString());
 								intersectionCoord = edge.calcIntersection(testEdge);
 								// trim the vector by creating a new vector with
 								// endpoint = intersectionCoordinate
@@ -214,20 +228,25 @@ public class Orbiting {
 
 				}
 			}
+			
+			//-------------------------------------------------------------------------------------------------------------------------
+			//Print the trimmed vectors
+			
 			System.out.println();
 			System.out.println("Trimmed vectors: " + feasibleVectorList.size());
 			for (Coordinate vect : feasibleVectorList) {
 				vect.printCoordinate();
 			}
 			
-//			System.out.println("Sorted vectors by angle");
+			
+			//-------------------------------------------------------------------------------------------------------------------------
+			//look for the translation vector
 
 			Coordinate translationVector;
 			if (feasibleVectorList.size() > 1) {
+				//sort the vectors from smallest to largest angle
 				Collections.sort(feasibleVectorList, new AngleComparator());
-//				for (Coordinate vect : feasibleVectorList) {
-//					vect.printCoordinate();
-//				}
+				
 				int i = 0;
 				// look for the vector that is closest in angle to the one
 				// previously translated by
@@ -247,8 +266,14 @@ public class Orbiting {
 			}
 			else translationVector = feasibleVectorList.get(0);
 
+			//-------------------------------------------------------------------------------------------------------------------------
+			//translating the polygon and storing the data in the nfp
 			orbPoly.translate(translationVector);
-			/*
+			nfp.addTranslation(orbPoly.getOuterPolygon()[0]);
+			
+			//-------------------------------------------------------------------------------------------------------------------------
+			//print translation data
+			
 			System.out.println("translation over: " + translationVector.toString());
 			
 			System.out.println("start point: "+startPoint.toString());
@@ -257,10 +282,12 @@ public class Orbiting {
 			System.out.println("current point: "+currentPoint.toString());
 			
 			System.out.println("translation over: " + translationVector.toString());
-			*/
-			nfp.addTranslation(orbPoly.getOuterPolygon()[0]);
+			
+			System.out.println();
+			
+			//Storing data for drawing
 			NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
-			//PolygonPairStages.addPolygonPair(statPoly, orbPoly);
+			
 		}
 		while(!currentPoint.equals(startPoint)/* && sc.nextInt() ==0*/);
 		

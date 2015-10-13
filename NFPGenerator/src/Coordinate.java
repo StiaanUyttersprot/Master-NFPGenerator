@@ -129,7 +129,7 @@ public class Coordinate {
 		return dValue;
 	}
 	
-	//check if the value is zero or not (tryong to cope with very small deviation values)
+	//check if the value is zero or not (trying to cope with very small deviation values)
 	public boolean dFunctionCheck(Coordinate startPoint, Coordinate endPoint) {
 		boolean touching = false;
 		double dValue = (startPoint.getxCoord() - endPoint.getxCoord()) * (startPoint.getyCoord() - yCoord)
@@ -143,11 +143,12 @@ public class Coordinate {
 		yCoord += y;
 	}
 
+	//check if two coordinates are equal (use round to make sure mistakes by rounding in the calculations are ignored
 	public boolean equals(Coordinate coord) {
 
-		if (xCoord != coord.getxCoord())
+		if (Math.round(xCoord*10000)/10000 != Math.round(coord.getxCoord()*10000)/10000)
 			return false;
-		if (yCoord != coord.getyCoord())
+		if (Math.round(yCoord*10000)/10000 != Math.round(coord.getyCoord()*10000)/10000)
 			return false;
 		return true;
 	}

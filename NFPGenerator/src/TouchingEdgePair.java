@@ -308,10 +308,10 @@ public class TouchingEdgePair {
 
 	public boolean isFeasibleVector(Coordinate vector) {
 
+		System.out.println(Math.toDegrees(startAngle) + " -> " + Math.toDegrees(endAngle));
+		
 		// test all possible ranges
-		double vectorAngle = vector.getVectorAngle();
-		System.out.println(Math.toDegrees(startAngle) + " -> " +
-		Math.toDegrees(endAngle));
+		double vectorAngle = vector.getVectorAngle();		
 		
 		if (startAngle <= vectorAngle && vectorAngle <= endAngle)
 			return true;

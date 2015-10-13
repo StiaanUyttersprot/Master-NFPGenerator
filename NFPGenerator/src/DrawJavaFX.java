@@ -18,11 +18,12 @@ public class DrawJavaFX extends Application{
     public void start(Stage primaryStage)
     {
     	double screenSizeX = java.awt.Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+    	double screenSizeY = java.awt.Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 //    	List<Stage> polyPairStageList = PolygonPairStages.drawPolygonPairs();
     	double stageWidth = PolygonPairStages.getSceneSizeX();
     	double stageHeight = PolygonPairStages.getSceneSizeY();
     	int stageNumber = 0;
-    	int heigthPlaceLine = 0;
+    	int heightPlaceLine = 0;
     	int borderOffset = 30;
 //    	for(Stage stage : polyPairStageList){
 //    		if(stageWidth*(stageNumber+1)> screenSizeX){
@@ -44,10 +45,13 @@ public class DrawJavaFX extends Application{
     		//stageNumber + 1 to make sure it is inside the screen
     		if(stageWidth*(stageNumber+1)> screenSizeX){
     			stageNumber = 0;
-    			heigthPlaceLine++;
+    			heightPlaceLine++;
+    		}
+    		if(stageHeight*(heightPlaceLine+1) > screenSizeY){
+    			heightPlaceLine = 0;
     		}
     		stage.setX(stageWidth*(stageNumber));
-    		stage.setY((borderOffset+stageHeight)*heigthPlaceLine);
+    		stage.setY((borderOffset+stageHeight)*heightPlaceLine);
     		stage.show();
     		
     		stageNumber++;
