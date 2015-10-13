@@ -118,25 +118,25 @@ public class Edge {
 
 	public TouchingEdgePair touching(Edge orbEdge) {
 
-		if (startPoint.dFunction(orbEdge.getStartPoint(), orbEdge.getEndPoint()) == 0) {
+		if (startPoint.dFunctionCheck(orbEdge.getStartPoint(), orbEdge.getEndPoint())) {
 			if (orbEdge.contains(startPoint)) {
 				TouchingEdgePair tEP = new TouchingEdgePair(this, orbEdge, startPoint);
 				return tEP;
 			}
 		}
-		if (endPoint.dFunction(orbEdge.getStartPoint(), orbEdge.getEndPoint()) == 0) {
+		if (endPoint.dFunctionCheck(orbEdge.getStartPoint(), orbEdge.getEndPoint())) {
 			if (orbEdge.contains(endPoint)) {
 				TouchingEdgePair tEP = new TouchingEdgePair(this, orbEdge, endPoint);
 				return tEP;
 			}
 		}
-		if (orbEdge.getStartPoint().dFunction(startPoint, endPoint) == 0) {
+		if (orbEdge.getStartPoint().dFunctionCheck(startPoint, endPoint)) {
 			if (contains(orbEdge.getStartPoint())) {
 				TouchingEdgePair tEP = new TouchingEdgePair(this, orbEdge, orbEdge.getStartPoint());
 				return tEP;
 			}
 		}
-		if (orbEdge.getEndPoint().dFunction(startPoint, endPoint) == 0) {
+		if (orbEdge.getEndPoint().dFunctionCheck(startPoint, endPoint)) {
 			if (contains(orbEdge.getEndPoint())) {
 				TouchingEdgePair tEP = new TouchingEdgePair(this, orbEdge, orbEdge.getEndPoint());
 				return tEP;

@@ -16,11 +16,11 @@ public class Main {
 
 		DrawJavaFX drawTool = new DrawJavaFX();
 
-		 File polygonData = new File("Convex1.txt");
-		 File polygonData2 = new File("Convex2.txt");
+//		 File polygonData = new File("Convex1.txt");
+//		 File polygonData2 = new File("Convex2.txt");
 
-//		File polygonData = new File("Polygon1.txt");
-//		File polygonData2 = new File("Polygon2.txt");
+		File polygonData = new File("Polygon1.txt");
+		File polygonData2 = new File("Polygon2.txt");
 
 		MultiPolygon mPolygon = new MultiPolygon(polygonData);
 		MultiPolygon mPolygon2 = new MultiPolygon(polygonData2);

@@ -54,11 +54,11 @@ public class Orbiting {
 					potentialVectorList.add(potVector);
 				}
 			}
-//			System.out.println();
-//			System.out.println("Potential vectors: " + potentialVectorList.size());
-//			for (Coordinate vect : potentialVectorList) {
-//				vect.printCoordinate();
-//			}
+			System.out.println();
+			System.out.println("Potential vectors: " + potentialVectorList.size());
+			for (Coordinate vect : potentialVectorList) {
+				vect.printCoordinate();
+			}
 
 			// ----------------------------------------------------------------------------------------------------------------------
 			// find the feasible vectors
@@ -68,12 +68,13 @@ public class Orbiting {
 			for (Coordinate vector : potentialVectorList) {
 				int i = 0;
 				feasibleVector = true;
-//				System.out.println(Math.toDegrees(vector.getVectorAngle()));
+				System.out.println("vector angle being tested: " + Math.toDegrees(vector.getVectorAngle()));
 				while (feasibleVector && i < touchingEdgeList.size()) {
 					TouchingEdgePair tEP = touchingEdgeList.get(i);
 					
 					if (!tEP.isFeasibleVector(vector)){
 						feasibleVector = false;
+						System.out.println("infeasible Vector");
 					}
 						
 					i++;
@@ -261,7 +262,7 @@ public class Orbiting {
 			NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
 			//PolygonPairStages.addPolygonPair(statPoly, orbPoly);
 		}
-		while(!currentPoint.equals(startPoint) /*&& sc.nextInt() !=0*/);
+		while(!currentPoint.equals(startPoint)/* && sc.nextInt() ==0*/);
 		
 		return null;// TODO resultaat hier zetten
 	}

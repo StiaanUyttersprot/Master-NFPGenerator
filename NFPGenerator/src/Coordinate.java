@@ -128,6 +128,15 @@ public class Coordinate {
 
 		return dValue;
 	}
+	
+	//check if the value is zero or not (tryong to cope with very small deviation values)
+	public boolean dFunctionCheck(Coordinate startPoint, Coordinate endPoint) {
+		boolean touching = false;
+		double dValue = (startPoint.getxCoord() - endPoint.getxCoord()) * (startPoint.getyCoord() - yCoord)
+				- (startPoint.getyCoord() - endPoint.getyCoord()) * (startPoint.getxCoord() - xCoord);
+		if(dValue < 1e-4 && dValue > -1e-4)touching = true;
+		return touching;
+	}
 
 	public void move(double x, double y) {
 		xCoord += x;

@@ -176,18 +176,18 @@ public class TouchingEdgePair {
 
 		// situation 2
 		if (!touchOrbStart && !touchOrbEnd) {
-
-			// stationary edge is located to the left of orbiting edge
-			if (stationaryAngle >= orbitingAngle && stationaryAngle <= orbitingAngle + Math.PI) {
-
-				startAngle = orbitingAngle - Math.PI;
-				endAngle = orbitingAngle;
-
+			// stationary edge is located to the right of orbiting edge
+			//we have to check the D-function for the start and end of the stationary edge to see if it is left or right, one of them will be zero, 
+			//the other one will be smaller or bigger then zero
+			if (statEdge.getEndPoint().dFunction(orbEdge.getStartPoint(), orbEdge.getEndPoint()) <= 0 
+					&& statEdge.getStartPoint().dFunction(orbEdge.getStartPoint(), orbEdge.getEndPoint()) <= 0) {
+				startAngle = orbitingAngle;
+				endAngle = orbitingAngle + Math.PI;
 			}
 			// stationary edge is located to the right of orbiting edge
 			else {
-				startAngle = orbitingAngle;
-				endAngle = orbitingAngle + Math.PI;
+				startAngle = orbitingAngle - Math.PI;
+				endAngle = orbitingAngle;
 			}
 			return;
 		}
