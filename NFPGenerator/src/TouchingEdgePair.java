@@ -76,7 +76,7 @@ public class TouchingEdgePair {
 		System.out.println("end angle: " + Math.toDegrees(endAngle));
 	}
 
-	public Coordinate getPotentialVector() {
+	public Vector getPotentialVector() {
 
 		/*
 		 * there are four possible ways that end or start points can be
@@ -101,11 +101,11 @@ public class TouchingEdgePair {
 			// stationary edge, and the translation
 			// vector will be derived from the orbiting edge
 			if (orbEdge.getEndPoint().dFunction(statEdge.getStartPoint(), statEdge.getEndPoint()) > 0) {
-				return orbEdge.makeFullVector();
+				return orbEdge.makeFullVector(statEdge.getEdgeNumber());
 			} else {
 				// if the D-function returns 0, edges are parallel, either edge
 				// can be used.
-				return statEdge.makeFullVector();
+				return statEdge.makeFullVector(statEdge.getEdgeNumber());
 			}
 		}
 		// ---------------------------------------------------------------------------------------------------------------------
@@ -117,7 +117,7 @@ public class TouchingEdgePair {
 			if (orbEdge.getStartPoint().dFunction(statEdge.getStartPoint(), statEdge.getEndPoint()) > 0) {
 				return null;
 			} else {
-				return statEdge.makeFullVector();
+				return statEdge.makeFullVector(statEdge.getEdgeNumber());
 			}
 		}
 		// ---------------------------------------------------------------------------------------------------------------------
@@ -125,7 +125,7 @@ public class TouchingEdgePair {
 			if (orbEdge.getEndPoint().dFunction(statEdge.getStartPoint(), statEdge.getEndPoint()) > 0) {
 				return null;
 			} else {
-				return orbEdge.makeFullVector();
+				return orbEdge.makeFullVector(statEdge.getEdgeNumber());
 			}
 		}
 		// ---------------------------------------------------------------------------------------------------------------------
@@ -133,11 +133,11 @@ public class TouchingEdgePair {
 		// other somewhere in between start and end point
 
 		if (touchStatStart || touchStatEnd) {
-			return orbEdge.makePartialVector(touchPoint);
+			return orbEdge.makePartialVector(touchPoint, statEdge.getEdgeNumber());
 		}
 		// ---------------------------------------------------------------------------------------------------------------------
 		if (touchOrbStart || touchOrbEnd) {
-			return statEdge.makePartialVector(touchPoint);
+			return statEdge.makePartialVector(touchPoint, statEdge.getEdgeNumber());
 		}
 
 		return null;
@@ -157,6 +157,21 @@ public class TouchingEdgePair {
 		// System.out.println("orbiting angle: " +
 		// Math.toDegrees(orbitingAngle));
 
+		//Situation 8: one edge is parallel with the other but starts at the end of the other one
+		if (stationaryAngle == orbitingAngle && ( (touchStatEnd && touchOrbStart)||(touchStatStart&&touchOrbEnd) ) ) {
+			startAngle = stationaryAngle - Math.PI;
+			endAngle = stationaryAngle + Math.PI;
+
+			return;
+		}
+		//Situation 8.2: edges are parallel and end or start in the same point
+		if (((stationaryAngle == orbitingAngle  - Math.PI)||(stationaryAngle == orbitingAngle  + Math.PI)) && ((touchStatEnd && touchOrbEnd)||(touchStatStart && touchOrbStart))) {
+			startAngle = stationaryAngle - Math.PI;
+			endAngle = stationaryAngle + Math.PI;
+
+			return;
+		}
+		
 		//Situation 7
 		if (stationaryAngle == orbitingAngle || stationaryAngle == orbitingAngle - Math.PI || stationaryAngle == orbitingAngle + Math.PI) {
 			startAngle = stationaryAngle - Math.PI;
@@ -179,8 +194,8 @@ public class TouchingEdgePair {
 			// stationary edge is located to the right of orbiting edge
 			//we have to check the D-function for the start and end of the stationary edge to see if it is left or right, one of them will be zero, 
 			//the other one will be smaller or bigger then zero
-			if (statEdge.getEndPoint().dFunction(orbEdge.getStartPoint(), orbEdge.getEndPoint()) <= 0 
-					&& statEdge.getStartPoint().dFunction(orbEdge.getStartPoint(), orbEdge.getEndPoint()) <= 0) {
+			if (statEdge.getEndPoint().dFunction(orbEdge.getStartPoint(), orbEdge.getEndPoint()) <= 1e-4 
+					&& statEdge.getStartPoint().dFunction(orbEdge.getStartPoint(), orbEdge.getEndPoint()) <= 1e-4) {
 				startAngle = orbitingAngle;
 				endAngle = orbitingAngle + Math.PI;
 			}
@@ -306,7 +321,7 @@ public class TouchingEdgePair {
 		}
 	}
 
-	public boolean isFeasibleVector(Coordinate vector) {
+	public boolean isFeasibleVector(Vector vector) {
 
 		System.out.println(Math.toDegrees(startAngle) + " -> " + Math.toDegrees(endAngle));
 		
@@ -322,6 +337,27 @@ public class TouchingEdgePair {
 
 		double negativeRotatedVectorAngle = vectorAngle - 2 * Math.PI;
 		if (startAngle <= negativeRotatedVectorAngle && negativeRotatedVectorAngle <= endAngle)
+			return true;
+
+		return false;
+	}
+	
+	public boolean isFeasibleVectorWithRounding(Vector vector) {
+		
+		System.out.println(Math.toDegrees(startAngle) + " -> " + Math.toDegrees(endAngle));
+		
+		// test all possible ranges
+		double vectorAngle = vector.getVectorAngle();		
+		
+		if (startAngle-1e-4 <= vectorAngle && vectorAngle <= endAngle+1e-4)
+			return true;
+
+		double rotatedVectorAngle = vectorAngle + 2 * Math.PI;
+		if (startAngle-1e-4 <= rotatedVectorAngle && rotatedVectorAngle <= endAngle+1e-4)
+			return true;
+
+		double negativeRotatedVectorAngle = vectorAngle - 2 * Math.PI;
+		if (startAngle-1e-4 <= negativeRotatedVectorAngle && negativeRotatedVectorAngle <= endAngle+1e-4)
 			return true;
 
 		return false;

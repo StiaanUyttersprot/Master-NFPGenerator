@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -17,17 +19,27 @@ public class Main {
 		DrawJavaFX drawTool = new DrawJavaFX();
 
 		File convex1Data = new File("Convex1.txt");
-		File convex2Data2 = new File("Convex2.txt");
+		File convex2Data = new File("Convex2.txt");
 
 		File concave1Data = new File("Concave1.txt");
-		File concave2Data2 = new File("Concave2.txt");
-
-		MultiPolygon mPolygonConvex1 = new MultiPolygon(convex1Data);
-		MultiPolygon mPolygonConvex2 = new MultiPolygon(convex2Data2);
+		File concave2Data = new File("Concave2.txt");
 		
-		MultiPolygon mPolygonConcave1 = new MultiPolygon(concave1Data);
-		MultiPolygon mPolygonConcave2 = new MultiPolygon(concave2Data2);
+		File rectangle1Data = new File("Rectangle1.txt");
+		File block1Data = new File("Block1.txt");
+		
+		File puzzle1Data = new File("Puzzle4.txt");
+		File puzzle2Data = new File("Puzzle2.txt");
+		File puzzle3Data = new File("Puzzle3.txt");
 
+		List<MultiPolygon> randomList = new ArrayList<>();
+		
+		randomList.add(new MultiPolygon(convex1Data));
+		randomList.add(new MultiPolygon(convex2Data));
+		
+		randomList.add(new MultiPolygon(concave1Data));
+		randomList.add(new MultiPolygon(concave2Data));
+
+		
 		// mPolygon.printPolygonData();
 
 //		MultiPolygon[] mPolygons = new MultiPolygon[2];
@@ -41,8 +53,24 @@ public class Main {
 
 		// -------------------------------------------------------------------------------------
 		// orbiting method
-		 Orbiting.generateNFP(mPolygonConcave1, mPolygonConvex1);
+		 
+//		Orbiting.generateNFP(new MultiPolygon(multiPolyList.get(3)), new MultiPolygon(multiPolyList.get(0)));
+		
+		for(MultiPolygon stat : randomList){
+			
+			for(MultiPolygon orb : randomList){
+				Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb));
+			}
+		}
+		
+		Orbiting.generateNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data));
+		
+		Orbiting.generateNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data));
+		
+		Orbiting.generateNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));
+		
 
+		
 		// ------------------------------------------------------------------------------------
 		// graphical representation
 		 
@@ -62,9 +90,10 @@ public class Main {
 		angle += coord3.calculateAngle(coord1, coord2);
 		angle += coord1.calculateAngle(coord3, coord2);// sum 180° correct
 
-		coord1.calculateVectorAngle();
+		Vector vect = new Vector(coord1,0);
+		
 
-		System.out.println(Math.toDegrees(coord1.getVectorAngle()));
+		System.out.println(Math.toDegrees(vect.getVectorAngle()));
 		System.out.println(Math.toDegrees(angle));
 
 		double dVal = coord2.dFunction(coord1, coord3);
@@ -77,8 +106,8 @@ public class Main {
 		Coordinate coord3 = new Coordinate(5, 7);
 		Coordinate coord4 = new Coordinate(-2, -5);
 
-		Edge edge1 = new Edge(coord1, coord2);
-		Edge edge2 = new Edge(coord3, coord4);
+		Edge edge1 = new Edge(coord1, coord2, 0);
+		Edge edge2 = new Edge(coord3, coord4, 5);
 
 		System.out.println(edge1.boundingBoxIntersect(edge2));
 		System.out.println(edge1.lineIntersect(edge2));

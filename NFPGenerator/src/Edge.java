@@ -7,6 +7,7 @@ public class Edge {
 	private boolean stationary = false;
 	private Coordinate startPoint;
 	private Coordinate endPoint;
+	private int edgeNumber;
 
 	// values to be used for bounding box intersection
 	private double smallX;
@@ -14,15 +15,17 @@ public class Edge {
 	private double smallY;
 	private double bigY;
 
-	Edge(Coordinate s, Coordinate e) {
+	Edge(Coordinate s, Coordinate e, int eN) {
 		startPoint = s;
 		endPoint = e;
+		edgeNumber = eN;
 		calculateRanges();
 	}
 
 	public Edge(Edge edge) {
 		startPoint = new Coordinate(edge.getStartPoint());
 		endPoint = new Coordinate(edge.getEndPoint());
+		edgeNumber = edge.getEdgeNumber();
 		calculateRanges();
 	}
 
@@ -81,8 +84,14 @@ public class Edge {
 	public void setBigY(double bigY) {
 		this.bigY = bigY;
 	}
-	
-	
+
+	public int getEdgeNumber() {
+		return edgeNumber;
+	}
+
+	public void setEdgeNumber(int edgeNumber) {
+		this.edgeNumber = edgeNumber;
+	}
 
 	@Override
 	public String toString() {
@@ -224,42 +233,42 @@ public class Edge {
 	}
 
 	// if the vector will be created from the whole edge
-	public Coordinate makeFullVector() {
+	public Vector makeFullVector(int eN) {
 
-		Coordinate vector;
+		Vector vector;
 		// if the orbiting edge is being used for the vector, it needs to be
 		// inversed
 		// this means startPoint-endPoint in stead of endPoint-startPoint
 		if (!stationary)
-			vector = startPoint.subtract(endPoint);
+			vector = new Vector(startPoint.subtract(endPoint), eN);
 		else {
-			vector = endPoint.subtract(startPoint);
+			vector = new Vector(endPoint.subtract(startPoint), eN);
 		}
-		vector.calculateVectorAngle();
+		
 		return vector;
 
 	}
 
-	public Coordinate makePartialVector(Coordinate touchPoint) {
-		Coordinate vector;
+	public Vector makePartialVector(Coordinate touchPoint, int eN) {
+		Vector vector;
 		// if the orbiting edge is being used for the vector, it needs to be
 		// inversed
 		// this means startPoint-endPoint in stead of endPoint-startPoint
 		if (!stationary)
-			vector = touchPoint.subtract(endPoint);
+			//TODO:the edgenumber from the orbiting edge may be wrong and cause errors
+			vector = new Vector(touchPoint.subtract(endPoint), eN);
 		else {
-			vector = endPoint.subtract(touchPoint);
+			vector = new Vector(endPoint.subtract(touchPoint), eN);
 		}
 
-		vector.calculateVectorAngle();
 		return vector;
 	}
 
 	public double getAngle() {
 		// we can't use the method makeFullVector, this will reverse the vector
 		// if it's from the orbiting polygon
-		Coordinate vector = endPoint.subtract(startPoint);
-		vector.calculateVectorAngle();
+		Vector vector = new Vector(endPoint.subtract(startPoint), edgeNumber);
+		
 		return vector.getVectorAngle();
 	}
 
@@ -267,8 +276,8 @@ public class Edge {
 
 		boolean intersect = true;
 
-		if (edge.getBigX() <= smallX || edge.getSmallX() >= bigX || edge.getBigY() <= smallY
-				|| edge.getSmallY() >= bigY)
+		if (edge.getBigX() <= smallX-1e-4 || edge.getSmallX() >= bigX+1e-4 || edge.getBigY() <= smallY-1e-4
+				|| edge.getSmallY() >= bigY+1e-4)
 			intersect = false;
 
 		return intersect;
@@ -279,11 +288,11 @@ public class Edge {
 		// the lines intersect if the start coordinate and the end coordinate
 		// of one of the edges are not both on the same side
 
-		if (testEdge.getStartPoint().dFunction(startPoint, endPoint) <= 0
-				&& testEdge.getEndPoint().dFunction(startPoint, endPoint) <= 0) {
+		if (testEdge.getStartPoint().dFunction(startPoint, endPoint) <= 1e-4
+				&& testEdge.getEndPoint().dFunction(startPoint, endPoint) <= 1e-4) {
 			intersect = false;
-		} else if (testEdge.getStartPoint().dFunction(startPoint, endPoint) >= 0
-				&& testEdge.getEndPoint().dFunction(startPoint, endPoint) >= 0) {
+		} else if (testEdge.getStartPoint().dFunction(startPoint, endPoint) >= -1e-4
+				&& testEdge.getEndPoint().dFunction(startPoint, endPoint) >= -1e-4) {
 			intersect = false;
 		}
 

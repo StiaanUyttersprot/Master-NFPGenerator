@@ -130,9 +130,9 @@ public class MultiPolygon {
 
 		for (int i = 0; i < outerPolygon.length; i++) {
 			if (i == outerPolygon.length - 1) {
-				outerPolygonEdges[i] = new Edge(outerPolygon[i], outerPolygon[0]);
+				outerPolygonEdges[i] = new Edge(outerPolygon[i], outerPolygon[0], i);
 			} else {
-				outerPolygonEdges[i] = new Edge(outerPolygon[i], outerPolygon[i + 1]);
+				outerPolygonEdges[i] = new Edge(outerPolygon[i], outerPolygon[i + 1], i);
 			}
 		}
 
@@ -141,9 +141,9 @@ public class MultiPolygon {
 			for (int j = 0; j < holes[i].length; j++) {
 
 				if (j == holes[i].length - 1) {
-					holeEdges[i][j] = new Edge(holes[i][j], holes[i][0]);
+					holeEdges[i][j] = new Edge(holes[i][j], holes[i][0], i);
 				} else {
-					holeEdges[i][j] = new Edge(holes[i][j], holes[i][j + 1]);
+					holeEdges[i][j] = new Edge(holes[i][j], holes[i][j + 1], i);
 				}
 
 			}
@@ -275,8 +275,7 @@ public class MultiPolygon {
 	}
 	
 	//translate with vector
-	public void translate(Coordinate vect) {
-
+	public void translate(Vector vect) {
 		double x = vect.getxCoord();
 		double y = vect.getyCoord();
 		
@@ -299,7 +298,6 @@ public class MultiPolygon {
 				edge.changeRangeValues(x, y);
 			}
 		}
-		
 	}
 	// ---------------------------------------------------------------------------------------------------------------------------------------
 
@@ -398,5 +396,7 @@ public class MultiPolygon {
 		}
 
 	}
+
+	
 
 }

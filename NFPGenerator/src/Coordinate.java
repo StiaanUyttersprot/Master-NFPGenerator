@@ -7,7 +7,6 @@
 public class Coordinate {
 	private double xCoord;
 	private double yCoord;
-	private double vectorAngle;
 
 	Coordinate(double x, double y) {
 		xCoord = x;
@@ -35,14 +34,6 @@ public class Coordinate {
 		this.yCoord = yCoord;
 	}
 
-	public double getVectorAngle() {
-		return vectorAngle;
-	}
-
-	public void setVectorAngle(double vectorAngle) {
-		this.vectorAngle = vectorAngle;
-	}
-
 	public void printCoordinate() {
 		System.out.println("( " + xCoord + " , " + yCoord + " ) ");
 	}
@@ -56,8 +47,6 @@ public class Coordinate {
 		final int prime = 31;
 		int result = 1;
 		long temp;
-		temp = Double.doubleToLongBits(vectorAngle);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(xCoord);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(yCoord);
@@ -74,23 +63,12 @@ public class Coordinate {
 		if (getClass() != obj.getClass())
 			return false;
 		Coordinate other = (Coordinate) obj;
-		if (Double.doubleToLongBits(vectorAngle) != Double.doubleToLongBits(other.vectorAngle))
-			return false;
 		if (Double.doubleToLongBits(xCoord) != Double.doubleToLongBits(other.xCoord))
 			return false;
 		if (Double.doubleToLongBits(yCoord) != Double.doubleToLongBits(other.yCoord))
 			return false;
 		return true;
 	}
-
-	// double distanceTo(Coordinate coord){
-	//
-	// double distance =
-	// Math.sqrt((xCoord-coord.getxCoord())*(xCoord-coord.getxCoord())
-	// + (yCoord-coord.getyCoord())*(yCoord-coord.getyCoord()));
-	//
-	// return distance;
-	// }
 
 	public double distanceTo(Coordinate coord) {
 		double dX = xCoord - coord.getxCoord();
@@ -144,7 +122,7 @@ public class Coordinate {
 	}
 
 	//check if two coordinates are equal (use round to make sure mistakes by rounding in the calculations are ignored
-	public boolean equals(Coordinate coord) {
+	public boolean equalValuesRounded(Coordinate coord) {
 
 		if (Math.round(xCoord*10000)/10000 != Math.round(coord.getxCoord()*10000)/10000)
 			return false;
@@ -159,35 +137,38 @@ public class Coordinate {
 		return new Coordinate(xCoord - point.getxCoord(), yCoord - point.getyCoord());
 	}
 
+	public Coordinate subtract(Vector vector) {
+		
+		return new Coordinate(xCoord - vector.getxCoord(), yCoord - vector.getyCoord());
+	}
+	
 	public Coordinate add(Coordinate point) {
 
 		return new Coordinate(xCoord + point.getxCoord(), yCoord + point.getyCoord());
 	}
 
+	public Coordinate add(Vector vector) {
+		
+		return new Coordinate(xCoord + vector.getxCoord(), yCoord + vector.getyCoord());
+	}
+
+	
+	
 	public boolean isBiggerThen(Coordinate biggestCoord) {
 
 		return false;
 	}
 
-	public void calculateVectorAngle() {
-
-		vectorAngle = Math.atan2(yCoord, xCoord);
-
+	public double getLengthSquared() {
+		
+		return xCoord*xCoord + yCoord*yCoord;
 	}
 
-	public Coordinate reflect() {
-		xCoord = 0-xCoord;
-		yCoord = 0-yCoord;
-		return this;
+	public Coordinate translatedTo(Vector vector) {
+		Coordinate transCoord = new Coordinate(xCoord+vector.getxCoord(), yCoord+ vector.getyCoord());
+		return transCoord;
 	}
 
-	public void trimTo(Coordinate intersectionCoord, Coordinate coord) {
-		xCoord = intersectionCoord.getxCoord()-coord.getxCoord();
-		yCoord = intersectionCoord.getyCoord()-coord.getyCoord();
-	}
+	
 
-//	public boolean dFunctionTouchCheck(Coordinate startPoint, Coordinate endPoint) {
-//		// TODO Auto-generated method stub
-//		return false;
-//	}
 }
