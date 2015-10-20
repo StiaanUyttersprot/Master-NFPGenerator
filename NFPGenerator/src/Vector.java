@@ -62,10 +62,6 @@ public class Vector {
 		this.edgeNumber = edgeNumber;
 	}
 
-	public void printCoordinate() {
-		System.out.println("( " + xCoord + " , " + yCoord + " ) ");
-	}
-	
 	public void printVector() {
 		System.out.println("( " + xCoord + " , " + yCoord + " ) " + " " + Math.toDegrees(vectorAngle) + " EdgeNumber: " + edgeNumber);
 	}
@@ -211,8 +207,88 @@ public class Vector {
 		return xCoord*xCoord + yCoord*yCoord;
 	}
 
-//	public boolean dFunctionTouchCheck(Vector startPoint, Vector endPoint) {
-//		// TODO Auto-generated method stub
-//		return false;
-//	}
+	public void trimFeasibleVector(MultiPolygon coordinatePolygon, MultiPolygon edgePolygon,boolean orbCoords) {
+		Edge testEdge;
+		boolean trimmed;
+		for (Coordinate coord : coordinatePolygon.getOuterPolygon()) {
+			//this is a testEdge and does not have a real number
+			if(orbCoords)testEdge = new Edge(coord, coord.add(this), -1);
+			else{
+				// the translation will be in the other direction if we're working with stationary coords,
+				//so we subtract the vector to get the edge
+				testEdge = new Edge(coord, coord.subtract(this), -1);
+			}
+			// checking the coordinates with the outer edges of the
+			// the other polygon
+			for (Edge edge : edgePolygon.getOuterPolygonEdges()) {
+				
+				trimmed = testAndTrimVector(edge, testEdge, coord);
+				if(trimmed){
+					if(orbCoords){
+						testEdge = new Edge(coord, coord.add(this), -1);
+					}
+					else{
+						// in this case the new vector will be in the wrong
+						// direction because we are using coordinates of
+						// the stationary polygon to translate, so we need
+						// to reflect the vector
+						reflect();
+						testEdge = new Edge(coord, coord.subtract(this), -1);
+					}
+				}
+				
+				
+			}
+			
+			for (Edge[] edgeArray : edgePolygon.getHoleEdges()) {
+				for (Edge edge : edgeArray) {
+					trimmed = testAndTrimVector(edge, testEdge, coord);
+					if(trimmed){
+						if(orbCoords){
+							testEdge = new Edge(coord, coord.add(this), -1);
+						}
+						else{
+							// in this case the new vector will be in the wrong
+							// direction because we are using coordinates of
+							// the stationary polygon to translate, so we need
+							// to reflect the vector
+							reflect();
+							testEdge = new Edge(coord, coord.subtract(this), -1);
+						}
+					}
+				}
+			}
+
+		}
+		
+	}
+
+	private boolean testAndTrimVector(Edge edge, Edge testEdge, Coordinate coord) {
+		Coordinate intersectionCoord;
+		boolean trimmed = false;
+		// if the bounding boxes intersect, line intersection
+		// has to
+		// be checked and the vector may need to be trimmed
+		if (edge.boundingBoxIntersect(testEdge)) {
+			// TODO: line intersection, trim vector to that
+			// distance
+			if (edge.lineIntersect(testEdge)) {
+				intersectionCoord = edge.calcIntersection(testEdge);
+				if(edge.containsPoint(intersectionCoord)&&testEdge.containsPoint(intersectionCoord)){
+					// trim the vector with
+					// endpoint = intersectionCoordinate
+					trimTo(intersectionCoord,coord);
+					trimmed = true;
+					//because the vector gets trimmed the testEdge changes, this will result in less intersection because of the shorter vector
+					//also the Vector will not be overwritten by every new intersection if the testEdge is changed, only when it has to be shorter
+				}
+				
+				
+			}
+
+		}
+		return trimmed;
+	}
+
+
 }

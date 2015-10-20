@@ -30,6 +30,9 @@ public class Main {
 		File puzzle1Data = new File("Puzzle4.txt");
 		File puzzle2Data = new File("Puzzle2.txt");
 		File puzzle3Data = new File("Puzzle3.txt");
+		
+		File sawtooth1Data = new File("Sawtooth1.txt");
+		File sawtooth2Data = new File("Sawtooth2.txt");
 
 		List<MultiPolygon> randomList = new ArrayList<>();
 		
@@ -56,21 +59,57 @@ public class Main {
 		 
 //		Orbiting.generateNFP(new MultiPolygon(multiPolyList.get(3)), new MultiPolygon(multiPolyList.get(0)));
 		
+		
+		long startTime;
+		long endTime;
+
+		long duration;  //divide by 1000000 to get milliseconds.
+		int scaleOfTime = 1000000;
+		List<Long> durations = new ArrayList<>();
+		
 		for(MultiPolygon stat : randomList){
 			
 			for(MultiPolygon orb : randomList){
+				startTime = System.nanoTime();
 				Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb));
+				endTime = System.nanoTime();
+				duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
+				durations.add(duration);
 			}
 		}
 		
+		startTime = System.nanoTime();
 		Orbiting.generateNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data));
+		endTime = System.nanoTime();
+		duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
+		durations.add(duration);
 		
+		startTime = System.nanoTime();
 		Orbiting.generateNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data));
+		endTime = System.nanoTime();
+		duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
+		durations.add(duration);
 		
+		startTime = System.nanoTime();
 		Orbiting.generateNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));
+		endTime = System.nanoTime();
+		duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
+		durations.add(duration);
 		
+		startTime = System.nanoTime();
+		Orbiting.generateNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data));
+		endTime = System.nanoTime();
+		duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
+		durations.add(duration);
 
-		
+		int durationIndex=1;
+		for(long dur : durations){
+			
+//			System.out.println("duration for generating nfp " +1 + " is " + dur/scaleOfTime + " ms.");
+//			durationIndex++;
+
+			System.out.println(dur);
+		}
 		// ------------------------------------------------------------------------------------
 		// graphical representation
 		 

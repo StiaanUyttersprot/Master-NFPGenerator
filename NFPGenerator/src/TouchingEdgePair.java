@@ -323,7 +323,7 @@ public class TouchingEdgePair {
 
 	public boolean isFeasibleVector(Vector vector) {
 
-		System.out.println(Math.toDegrees(startAngle) + " -> " + Math.toDegrees(endAngle));
+//		System.out.println(Math.toDegrees(startAngle) + " -> " + Math.toDegrees(endAngle));
 		
 		// test all possible ranges
 		double vectorAngle = vector.getVectorAngle();		
@@ -344,7 +344,7 @@ public class TouchingEdgePair {
 	
 	public boolean isFeasibleVectorWithRounding(Vector vector) {
 		
-		System.out.println(Math.toDegrees(startAngle) + " -> " + Math.toDegrees(endAngle));
+//		System.out.println(Math.toDegrees(startAngle) + " -> " + Math.toDegrees(endAngle));
 		
 		// test all possible ranges
 		double vectorAngle = vector.getVectorAngle();		

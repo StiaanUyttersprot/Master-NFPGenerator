@@ -41,11 +41,11 @@ public class Orbiting {
 			// printing touching edges
 
 			
-			System.out.println("touching edges: " + touchingEdgeList.size());
-			for (TouchingEdgePair tEP : touchingEdgeList) {
-				tEP.print();
-			}
-			System.out.println();
+//			System.out.println("touching edges: " + touchingEdgeList.size());
+//			for (TouchingEdgePair tEP : touchingEdgeList) {
+//				tEP.print();
+//			}
+//			System.out.println();
 
 			// ---------------------------------------------------------------------------------------------------------------------
 			// create potential translation vectors
@@ -63,12 +63,12 @@ public class Orbiting {
 			// ---------------------------------------------------------------------------------------------------------------------
 			// printing potential vectors
 			
-			System.out.println();
-			System.out.println("Potential vectors: " + potentialVectorList.size());
-			for (Vector vect : potentialVectorList) {
-				vect.printVector();
-			}
-			System.out.println();
+//			System.out.println();
+//			System.out.println("Potential vectors: " + potentialVectorList.size());
+//			for (Vector vect : potentialVectorList) {
+//				vect.printVector();
+//			}
+//			System.out.println();
 			
 			// ----------------------------------------------------------------------------------------------------------------------
 			// find the feasible vectors
@@ -78,14 +78,14 @@ public class Orbiting {
 			for (Vector vector : potentialVectorList) {
 				int i = 0;
 				feasibleVector = true;
-				System.out.println("vector angle being tested: " + Math.toDegrees(vector.getVectorAngle()));
+//				System.out.println("vector angle being tested: " + Math.toDegrees(vector.getVectorAngle()));
 				while (feasibleVector && i < touchingEdgeList.size()) {
 					TouchingEdgePair tEP = touchingEdgeList.get(i);
 					
 					//we use rounded angles to avoid rounding errors
 					if (!tEP.isFeasibleVectorWithRounding(vector)){
 						feasibleVector = false;
-						System.out.println("infeasible Vector");
+//						System.out.println("infeasible Vector");
 					}
 						
 					i++;
@@ -101,21 +101,72 @@ public class Orbiting {
 			//print feasible vectors
 			
 			
-			System.out.println("Feasible vectors: " + feasibleVectorList.size());
-			for (Vector vect : feasibleVectorList) {
-				vect.printVector();
+//			System.out.println("Feasible vectors: " + feasibleVectorList.size());
+//			for (Vector vect : feasibleVectorList) {
+//				vect.printVector();
+//			}
+//			System.out.println();
+			
+			//-------------------------------------------------------------------------------------------------------------------------
+			//look for the translation vector
+			Collections.sort(feasibleVectorList, new EdgeComparator());
+			Vector translationVector;
+			if (feasibleVectorList.size() > 1) {
+				//sort the vectors from smallest to largest angle
+				
+				
+				int i = 0;
+				// look for the vector that is closest in angle to the one
+				// previously translated by
+				while (i < feasibleVectorList.size() && feasibleVectorList.get(i).getEdgeNumber() < previousEdge ) {
+					i++;
+				}
+				
+				
+				///look if the point after translation with this vector is the same as the previously visited point, if this is true, we skip this vector to not get stuck
+				if(i < feasibleVectorList.size()&&usedTranslationVectorList.size()>0&&nfp.getActiveList().size()> 1){
+					Coordinate previousPoint = nfp.getActiveList().get(nfp.getActiveList().size()-2);
+					
+					Coordinate nextPoint = currentPoint.translatedTo(feasibleVectorList.get(i));
+					
+					if(nextPoint.equals(previousPoint)){
+						i++;
+					}
+					
+				}
+				
+				//check if the vector found isn't in the same direction as the previous one, if it is we may skip concavities if we use it
+				if(usedTranslationVectorList.size()>1&&i < feasibleVectorList.size()){
+					if(usedTranslationVectorList.get(usedTranslationVectorList.size()-1).getVectorAngle()==feasibleVectorList.get(i).getVectorAngle()){
+						i++;
+					}
+				}
+				// if the value of i is smaller then the listsize, a next vector
+				// is found, if it reaches the end, it means the next vector is
+				// the one with the smallest angle
+				if (i < feasibleVectorList.size()) {
+					translationVector = feasibleVectorList.get(i);
+				} else
+					translationVector = feasibleVectorList.get(0);
+			} else if(feasibleVectorList.size()==0){
+				System.out.println("RIP");
+				break;
 			}
-			System.out.println();
+			else translationVector = feasibleVectorList.get(0);
 
 			// -----------------------------------------------------------------------------------------------------------------------
 			// trimming the feasible vectors
 
 			// the testEdge will be the edge that starts in a coordinate of the
 			// polygon and ends in the translation of that coordinate
-			Edge testEdge;
-			Coordinate intersectionCoord;
+//			Edge testEdge;
+//			Coordinate intersectionCoord;
 			
-			for (Vector vector : feasibleVectorList) {
+			
+				
+				translationVector.trimFeasibleVector(orbPoly, statPoly, true);
+				translationVector.trimFeasibleVector(statPoly, orbPoly, false);
+				/*
 				for (Coordinate coord : orbPoly.getOuterPolygon()) {
 					//this is a testEdge and does not have a real number
 					testEdge = new Edge(coord, coord.add(vector), -1);
@@ -234,68 +285,23 @@ public class Orbiting {
 						}
 					}
 
-				}
-			}
+				}*/
+			//}
+			
+			
 			
 			//-------------------------------------------------------------------------------------------------------------------------
 			//Print the trimmed vectors
 			
-			System.out.println();
-			System.out.println("Trimmed vectors: " + feasibleVectorList.size());
-			Collections.sort(feasibleVectorList, new AngleComparator());
-			for (Vector vect : feasibleVectorList) {
-				vect.printVector();
-			}
-			System.out.println();
+//			System.out.println();
+//			System.out.println("Trimmed vectors: " + feasibleVectorList.size());
+//			for (Vector vect : feasibleVectorList) {
+//				vect.printVector();
+//			}
+//			System.out.println();
 			
 			
-			//-------------------------------------------------------------------------------------------------------------------------
-			//look for the translation vector
-
-			Vector translationVector;
-			if (feasibleVectorList.size() > 1) {
-				//sort the vectors from smallest to largest angle
-				
-				
-				int i = 0;
-				// look for the vector that is closest in angle to the one
-				// previously translated by
-				while (i < feasibleVectorList.size() && feasibleVectorList.get(i).getEdgeNumber() < previousEdge ) {
-					i++;
-				}
-				System.out.println(previousEdge);
-				System.out.println(i);
-				
-//				look if the point after translation with this vector is the same as the previously visited point, if this is true, we skip this vector to not get stuck
-				if(i < feasibleVectorList.size()&&usedTranslationVectorList.size()>1&&nfp.getActiveList().size()> 1){
-					Coordinate previousPoint = nfp.getActiveList().get(nfp.getActiveList().size()-2);
-					System.out.println(previousPoint.toString());
-					Coordinate nextPoint = currentPoint.translatedTo(feasibleVectorList.get(i));
-					System.out.println(currentPoint.toString());
-					if(nextPoint.equals(previousPoint)){
-						i++;
-					}
-					
-				}
-				
-				//check if the vector found isn't a vector that causes stagnation between 2 points
-				if(usedTranslationVectorList.size()>1&&i < feasibleVectorList.size()){
-					if(usedTranslationVectorList.get(usedTranslationVectorList.size()-2).equals(feasibleVectorList.get(i))){
-						i++;
-					}
-				}
-				// if the value of i is smaller then the listsize, a next vector
-				// is found, if it reaches the end, it means the next vector is
-				// the one with the smallest angle
-				if (i < feasibleVectorList.size()) {
-					translationVector = feasibleVectorList.get(i);
-				} else
-					translationVector = feasibleVectorList.get(0);
-			} else if(feasibleVectorList.size()==0){
-				System.out.println("RIP");
-				break;
-			}
-			else translationVector = feasibleVectorList.get(0);
+			
 
 			//-------------------------------------------------------------------------------------------------------------------------
 			//translating the polygon and storing the data in the nfp
@@ -308,14 +314,10 @@ public class Orbiting {
 			//-------------------------------------------------------------------------------------------------------------------------
 			//print translation data
 			
-			System.out.println("start point: "+startPoint.toString());
-			
-			//currentPoint = nfp.addTranslation(translationVector);
-			System.out.println("current point: "+currentPoint.toString());
-			
-			System.out.println("translation over: " + translationVector.toString());
-			
-			System.out.println();
+//			System.out.println("start point: "+startPoint.toString());
+//			System.out.println("current point: "+currentPoint.toString());
+//			System.out.println("translation over: " + translationVector.toString());
+//			System.out.println();
 			
 			//Storing data for drawing
 //			NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));

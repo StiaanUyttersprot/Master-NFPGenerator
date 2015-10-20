@@ -287,6 +287,7 @@ public class Edge {
 		boolean intersect = true;
 		// the lines intersect if the start coordinate and the end coordinate
 		// of one of the edges are not both on the same side
+		//in most cases this will guarantee an intersection, but there are cases where the intersection point will not be part of one of the lines
 
 		if (testEdge.getStartPoint().dFunction(startPoint, endPoint) <= 1e-4
 				&& testEdge.getEndPoint().dFunction(startPoint, endPoint) <= 1e-4) {
@@ -353,6 +354,22 @@ public class Edge {
 		smallY += y;
 		bigY += y;
 		
+	}
+
+	public boolean containsPoint(Coordinate intersectionCoord) {
+		if(intersectionCoord.getxCoord()<smallX){
+			return false;
+		}
+		if(intersectionCoord.getxCoord()>bigX){
+			return false;
+		}
+		if(intersectionCoord.getyCoord()<smallY){
+			return false;
+		}
+		if(intersectionCoord.getyCoord()>bigY){
+			return false;
+		}
+		return true;
 	}
 
 }
