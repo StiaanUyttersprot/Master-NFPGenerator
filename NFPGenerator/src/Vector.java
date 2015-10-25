@@ -10,6 +10,7 @@ public class Vector {
 	private double vectorAngle;
 	//the number of the edge that the vector slides over
 	private int edgeNumber;
+	private boolean fromStatEdge;
 
 	Vector(double x, double y) {
 		xCoord = x;
@@ -21,13 +22,15 @@ public class Vector {
 		yCoord = vect.getyCoord();
 		edgeNumber = vect.getEdgeNumber();
 		calculateVectorAngle();
+		fromStatEdge = vect.isFromStatEdge();
 	}
 
-	public Vector(Coordinate coord, int eN) {
+	public Vector(Coordinate coord, int eN, boolean fromStat) {
 		xCoord = coord.getxCoord();
 		yCoord = coord.getyCoord();
 		calculateVectorAngle();
 		edgeNumber = eN;
+		fromStatEdge = fromStat;
 	}
 
 	public double getxCoord() {
@@ -62,12 +65,20 @@ public class Vector {
 		this.edgeNumber = edgeNumber;
 	}
 
+	public boolean isFromStatEdge() {
+		return fromStatEdge;
+	}
+
+	public void setFromStatEdge(boolean fromStatEdge) {
+		this.fromStatEdge = fromStatEdge;
+	}
+
 	public void printVector() {
-		System.out.println("( " + xCoord + " , " + yCoord + " ) " + " " + Math.toDegrees(vectorAngle) + " EdgeNumber: " + edgeNumber);
+		System.out.println("( " + xCoord + " , " + yCoord + " ) " + " " + Math.toDegrees(vectorAngle) + " EdgeNumber: " + edgeNumber + " translates over stationary: " + fromStatEdge);
 	}
 
 	public String toString() {
-		return "( " + xCoord + " , " + yCoord + " ) EdgeNumber: " + edgeNumber;
+		return "( " + xCoord + " , " + yCoord + " ) EdgeNumber: " + edgeNumber+ " translates over stationary: " + fromStatEdge;
 	}
 
 	

@@ -41,6 +41,23 @@ public class TouchingEdgePair {
 		} else if (orbEdge.getEndPoint().equals(touchPoint)) {
 			touchOrbEnd = true;
 		}
+		if(orbEdge.getStartPoint().equals(statEdge.getStartPoint())){
+			touchStatStart = true;
+			touchOrbStart = true;
+		}
+		if(orbEdge.getEndPoint().equals(statEdge.getEndPoint())){
+			touchStatEnd = true;
+			touchOrbEnd = true;
+		}
+		if(orbEdge.getStartPoint().equals(statEdge.getEndPoint())){
+			
+			touchStatEnd = true;
+			touchOrbStart = true;
+		}
+		if(orbEdge.getEndPoint().equals(statEdge.getStartPoint())){
+			touchStatStart = true;
+			touchOrbEnd = true;
+		}
 	}
 
 	public Edge getStatEdge() {
@@ -148,24 +165,31 @@ public class TouchingEdgePair {
 		double stationaryAngle = statEdge.getAngle();
 		if (stationaryAngle < 0)
 			stationaryAngle = stationaryAngle + Math.PI * 2;
-		// System.out.println("stationary angle: " +
-		// Math.toDegrees(stationaryAngle));
+//		 System.out.println("stationary angle: " +
+//		 Math.toDegrees(stationaryAngle));
 
 		double orbitingAngle = orbEdge.getAngle();
 		if (orbitingAngle < 0)
 			orbitingAngle = orbitingAngle + Math.PI * 2;
-		// System.out.println("orbiting angle: " +
-		// Math.toDegrees(orbitingAngle));
+//		 System.out.println("orbiting angle: " +
+//		 Math.toDegrees(orbitingAngle));
 
 		//Situation 8: one edge is parallel with the other but starts at the end of the other one
-		if (stationaryAngle == orbitingAngle && ( (touchStatEnd && touchOrbStart)||(touchStatStart&&touchOrbEnd) ) ) {
+		if ((stationaryAngle <= orbitingAngle + 1e-6 && stationaryAngle >= orbitingAngle - 1e-6 ) && ( (touchStatEnd && touchOrbStart)||(touchStatStart&&touchOrbEnd) ) ) {
 			startAngle = stationaryAngle - Math.PI;
 			endAngle = stationaryAngle + Math.PI;
 
 			return;
 		}
 		//Situation 8.2: edges are parallel and end or start in the same point
-		if (((stationaryAngle == orbitingAngle  - Math.PI)||(stationaryAngle == orbitingAngle  + Math.PI)) && ((touchStatEnd && touchOrbEnd)||(touchStatStart && touchOrbStart))) {
+		if (((stationaryAngle <= orbitingAngle  - Math.PI+ 1e-6 && stationaryAngle >= orbitingAngle  - Math.PI- 1e-6 )
+				||(stationaryAngle <= orbitingAngle  + Math.PI+ 1e-6 && stationaryAngle >= orbitingAngle  + Math.PI- 1e-6 )
+				&& ((touchStatEnd && touchOrbEnd)||(touchStatStart && touchOrbStart)))) {
+			if(touchStatEnd && touchOrbEnd && touchStatStart && touchOrbStart){
+				startAngle = stationaryAngle - Math.PI;
+				endAngle = stationaryAngle;
+				return;
+			}
 			startAngle = stationaryAngle - Math.PI;
 			endAngle = stationaryAngle + Math.PI;
 
@@ -173,10 +197,11 @@ public class TouchingEdgePair {
 		}
 		
 		//Situation 7
-		if (stationaryAngle == orbitingAngle || stationaryAngle == orbitingAngle - Math.PI || stationaryAngle == orbitingAngle + Math.PI) {
+		if ((stationaryAngle <= orbitingAngle + 1e-6 && stationaryAngle >= orbitingAngle - 1e-6 )
+				||(stationaryAngle <= orbitingAngle  - Math.PI+ 1e-6 && stationaryAngle >= orbitingAngle  - Math.PI- 1e-6 )
+				|| (stationaryAngle <= orbitingAngle  + Math.PI+ 1e-6 && stationaryAngle >= orbitingAngle  + Math.PI- 1e-6 )) {
 			startAngle = stationaryAngle - Math.PI;
 			endAngle = stationaryAngle;
-
 			return;
 		}
 		

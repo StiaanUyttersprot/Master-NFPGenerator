@@ -33,6 +33,8 @@ public class Main {
 		
 		File sawtooth1Data = new File("Sawtooth1.txt");
 		File sawtooth2Data = new File("Sawtooth2.txt");
+		
+		File clockwiseData = new File("clockwise.txt");
 
 		List<MultiPolygon> randomList = new ArrayList<>();
 		
@@ -45,15 +47,19 @@ public class Main {
 		
 		// mPolygon.printPolygonData();
 
-//		MultiPolygon[] mPolygons = new MultiPolygon[2];
-//		mPolygons[0] = mPolygon;
-//		mPolygons[1] = mPolygon2;
+		
 
 		// ------------------------------------------------------------------------------
 		// checking methods of calculations with coordinates
 		// testCoordinateMethods();
 		// testEdgeMethods();
 
+		//------------------------------------------------------------------------------
+		//testing clockwise and counterclockwise detection and fixing
+		
+		//MultiPolygon clockwisePolygon = new MultiPolygon(clockwiseData);
+		//clockwisePolygon.printPolygonData();
+		
 		// -------------------------------------------------------------------------------------
 		// orbiting method
 		 
@@ -67,55 +73,41 @@ public class Main {
 		int scaleOfTime = 1000000;
 		List<Long> durations = new ArrayList<>();
 		
-		for(MultiPolygon stat : randomList){
+		int numberOfIterations = 100;
+		
+//		for(int j = 0; j<11; j++){
+			startTime = System.currentTimeMillis();
+//			for(int i = 0; i< numberOfIterations; i++){
 			
-			for(MultiPolygon orb : randomList){
-				startTime = System.nanoTime();
-				Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb));
-				endTime = System.nanoTime();
-				duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
-				durations.add(duration);
-			}
-		}
+//				for(MultiPolygon stat : randomList){
+//					
+//					for(MultiPolygon orb : randomList){
+//		
+//						Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb));
+//		
+//					}
+//				}
+//				Orbiting.generateNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data));
 		
-		startTime = System.nanoTime();
-		Orbiting.generateNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data));
-		endTime = System.nanoTime();
-		duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
-		durations.add(duration);
+				Orbiting.generateNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data));
 		
-		startTime = System.nanoTime();
-		Orbiting.generateNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data));
-		endTime = System.nanoTime();
-		duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
-		durations.add(duration);
-		
-		startTime = System.nanoTime();
-		Orbiting.generateNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));
-		endTime = System.nanoTime();
-		duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
-		durations.add(duration);
-		
-		startTime = System.nanoTime();
-		Orbiting.generateNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data));
-		endTime = System.nanoTime();
-		duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
-		durations.add(duration);
-
-		int durationIndex=1;
-		for(long dur : durations){
+//				Orbiting.generateNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));
+//		
+//				Orbiting.generateNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data));
 			
-//			System.out.println("duration for generating nfp " +1 + " is " + dur/scaleOfTime + " ms.");
-//			durationIndex++;
-
-			System.out.println(dur);
-		}
+//			}
+			endTime = System.currentTimeMillis();
+			duration = (endTime - startTime);
+			
+			System.out.println(duration);
+			
+//		}
 		// ------------------------------------------------------------------------------------
 		// graphical representation
 		 
 		 drawTool.launchDrawer(args);
 	}
-
+/*
 	private static void testCoordinateMethods() {
 		Coordinate coord1 = new Coordinate(-2, -2);
 		Coordinate coord2 = new Coordinate(4, 3);
@@ -129,7 +121,7 @@ public class Main {
 		angle += coord3.calculateAngle(coord1, coord2);
 		angle += coord1.calculateAngle(coord3, coord2);// sum 180° correct
 
-		Vector vect = new Vector(coord1,0);
+		Vector vect = new Vector(coord1,0, true);
 		
 
 		System.out.println(Math.toDegrees(vect.getVectorAngle()));
@@ -152,5 +144,5 @@ public class Main {
 		System.out.println(edge1.lineIntersect(edge2));
 		System.out.println(edge1.calcIntersection(edge2).toString());
 	}
-
+*/
 }

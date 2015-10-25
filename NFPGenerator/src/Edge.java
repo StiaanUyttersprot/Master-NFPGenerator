@@ -126,7 +126,7 @@ public class Edge {
 	}
 
 	public TouchingEdgePair touching(Edge orbEdge) {
-
+		
 		if (startPoint.dFunctionCheck(orbEdge.getStartPoint(), orbEdge.getEndPoint())) {
 			if (orbEdge.contains(startPoint)) {
 				TouchingEdgePair tEP = new TouchingEdgePair(this, orbEdge, startPoint);
@@ -177,28 +177,25 @@ public class Edge {
 		}
 		//after checking those points, check if it is somewhere in between start and end
 		
-		if (startPoint.dFunction(orbEdge.getStartPoint(), orbEdge.getEndPoint()) == 0) {
+		if (startPoint.dFunctionCheck(orbEdge.getStartPoint(), orbEdge.getEndPoint())) {
 			if (orbEdge.contains(startPoint)) {
 				TouchingEdgePair tEP = new TouchingEdgePair(this, orbEdge, startPoint);
 				return tEP;
 			}
 		}
-		
-		if (endPoint.dFunction(orbEdge.getStartPoint(), orbEdge.getEndPoint()) == 0) {
+		if (endPoint.dFunctionCheck(orbEdge.getStartPoint(), orbEdge.getEndPoint())) {
 			if (orbEdge.contains(endPoint)) {
 				TouchingEdgePair tEP = new TouchingEdgePair(this, orbEdge, endPoint);
 				return tEP;
 			}
 		}
-		
-		if (orbEdge.getStartPoint().dFunction(startPoint, endPoint) == 0) {
+		if (orbEdge.getStartPoint().dFunctionCheck(startPoint, endPoint)) {
 			if (contains(orbEdge.getStartPoint())) {
 				TouchingEdgePair tEP = new TouchingEdgePair(this, orbEdge, orbEdge.getStartPoint());
 				return tEP;
 			}
 		}
-		
-		if (orbEdge.getEndPoint().dFunction(startPoint, endPoint) == 0) {
+		if (orbEdge.getEndPoint().dFunctionCheck(startPoint, endPoint)) {
 			if (contains(orbEdge.getEndPoint())) {
 				TouchingEdgePair tEP = new TouchingEdgePair(this, orbEdge, orbEdge.getEndPoint());
 				return tEP;
@@ -240,9 +237,9 @@ public class Edge {
 		// inversed
 		// this means startPoint-endPoint in stead of endPoint-startPoint
 		if (!stationary)
-			vector = new Vector(startPoint.subtract(endPoint), eN);
+			vector = new Vector(startPoint.subtract(endPoint), eN, stationary);
 		else {
-			vector = new Vector(endPoint.subtract(startPoint), eN);
+			vector = new Vector(endPoint.subtract(startPoint), eN, stationary);
 		}
 		
 		return vector;
@@ -256,9 +253,9 @@ public class Edge {
 		// this means startPoint-endPoint in stead of endPoint-startPoint
 		if (!stationary)
 			//TODO:the edgenumber from the orbiting edge may be wrong and cause errors
-			vector = new Vector(touchPoint.subtract(endPoint), eN);
+			vector = new Vector(touchPoint.subtract(endPoint), eN, stationary);
 		else {
-			vector = new Vector(endPoint.subtract(touchPoint), eN);
+			vector = new Vector(endPoint.subtract(touchPoint), eN, stationary);
 		}
 
 		return vector;
@@ -267,7 +264,7 @@ public class Edge {
 	public double getAngle() {
 		// we can't use the method makeFullVector, this will reverse the vector
 		// if it's from the orbiting polygon
-		Vector vector = new Vector(endPoint.subtract(startPoint), edgeNumber);
+		Vector vector = new Vector(endPoint.subtract(startPoint), edgeNumber, stationary);
 		
 		return vector.getVectorAngle();
 	}
@@ -370,6 +367,15 @@ public class Edge {
 			return false;
 		}
 		return true;
+	}
+
+	public double calcClockwiseValue() {
+		
+		//Sum over the edges, (x2-x1)(y2+y1). If the result is positive the curve is clockwise, if it's negative the curve is counter-clockwise.
+		double xDiff = endPoint.getxCoord() - startPoint.getxCoord();
+		double ySum = endPoint.getyCoord() + startPoint.getyCoord();
+		
+		return xDiff*ySum;
 	}
 
 }

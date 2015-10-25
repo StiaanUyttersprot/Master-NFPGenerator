@@ -25,7 +25,7 @@ public class Orbiting {
 		Coordinate startPoint = new Coordinate(orbPoly.getOuterPolygon()[0]);
 		Coordinate currentPoint = orbPoly.getOuterPolygon()[0];
 
-		int aantalStappen = 50;
+		int aantalStappen = 3;
 		int stap = 0;
 		// start the orbiting
 		do{
@@ -96,20 +96,22 @@ public class Orbiting {
 				}
 
 			}
-			
+			//sorting by edgenumber and vectors made from stationary edges get priviledges
+			Collections.sort(feasibleVectorList, new EdgeComparator());
 			// ---------------------------------------------------------------------------------------------------------------------
 			//print feasible vectors
 			
 			
-//			System.out.println("Feasible vectors: " + feasibleVectorList.size());
-//			for (Vector vect : feasibleVectorList) {
-//				vect.printVector();
-//			}
-//			System.out.println();
-			
+			System.out.println("Feasible vectors: " + feasibleVectorList.size());
+			for (Vector vect : feasibleVectorList) {
+				vect.printVector();
+			}
+			System.out.println();
+
 			//-------------------------------------------------------------------------------------------------------------------------
 			//look for the translation vector
-			Collections.sort(feasibleVectorList, new EdgeComparator());
+
+			
 			Vector translationVector;
 			if (feasibleVectorList.size() > 1) {
 				//sort the vectors from smallest to largest angle
@@ -136,11 +138,11 @@ public class Orbiting {
 				}
 				
 				//check if the vector found isn't in the same direction as the previous one, if it is we may skip concavities if we use it
-				if(usedTranslationVectorList.size()>1&&i < feasibleVectorList.size()){
+				/*if(usedTranslationVectorList.size()>1&&i < feasibleVectorList.size()){
 					if(usedTranslationVectorList.get(usedTranslationVectorList.size()-1).getVectorAngle()==feasibleVectorList.get(i).getVectorAngle()){
 						i++;
 					}
-				}
+				}*/
 				// if the value of i is smaller then the listsize, a next vector
 				// is found, if it reaches the end, it means the next vector is
 				// the one with the smallest angle
@@ -154,6 +156,20 @@ public class Orbiting {
 			}
 			else translationVector = feasibleVectorList.get(0);
 
+			//find the longest vector with the same angle as the translation vector---------------------------------------------------
+			
+			double translationAngle = translationVector.getVectorAngle();
+			for(Vector vect: feasibleVectorList){
+				if(vect.getVectorAngle()<=translationAngle + 1e-4 && vect.getVectorAngle()>=translationAngle - 1e-4){
+					if(vect.getLengthSquared()> translationVector.getLengthSquared()){
+						System.out.println("replaced "+ translationVector.toString() + " with " + vect.toString());
+						translationVector = vect;
+						
+					}
+				}
+			}
+			System.out.println(translationVector);
+			
 			// -----------------------------------------------------------------------------------------------------------------------
 			// trimming the feasible vectors
 
@@ -162,10 +178,14 @@ public class Orbiting {
 //			Edge testEdge;
 //			Coordinate intersectionCoord;
 			
+			translationVector.trimFeasibleVector(orbPoly, statPoly, true);
+			translationVector.trimFeasibleVector(statPoly, orbPoly, false);
 			
+			/*
+			for (Vector vector : feasibleVectorList) {
 				
-				translationVector.trimFeasibleVector(orbPoly, statPoly, true);
-				translationVector.trimFeasibleVector(statPoly, orbPoly, false);
+				vector.trimFeasibleVector(orbPoly, statPoly, true);
+				vector.trimFeasibleVector(statPoly, orbPoly, false);
 				/*
 				for (Coordinate coord : orbPoly.getOuterPolygon()) {
 					//this is a testEdge and does not have a real number
@@ -285,8 +305,8 @@ public class Orbiting {
 						}
 					}
 
-				}*/
-			//}
+				}
+			}*/
 			
 			
 			
@@ -302,7 +322,6 @@ public class Orbiting {
 			
 			
 			
-
 			//-------------------------------------------------------------------------------------------------------------------------
 			//translating the polygon and storing the data in the nfp
 			orbPoly.translate(translationVector);
@@ -320,13 +339,13 @@ public class Orbiting {
 //			System.out.println();
 			
 			//Storing data for drawing
-//			NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
+			NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
 			stap++;
 		}
 		while(!currentPoint.equalValuesRounded(startPoint) && stap < aantalStappen);
-		
-		NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
-		
+		System.out.println(stap);
+//		NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
+//		
 		return null;// TODO resultaat hier zetten
 	}
 }

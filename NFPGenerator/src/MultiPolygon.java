@@ -66,6 +66,12 @@ public class MultiPolygon {
 			//-----------------------------------------------------
 			
 		}
+		
+		if(checkClockwise(outerPolygon)){
+			
+			changeClockOrientation(outerPolygon);
+
+		}
 
 		for (int i = 0; i < nHoles; i++) {
 
@@ -74,6 +80,10 @@ public class MultiPolygon {
 
 			for (int j = 0; j < nPoints; j++) {
 				holes[i][j] = new Coordinate(input.nextDouble(), input.nextDouble());
+			}
+			
+			if(!checkClockwise(holes[i])){
+				changeClockOrientation(holes[i]);
 			}
 		}
 		input.close();
@@ -354,36 +364,7 @@ public class MultiPolygon {
 			}
 		}
 		return touchingEdges;
-
 	}
-
-	/*
-	 * public List<TouchingEdgePair> oudeVersiefindTouchingEdges(MultiPolygon
-	 * orbPoly) {
-	 * 
-	 * List<TouchingEdgePair> touchingEdges = new ArrayList<>(); Edge statEdge;
-	 * Edge orbEdge; TouchingEdgePair tEP; //the outer polygon of the orbiting
-	 * multipolygon Coordinate[] orbOuterPolygon = orbPoly.getOuterPolygon();
-	 * //check for every point of orb if it touches an edge of stat for(int k =
-	 * 0; k < orbOuterPolygon.length; k++){
-	 * 
-	 * //the edge of the orbiting Polygon we are going to use for testing if 2
-	 * edges touch if(k == 0){ orbEdge = new
-	 * Edge(orbOuterPolygon[orbOuterPolygon.length-1], orbOuterPolygon[k],
-	 * false); } else orbEdge = new Edge(orbOuterPolygon[k-1],
-	 * orbOuterPolygon[k], false);
-	 * 
-	 * for(int i =0; i< outerPolygon.length-1; i++){ //the edge of the
-	 * stationary Polygon we are going to use for testing if 2 edges touch
-	 * if(i==0){ statEdge = new Edge(outerPolygon[orbOuterPolygon.length-1],
-	 * outerPolygon[i], true); } else statEdge = new Edge(outerPolygon[i-1],
-	 * outerPolygon[i], true);
-	 * 
-	 * tEP = statEdge.touching(orbEdge); if(tEP != null)touchingEdges.add(tEP);
-	 * } } return touchingEdges;
-	 * 
-	 * }
-	 */
 
 	public void isStationary() {
 		for (Edge e : outerPolygonEdges) {
@@ -394,9 +375,41 @@ public class MultiPolygon {
 				e.setStationary(true);
 			}
 		}
-
 	}
-
+	//the next method returns true if the polygon is clockwise
+	private boolean checkClockwise(Coordinate[] polygon) {
+		double clockwiseValue = 0;
+		
+		double xDiff;
+		double ySum;
+		
+		//If the result is positive the curve is clockwise, if it's negative the curve is counter-clockwise.
+		for(int i = 0; i < polygon.length; i++){
+			if(i < polygon.length-1){
+				//Sum over the edges, (x2-x1)(y2+y1). If the result is positive the curve is clockwise, if it's negative the curve is counter-clockwise.
+				xDiff = polygon[i+1].getxCoord() - polygon[i].getxCoord();
+				ySum = polygon[i+1].getyCoord() + polygon[i].getyCoord();
+				clockwiseValue += xDiff*ySum;
+				
+			}
+		}
+		
+		if(clockwiseValue > 0) return true;
+		else return false;
+	}
+	
+	private void changeClockOrientation(Coordinate[] polygon){
+		Coordinate[] changedPolygon = new Coordinate[polygon.length];
+		changedPolygon[0] = polygon[0];
+		for(int i = 1; i < polygon.length; i++){
+			changedPolygon[i] = polygon[polygon.length-i];
+			System.out.println("placing " + polygon[polygon.length-i].toString() + "to location " + i);
+		}
+		for(int i = 0; i < polygon.length; i++){
+			polygon[i] = changedPolygon[i];
+		}
+		
+	}
 	
 
 }
