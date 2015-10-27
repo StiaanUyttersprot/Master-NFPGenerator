@@ -8,6 +8,7 @@ public class Edge {
 	private Coordinate startPoint;
 	private Coordinate endPoint;
 	private int edgeNumber;
+	private boolean traversed = false;
 
 	// values to be used for bounding box intersection
 	private double smallX;
@@ -95,8 +96,8 @@ public class Edge {
 
 	@Override
 	public String toString() {
-		return "Edge [ startPoint=" + startPoint + ", endPoint=" + endPoint + ", smallX="
-				+ smallX + ", bigX=" + bigX + ", smallY=" + smallY + ", bigY=" + bigY + "]";
+		return "Edge [ nr=" + edgeNumber + " startPoint=" + startPoint + ", endPoint=" + endPoint + ", smallX="
+				+ smallX + ", bigX=" + bigX + ", smallY=" + smallY + ", bigY=" + bigY + " traversed= "+ traversed + "]";
 	}
 
 	public void print() {
@@ -376,6 +377,12 @@ public class Edge {
 		double ySum = endPoint.getyCoord() + startPoint.getyCoord();
 		
 		return xDiff*ySum;
+	}
+
+	public void markTraversed() {
+		
+		traversed = true;
+		
 	}
 
 }

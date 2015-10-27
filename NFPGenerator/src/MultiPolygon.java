@@ -359,8 +359,10 @@ public class MultiPolygon {
 			for (Edge statEdge : outerPolygonEdges) {
 
 				tEP = statEdge.touching(orbEdge);
-				if (tEP != null)
+				if (tEP != null){
 					touchingEdges.add(tEP);
+					statEdge.markTraversed();
+				}	
 			}
 		}
 		return touchingEdges;
@@ -409,6 +411,19 @@ public class MultiPolygon {
 			polygon[i] = changedPolygon[i];
 		}
 		
+	}
+
+	public boolean hasNextStartPoint() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void printEdges() {
+		
+		for(Edge e: outerPolygonEdges){
+			System.out.println(e.toString());
+		}
+		System.out.println();
 	}
 	
 

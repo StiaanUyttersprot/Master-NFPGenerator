@@ -95,6 +95,7 @@ public class TouchingEdgePair {
 
 	public Vector getPotentialVector() {
 
+		Vector potentialVector = null;
 		/*
 		 * there are four possible ways that end or start points can be
 		 * touching: stat orb ------------- end end start start start end end
@@ -104,8 +105,9 @@ public class TouchingEdgePair {
 		// if the touching point is at the end of both edges, there will be no
 		// potential vector
 		if (touchStatEnd && touchOrbEnd)
-			return null;
+			potentialVector = null;
 
+		
 		// ---------------------------------------------------------------------------------------------------------------------
 		// if both startpoints are touching, the translationvector will be the
 		// orbiting edge if the relative position
@@ -113,51 +115,50 @@ public class TouchingEdgePair {
 		// determined with the D-function)
 		// this by looking if the endpoint of the orbiting edge is located left
 		// or right
-		if (touchStatStart && touchOrbStart) {
+		else if (touchStatStart && touchOrbStart) {
 			// if Dfunction returns value > 0 the orbiting edge is left of the
 			// stationary edge, and the translation
 			// vector will be derived from the orbiting edge
 			if (orbEdge.getEndPoint().dFunction(statEdge.getStartPoint(), statEdge.getEndPoint()) > 0) {
-				return orbEdge.makeFullVector(statEdge.getEdgeNumber());
+				potentialVector =  orbEdge.makeFullVector(statEdge.getEdgeNumber());
 			} else {
 				// if the D-function returns 0, edges are parallel, either edge
 				// can be used.
-				return statEdge.makeFullVector(statEdge.getEdgeNumber());
+				potentialVector =  statEdge.makeFullVector(statEdge.getEdgeNumber());
 			}
 		}
 		// ---------------------------------------------------------------------------------------------------------------------
-		if (touchStatStart && touchOrbEnd) {
+		else if (touchStatStart && touchOrbEnd) {
 			// in this case, if the orbiting edge is located left of the
 			// stationary edge, no vector will be possible
 			// if it is on the right, the stationary edge will provide the
 			// vector.
 			if (orbEdge.getStartPoint().dFunction(statEdge.getStartPoint(), statEdge.getEndPoint()) > 0) {
-				return null;
+				potentialVector = null;
 			} else {
-				return statEdge.makeFullVector(statEdge.getEdgeNumber());
+				potentialVector = statEdge.makeFullVector(statEdge.getEdgeNumber());
 			}
 		}
 		// ---------------------------------------------------------------------------------------------------------------------
-		if (touchStatEnd && touchOrbStart) {
+		else if (touchStatEnd && touchOrbStart) {
 			if (orbEdge.getEndPoint().dFunction(statEdge.getStartPoint(), statEdge.getEndPoint()) > 0) {
-				return null;
+				potentialVector = null;
 			} else {
-				return orbEdge.makeFullVector(statEdge.getEdgeNumber());
+				potentialVector = orbEdge.makeFullVector(statEdge.getEdgeNumber());
 			}
 		}
 		// ---------------------------------------------------------------------------------------------------------------------
 		// the two other cases left are when one of the edges is touching the
 		// other somewhere in between start and end point
 
-		if (touchStatStart || touchStatEnd) {
-			return orbEdge.makePartialVector(touchPoint, statEdge.getEdgeNumber());
+		else if (touchStatStart || touchStatEnd) {
+			potentialVector = orbEdge.makePartialVector(touchPoint, statEdge.getEdgeNumber());
 		}
 		// ---------------------------------------------------------------------------------------------------------------------
-		if (touchOrbStart || touchOrbEnd) {
-			return statEdge.makePartialVector(touchPoint, statEdge.getEdgeNumber());
+		else if (touchOrbStart || touchOrbEnd) {
+			potentialVector = statEdge.makePartialVector(touchPoint, statEdge.getEdgeNumber());
 		}
-
-		return null;
+		return potentialVector;
 	}
 
 	public void calcFeasibleAngleRange() {

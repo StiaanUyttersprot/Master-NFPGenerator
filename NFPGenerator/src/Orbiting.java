@@ -25,7 +25,7 @@ public class Orbiting {
 		Coordinate startPoint = new Coordinate(orbPoly.getOuterPolygon()[0]);
 		Coordinate currentPoint = orbPoly.getOuterPolygon()[0];
 
-		int aantalStappen = 3;
+		int aantalStappen = 50;
 		int stap = 0;
 		// start the orbiting
 		do{
@@ -101,12 +101,12 @@ public class Orbiting {
 			// ---------------------------------------------------------------------------------------------------------------------
 			//print feasible vectors
 			
-			
-			System.out.println("Feasible vectors: " + feasibleVectorList.size());
-			for (Vector vect : feasibleVectorList) {
-				vect.printVector();
-			}
-			System.out.println();
+		
+//			System.out.println("Feasible vectors: " + feasibleVectorList.size());
+//			for (Vector vect : feasibleVectorList) {
+//				vect.printVector();
+//			}
+//			System.out.println();
 
 			//-------------------------------------------------------------------------------------------------------------------------
 			//look for the translation vector
@@ -158,17 +158,16 @@ public class Orbiting {
 
 			//find the longest vector with the same angle as the translation vector---------------------------------------------------
 			
-			double translationAngle = translationVector.getVectorAngle();
-			for(Vector vect: feasibleVectorList){
-				if(vect.getVectorAngle()<=translationAngle + 1e-4 && vect.getVectorAngle()>=translationAngle - 1e-4){
-					if(vect.getLengthSquared()> translationVector.getLengthSquared()){
-						System.out.println("replaced "+ translationVector.toString() + " with " + vect.toString());
-						translationVector = vect;
-						
-					}
-				}
-			}
-			System.out.println(translationVector);
+//			double translationAngle = translationVector.getVectorAngle();
+//			for(Vector vect: feasibleVectorList){
+//				if(vect.getVectorAngle()<=translationAngle + 1e-4 && vect.getVectorAngle()>=translationAngle - 1e-4){
+//					if(vect.getLengthSquared()> translationVector.getLengthSquared()){
+//						translationVector = vect;
+//						
+//					}
+//				}
+//			}
+		
 			
 			// -----------------------------------------------------------------------------------------------------------------------
 			// trimming the feasible vectors
@@ -181,146 +180,24 @@ public class Orbiting {
 			translationVector.trimFeasibleVector(orbPoly, statPoly, true);
 			translationVector.trimFeasibleVector(statPoly, orbPoly, false);
 			
-			/*
-			for (Vector vector : feasibleVectorList) {
-				
-				vector.trimFeasibleVector(orbPoly, statPoly, true);
-				vector.trimFeasibleVector(statPoly, orbPoly, false);
-				/*
-				for (Coordinate coord : orbPoly.getOuterPolygon()) {
-					//this is a testEdge and does not have a real number
-					testEdge = new Edge(coord, coord.add(vector), -1);
-
-					// checking the coordinates with the outer edges of the
-					// stationary polygon
-					for (Edge edge : statPoly.getOuterPolygonEdges()) {
-
-						// if the bounding boxes intersect, line intersection
-						// has to
-						// be checked and the vector may need to be trimmed
-						if (edge.boundingBoxIntersect(testEdge)) {
-							// TODO: line intersection, trim vector to that
-							// distance
-							if (edge.lineIntersect(testEdge)) {
-								intersectionCoord = edge.calcIntersection(testEdge);
-								
-								intersectionCoord.printCoordinate();
-								// trim the vector with
-								// endpoint = intersectionCoordinate
-								vector.trimTo(intersectionCoord,coord);
-								
-								//because the vector gets trimmed the testEdge changes, this will result in less intersection because of the shorter vector
-								//also the Vector will not be overwritten by every new intersection if the testEdge is changed, only when it has to be shorter
-								testEdge = new Edge(coord, coord.add(vector), -1);
-							}
-
-						}
-
-					}
-					// checking the coordinates with the hole edges of the
-					// stationary polygon
-					for (Edge[] edgeArray : statPoly.getHoleEdges()) {
-						for (Edge edge : edgeArray) {
-							// if the bounding boxes intersect, line
-							// intersection
-							// has to
-							// be checked and the vector may need to be trimmed
-							if (edge.boundingBoxIntersect(testEdge)) {
-								// TODO: line intersection, trim vector to that
-								// distance
-								
-								if (edge.lineIntersect(testEdge)) {
-									intersectionCoord = edge.calcIntersection(testEdge);
-									// trim the vector by creating a new vector
-									// with
-									// endpoint = intersectionCoordinate
-									vector.trimTo(intersectionCoord,coord);
-								}
-
-							}
-						}
-					}
-
-				}
-				// now we have to test all the points of the stationary polygon
-				// with
-				// the edges of the orbiting polygon
-				for (Coordinate coord : statPoly.getOuterPolygon()) {
-					// the translation will be in the other direction, so we
-					// subtract the vector to get the edge
-					testEdge = new Edge(coord, coord.subtract(vector), -1);
-
-					// checking the coordinates with the outer edges of the
-					// stationary polygon
-					for (Edge edge : orbPoly.getOuterPolygonEdges()) {
-
-						// if the bounding boxes intersect, line intersection
-						// has to
-						// be checked and the vector may need to be trimmed
-						if (edge.boundingBoxIntersect(testEdge)) {
-							// TODO: line intersection, trim vector to that
-							// distance
-							if (edge.lineIntersect(testEdge)) {
-//								System.out.println("intersecting lines: " +edge.toString() + " " + testEdge.toString());
-								intersectionCoord = edge.calcIntersection(testEdge);
-								// trim the vector by creating a new vector with
-								// endpoint = intersectionCoordinate
-								// in this case the new vector will be in the
-								// wrong
-								// direction because we are using coordinates of
-								// the
-								// stationary polygon to translate, so we need
-								// to
-								// reflect the vector
-								vector.trimTo(intersectionCoord,coord);
-								vector.reflect();
-							}
-
-						}
-
-					}
-					// checking the coordinates with the hole edges of the
-					// stationary polygon
-					for (Edge[] edgeArray : orbPoly.getHoleEdges()) {
-						for (Edge edge : edgeArray) {
-							// if the bounding boxes intersect, line
-							// intersection
-							// has to
-							// be checked and the vector may need to be trimmed
-							if (edge.boundingBoxIntersect(testEdge)) {
-								// TODO: line intersection, trim vector to that
-								// distance
-								if (edge.lineIntersect(testEdge)) {
-
-									intersectionCoord = edge.calcIntersection(testEdge);
-									// trim the vector by creating a new vector
-									// with
-									// endpoint = intersectionCoordinate
-									// reflection is needed
-									vector.trimTo(intersectionCoord,coord);
-									vector.reflect();
-								}
-
-							}
-						}
-					}
-
-				}
-			}*/
-			
-			
-			
+	
 			//-------------------------------------------------------------------------------------------------------------------------
-			//Print the trimmed vectors
+			//Print the trimmed vector
 			
-//			System.out.println();
-//			System.out.println("Trimmed vectors: " + feasibleVectorList.size());
-//			for (Vector vect : feasibleVectorList) {
-//				vect.printVector();
+			//System.out.println(" trimmed: " + translationVector);
+			
+			//marking the traversed edge-----------------------------------------------------------------------------------------------
+			
+//			if(translationVector.isFromStatEdge()){
+//				statPoly.getOuterPolygonEdges()[translationVector.getEdgeNumber()].markTraversed();
 //			}
-//			System.out.println();
-			
-			
+//			else{
+//				for(Vector vect: feasibleVectorList){
+//					if(vect.isFromStatEdge()&&vect.getVectorAngle()==translationVector.getVectorAngle()){
+//						statPoly.getOuterPolygonEdges()[vect.getEdgeNumber()].markTraversed();
+//					}
+//				}
+//			}
 			
 			//-------------------------------------------------------------------------------------------------------------------------
 			//translating the polygon and storing the data in the nfp
@@ -336,15 +213,34 @@ public class Orbiting {
 //			System.out.println("start point: "+startPoint.toString());
 //			System.out.println("current point: "+currentPoint.toString());
 //			System.out.println("translation over: " + translationVector.toString());
+//			System.out.println(stap);
 //			System.out.println();
 			
-			//Storing data for drawing
-			NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
+			
+			//Storing data for drawing step by step----------------------------------------------------------------------------------------
+//			NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
+			
+			//check if right edges are traversed---------------------------------------------------------------
+//			statPoly.printEdges();
+			
 			stap++;
 		}
 		while(!currentPoint.equalValuesRounded(startPoint) && stap < aantalStappen);
-		System.out.println(stap);
-//		NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
+		//System.out.println(stap);
+		
+		//check if right edges are traversed-----------------------------------------------------------------------
+		statPoly.printEdges();
+		
+		//nfp steps for interlocking concavities and holes
+//		if(!statPoly.allEdgesTraversed()){
+//			while(statPoly.hasNextStartPoint()){
+//					
+//				}
+//			}
+//		}
+		
+		//only draw the final result
+		NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
 //		
 		return null;// TODO resultaat hier zetten
 	}

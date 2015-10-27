@@ -78,22 +78,25 @@ public class Main {
 //		for(int j = 0; j<11; j++){
 			startTime = System.currentTimeMillis();
 //			for(int i = 0; i< numberOfIterations; i++){
-			
-//				for(MultiPolygon stat : randomList){
-//					
-//					for(MultiPolygon orb : randomList){
-//		
-//						Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb));
-//		
-//					}
-//				}
-//				Orbiting.generateNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data));
+			int i = 0;
+				for(MultiPolygon stat : randomList){
+					int j = 0;
+					
+					for(MultiPolygon orb : randomList){
+						j++;
+						Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb));
+						System.out.println("["+i+"]["+j+"]");
+					}
+					i++;
+				}
+//				
+				Orbiting.generateNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data));
 		
 				Orbiting.generateNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data));
 		
-//				Orbiting.generateNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));
-//		
-//				Orbiting.generateNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data));
+				Orbiting.generateNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));
+		
+				Orbiting.generateNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data));
 			
 //			}
 			endTime = System.currentTimeMillis();
