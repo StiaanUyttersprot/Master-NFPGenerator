@@ -33,6 +33,16 @@ public class Vector {
 		fromStatEdge = fromStat;
 	}
 
+	public Vector(Coordinate startPoint, Coordinate endPoint) {
+		
+		Coordinate vectorCoord = endPoint.subtract(startPoint);
+		xCoord = vectorCoord.getxCoord();
+		yCoord = vectorCoord.getyCoord();
+		calculateVectorAngle();
+		edgeNumber = -1;
+		fromStatEdge = false;
+	}
+
 	public double getxCoord() {
 		return xCoord;
 	}
@@ -274,6 +284,7 @@ public class Vector {
 		
 	}
 
+
 	private boolean testAndTrimVector(Edge edge, Edge testEdge, Coordinate coord) {
 		Coordinate intersectionCoord;
 		boolean trimmed = false;
@@ -285,10 +296,13 @@ public class Vector {
 			// distance
 			if (edge.lineIntersect(testEdge)) {
 				intersectionCoord = edge.calcIntersection(testEdge);
-				if(edge.containsPoint(intersectionCoord)&&testEdge.containsPoint(intersectionCoord)){
+				//System.out.println(intersectionCoord);
+				//System.out.println(edge + " " +  testEdge);
+				if(edge.containsIntersectionPoint(intersectionCoord)&&testEdge.containsIntersectionPoint(intersectionCoord)){
 					// trim the vector with
 					// endpoint = intersectionCoordinate
 					trimTo(intersectionCoord,coord);
+					//System.out.println(this);
 					trimmed = true;
 					//because the vector gets trimmed the testEdge changes, this will result in less intersection because of the shorter vector
 					//also the Vector will not be overwritten by every new intersection if the testEdge is changed, only when it has to be shorter

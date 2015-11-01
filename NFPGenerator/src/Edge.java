@@ -30,6 +30,13 @@ public class Edge {
 		calculateRanges();
 	}
 
+	public Edge(Coordinate s, Coordinate e) {
+		startPoint = s;
+		endPoint = e;
+		edgeNumber = -1;
+		calculateRanges();
+	}
+
 	public boolean isStationary() {
 		return stationary;
 	}
@@ -129,25 +136,25 @@ public class Edge {
 	public TouchingEdgePair touching(Edge orbEdge) {
 		
 		if (startPoint.dFunctionCheck(orbEdge.getStartPoint(), orbEdge.getEndPoint())) {
-			if (orbEdge.contains(startPoint)) {
+			if (orbEdge.containsRounded(startPoint)) {
 				TouchingEdgePair tEP = new TouchingEdgePair(this, orbEdge, startPoint);
 				return tEP;
 			}
 		}
 		if (endPoint.dFunctionCheck(orbEdge.getStartPoint(), orbEdge.getEndPoint())) {
-			if (orbEdge.contains(endPoint)) {
+			if (orbEdge.containsRounded(endPoint)) {
 				TouchingEdgePair tEP = new TouchingEdgePair(this, orbEdge, endPoint);
 				return tEP;
 			}
 		}
 		if (orbEdge.getStartPoint().dFunctionCheck(startPoint, endPoint)) {
-			if (contains(orbEdge.getStartPoint())) {
+			if (containsRounded(orbEdge.getStartPoint())) {
 				TouchingEdgePair tEP = new TouchingEdgePair(this, orbEdge, orbEdge.getStartPoint());
 				return tEP;
 			}
 		}
 		if (orbEdge.getEndPoint().dFunctionCheck(startPoint, endPoint)) {
-			if (contains(orbEdge.getEndPoint())) {
+			if (containsRounded(orbEdge.getEndPoint())) {
 				TouchingEdgePair tEP = new TouchingEdgePair(this, orbEdge, orbEdge.getEndPoint());
 				return tEP;
 			}
@@ -225,6 +232,30 @@ public class Edge {
 			if (startPoint.getyCoord() <= coord.getyCoord() && endPoint.getyCoord() >= coord.getyCoord())
 				containsY = true;
 		} else if (startPoint.getyCoord() >= coord.getyCoord() && endPoint.getyCoord() <= coord.getyCoord())
+			containsY = true;
+
+		return containsX && containsY;
+	}
+	
+	private boolean containsRounded(Coordinate coord) {
+		// TODO: kijken of het sneller is eerst de waarde van x op te slaan in
+		// een int, of gewoon altijd in coord er naar te callen
+		boolean containsX = false;
+		boolean containsY = false;
+		// check x
+		// coordinate-----------------------------------------------------------------------------------------------------
+		if (startPoint.getxCoord() < endPoint.getxCoord()+1e-4) {
+			if (startPoint.getxCoord() <= coord.getxCoord()+1e-4 && endPoint.getxCoord() >= coord.getxCoord()-1e-4)
+				containsX = true;
+		} else if (startPoint.getxCoord() >= coord.getxCoord()-1e-4 && endPoint.getxCoord() <= coord.getxCoord()+1e-4)
+			containsX = true;
+
+		// check
+		// y-coordinate-----------------------------------------------------------------------------------------------------
+		if (startPoint.getyCoord() < endPoint.getyCoord()+1e-4) {
+			if (startPoint.getyCoord() <= coord.getyCoord()+1e-4 && endPoint.getyCoord() >= coord.getyCoord()-1e-4)
+				containsY = true;
+		} else if (startPoint.getyCoord() >= coord.getyCoord()-1e-4 && endPoint.getyCoord() <= coord.getyCoord()+1e-4)
 			containsY = true;
 
 		return containsX && containsY;
@@ -354,17 +385,17 @@ public class Edge {
 		
 	}
 
-	public boolean containsPoint(Coordinate intersectionCoord) {
-		if(intersectionCoord.getxCoord()<smallX){
+	public boolean containsIntersectionPoint(Coordinate intersectionCoord) {
+		if(intersectionCoord.getxCoord()<smallX-1e-4){
 			return false;
 		}
-		if(intersectionCoord.getxCoord()>bigX){
+		if(intersectionCoord.getxCoord()>bigX+1e-4){
 			return false;
 		}
-		if(intersectionCoord.getyCoord()<smallY){
+		if(intersectionCoord.getyCoord()<smallY-1e-4){
 			return false;
 		}
-		if(intersectionCoord.getyCoord()>bigY){
+		if(intersectionCoord.getyCoord()>bigY+1e-4){
 			return false;
 		}
 		return true;
@@ -385,4 +416,46 @@ public class Edge {
 		
 	}
 
+	public boolean isTraversed() {
+		return traversed;
+	}
+
+	public void setTraversed(boolean traversed) {
+		this.traversed = traversed;
+	}
+
+	public boolean testIntersect(Edge edge) {
+		Coordinate intersectionCoord;
+		boolean intersection = false;
+
+		// if the bounding boxes intersect, line intersection
+		// has to be checked and the edge may need to be trimmed
+		if (boundingBoxIntersect(edge)) {
+			// TODO: line intersection, trim vector to that
+			// distance
+			if (lineIntersect(edge)) {
+				intersectionCoord = calcIntersection(edge);
+				//intersectionCoord.roundCoord();
+				if(containsIntersectionPoint(intersectionCoord)&&edge.containsIntersectionPoint(intersectionCoord)){
+					intersection = true;
+				}
+			}
+			
+		}
+		return intersection;
+	}
+
+	public Coordinate getMiddlePointEdge() {
+		double midxCoord = (startPoint.getxCoord()+endPoint.getxCoord())/2;
+		double midyCoord = (startPoint.getyCoord()+endPoint.getyCoord())/2;
+		return new Coordinate(midxCoord, midyCoord);
+	}
+
+	public boolean edgesOrientatedRight(Edge preEdge, Edge postEdge) {
+		//the edges are right of or parallel with this edge 
+		if(preEdge.getStartPoint().dFunction(startPoint, endPoint)<=1e-4 && 
+				postEdge.getEndPoint().dFunction(startPoint, endPoint) <= 1e-4)
+			return true;
+		return false;
+	}
 }

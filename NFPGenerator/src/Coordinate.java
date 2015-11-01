@@ -168,7 +168,15 @@ public class Coordinate {
 		Coordinate transCoord = new Coordinate(xCoord+vector.getxCoord(), yCoord+ vector.getyCoord());
 		return transCoord;
 	}
-
 	
-
+	public void translate(Vector vector){
+		xCoord+=vector.getxCoord();
+		yCoord+=vector.getyCoord();
+	}
+	
+	public void roundCoord(){
+		int roundingValue = 1000;
+		xCoord = Math.round(xCoord*roundingValue)/roundingValue;
+		yCoord = Math.round(yCoord*roundingValue)/roundingValue;
+	}
 }

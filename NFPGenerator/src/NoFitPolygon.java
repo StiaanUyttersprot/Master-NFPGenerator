@@ -92,5 +92,10 @@ public class NoFitPolygon {
 		return polygonList;
 	}
 
+	public void startNewActiveList(Coordinate coord){
+		activeList = new ArrayList<>();
+		activeList.add(new Coordinate(coord));
+		nfpPolygonsList.add(activeList);
+	}
 	
 }

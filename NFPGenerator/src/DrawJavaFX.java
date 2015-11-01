@@ -25,18 +25,19 @@ public class DrawJavaFX extends Application{
     	int stageNumber = 0;
     	int heightPlaceLine = 0;
     	int borderOffset = 30;
-//    	for(Stage stage : polyPairStageList){
-//    		if(stageWidth*(stageNumber+1)> screenSizeX){
-//    			stageNumber = 0;
-//    			heigthPlaceLine++;
-//    		}
-//    		stage.setX(stageWidth*(stageNumber));
-//    		stage.setY((borderOffset+stageHeight)*heigthPlaceLine);
-//    		stage.show();
-//    		
-//    		stageNumber++;
-//    		
-//    	}
+    	
+    	for(Stage stage : PolygonPairStages.drawPolygonPairs()){
+    		if(stageWidth*(stageNumber+1)> screenSizeX){
+    			stageNumber = 0;
+    			heightPlaceLine++;
+    		}
+    		stage.setX(stageWidth*(stageNumber));
+    		stage.setY((borderOffset+stageHeight)*heightPlaceLine);
+    		stage.show();
+    		
+    		stageNumber++;
+    		
+    	}
     	
     	List<Stage> nfpStages = NoFitPolygonStages.drawNFPFigures();
     	stageWidth = NoFitPolygonStages.getSceneSizeX();
