@@ -26,6 +26,7 @@ public class Main {
 		
 		File rectangle1Data = new File("Rectangle1.txt");
 		File block1Data = new File("Block1.txt");
+		File block2Data = new File("Block2.txt");
 		
 		File puzzle1Data = new File("Puzzle4.txt");
 		File puzzle2Data = new File("Puzzle2.txt");
@@ -36,9 +37,15 @@ public class Main {
 		
 		File clockwiseData = new File("clockwise.txt");
 		
-		File interlockingConcData = new File("interCav1.txt");
+		File interlockingConc1Data = new File("interCav1.txt");
 		File triangleData = new File("triangle1.txt");
 
+		File interlockingConc2Data = new File("interCav2.txt");
+		File interlockingConc3Data = new File("interCav3.txt");
+		
+		File holes1Data = new File("Holes1.txt");
+		File holes2Data = new File("Holes2.txt");
+		
 		List<MultiPolygon> randomList = new ArrayList<>();
 		
 		randomList.add(new MultiPolygon(convex1Data));
@@ -80,28 +87,51 @@ public class Main {
 		
 //		for(int j = 0; j<11; j++){
 			startTime = System.currentTimeMillis();
-////			for(int i = 0; i< numberOfIterations; i++){
-			int i = 0;
-				for(MultiPolygon stat : randomList){
-					int j = 0;
-					
-					for(MultiPolygon orb : randomList){
-						j++;
-						Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb));
-						System.out.println("["+i+"]["+j+"]");
-					}
-					i++;
-				}
+//			for(int i = 0; i< numberOfIterations; i++){
+//				int i = 0;
+//				for(MultiPolygon stat : randomList){
+//					int j = 0;
+//					
+//					for(MultiPolygon orb : randomList){
+//						j++;
+//						Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb));
+//						System.out.println("["+i+"]["+j+"]");
+//					}
+//					i++;
+//				}
+//				
+//				Orbiting.generateNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data));
+//		
+//				Orbiting.generateNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data));
+//		
+//				Orbiting.generateNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));
+//		
+//				Orbiting.generateNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data));
+//		
+//				Orbiting.generateNFP(new MultiPolygon(interlockingConc1Data), new MultiPolygon(triangleData));
+//				
+//				Orbiting.generateNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc2Data));
+//			
+//				Orbiting.generateNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc3Data));
+//
+//				Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(triangleData));
+//				
+//				Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(holes2Data));
+//			
+//				Orbiting.generateNFP(new MultiPolygon(interlockingConc3Data), new MultiPolygon(interlockingConc2Data));
 				
-				Orbiting.generateNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data));
-		
-				Orbiting.generateNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data));
-		
-				Orbiting.generateNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));
-		
-				Orbiting.generateNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data));
-		
-				Orbiting.generateNFP(new MultiPolygon(interlockingConcData), new MultiPolygon(triangleData));
+				Orbiting.generateNFP(new MultiPolygon(interlockingConc2Data), new MultiPolygon(interlockingConc3Data));
+			
+				
+//			MultiPolygon holes = new MultiPolygon(holes1Data);
+//			for(int j=0; j<650;j+=10){
+//				for(int i=0; i<1000;i+=10){
+//					if(holes.pointInPolygon(new Coordinate(i,j)))System.out.print("x");
+//					else System.out.print(" ");
+//				}
+//				System.out.println();
+//			}
+			//System.out.println(new MultiPolygon(holes1Data).pointInPolygon(new Coordinate(400, 100)));
 			
 //			}
 			endTime = System.currentTimeMillis();

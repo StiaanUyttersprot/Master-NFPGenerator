@@ -97,5 +97,10 @@ public class NoFitPolygon {
 		activeList.add(new Coordinate(coord));
 		nfpPolygonsList.add(activeList);
 	}
+
+	public boolean pointOnEdge(Coordinate nextStartPoint) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 }

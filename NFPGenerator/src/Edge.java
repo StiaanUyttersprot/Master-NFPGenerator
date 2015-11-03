@@ -317,7 +317,6 @@ public class Edge {
 		// the lines intersect if the start coordinate and the end coordinate
 		// of one of the edges are not both on the same side
 		//in most cases this will guarantee an intersection, but there are cases where the intersection point will not be part of one of the lines
-
 		if (testEdge.getStartPoint().dFunction(startPoint, endPoint) <= 1e-4
 				&& testEdge.getEndPoint().dFunction(startPoint, endPoint) <= 1e-4) {
 			intersect = false;
@@ -400,6 +399,25 @@ public class Edge {
 		}
 		return true;
 	}
+	
+	public boolean containsPoint(Coordinate intersectionCoord) {
+		boolean onLine;
+		onLine = intersectionCoord.dFunctionCheck(startPoint, endPoint);
+		if(onLine == false)return false;
+		if(intersectionCoord.getxCoord()<smallX-1e-4){
+			return false;
+		}
+		if(intersectionCoord.getxCoord()>bigX+1e-4){
+			return false;
+		}
+		if(intersectionCoord.getyCoord()<smallY-1e-4){
+			return false;
+		}
+		if(intersectionCoord.getyCoord()>bigY+1e-4){
+			return false;
+		}
+		return true;
+	}
 
 	public double calcClockwiseValue() {
 		
@@ -437,7 +455,11 @@ public class Edge {
 				intersectionCoord = calcIntersection(edge);
 				//intersectionCoord.roundCoord();
 				if(containsIntersectionPoint(intersectionCoord)&&edge.containsIntersectionPoint(intersectionCoord)){
-					intersection = true;
+					if(intersectionCoord.equalValuesRounded(edge.getStartPoint())||intersectionCoord.equalValuesRounded(edge.getEndPoint())
+							||intersectionCoord.equalValuesRounded(startPoint)||intersectionCoord.equalValuesRounded(endPoint)){
+						
+					}
+					else intersection = true;
 				}
 			}
 			
