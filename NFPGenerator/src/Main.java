@@ -9,8 +9,8 @@ import java.util.List;
  */
 public class Main {
 
-	private static final String directoryT1 = "D:\\CloudStorage\\Google Drive\\_Master\\Terashima1Polygons\\";
-	private static final String directoryT2 = "D:\\CloudStorage\\Google Drive\\_Master\\Terashima2Polygons\\";
+	private static final String directoryT1 = "Terashima1Polygons\\";
+	private static final String directoryT2 = "Terashima2Polygons\\";
 	/**
 	 * @param args
 	 *            the command line arguments
