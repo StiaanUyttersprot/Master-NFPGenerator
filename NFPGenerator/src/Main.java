@@ -72,7 +72,7 @@ public class Main {
 		for(File polygonT1: listOfFilesT1){
 			polygonsT1.add(new MultiPolygon(polygonT1));
 		}
-		System.out.println("T1 done");
+//		System.out.println("T1 done");
 //		for(File polygonT2: listOfFilesT2){
 //			polygonsT2.add(new MultiPolygon(polygonT2));
 //		}
@@ -156,18 +156,20 @@ public class Main {
 					j = 0;
 					for (MultiPolygon orb: polygonsT1) {
 						System.out.println("["+i+"]["+j+"]");
-						if(i == 43 && j == 23520){
+//						if(i == 43 && j == 23520){
 					
 							nfpList.add(Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb)));
-							break;
-							}
+//							break;
+//							}
+						totalIts++;
 						j++;
 				    }
-					if(i==43)break;
+					if(i==30)break;
 					i++;
-					totalIts++;
+					
 					System.out.println("current total: " + totalIts);
 				}
+				System.out.println("current total: " + totalIts);
 				System.out.println("fails: " + Orbiting.numberOfFails);
 				
 //			MultiPolygon holes = new MultiPolygon(holes1Data);
@@ -196,7 +198,7 @@ public class Main {
 		// ------------------------------------------------------------------------------------
 		// graphical representation
 		 
-		 drawTool.launchDrawer(args);
+		 //drawTool.launchDrawer(args);
 	}
 /*
 	private static void testCoordinateMethods() {

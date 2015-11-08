@@ -12,6 +12,7 @@ public class Vector {
 	private int edgeNumber;
 	private boolean fromStatEdge;
 
+	private static double roundingValue = 10000;
 	
 	private Edge parentEdge;
 	
@@ -186,9 +187,9 @@ public class Vector {
 	//check if two vectinates are equal (use round to make sure mistakes by rounding in the calculations are ignored
 	public boolean equalValuesRounded(Vector vect) {
 
-		if (Math.round(xCoord*10000)/10000 != Math.round(vect.getxCoord()*10000)/10000)
+		if (Math.round(xCoord*roundingValue)/roundingValue != Math.round(vect.getxCoord()*roundingValue)/roundingValue)
 			return false;
-		if (Math.round(yCoord*10000)/10000 != Math.round(vect.getyCoord()*10000)/10000)
+		if (Math.round(yCoord*roundingValue)/roundingValue != Math.round(vect.getyCoord()*roundingValue)/roundingValue)
 			return false;
 		return true;
 	}

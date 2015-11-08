@@ -9,6 +9,8 @@ public class Edge {
 	private Coordinate endPoint;
 	private int edgeNumber;
 	private boolean traversed = false;
+	
+	private static double round = 1e-4;
 
 	// values to be used for bounding box intersection
 	private double smallX;
@@ -242,20 +244,21 @@ public class Edge {
 		// een int, of gewoon altijd in coord er naar te callen
 		boolean containsX = false;
 		boolean containsY = false;
+		
 		// check x
 		// coordinate-----------------------------------------------------------------------------------------------------
-		if (startPoint.getxCoord() < endPoint.getxCoord()+1e-4) {
-			if (startPoint.getxCoord() <= coord.getxCoord()+1e-4 && endPoint.getxCoord() >= coord.getxCoord()-1e-4)
+		if (startPoint.getxCoord() < endPoint.getxCoord()+round) {
+			if (startPoint.getxCoord() <= coord.getxCoord()+round && endPoint.getxCoord() >= coord.getxCoord()-round)
 				containsX = true;
-		} else if (startPoint.getxCoord() >= coord.getxCoord()-1e-4 && endPoint.getxCoord() <= coord.getxCoord()+1e-4)
+		} else if (startPoint.getxCoord() >= coord.getxCoord()-round && endPoint.getxCoord() <= coord.getxCoord()+round)
 			containsX = true;
 
 		// check
 		// y-coordinate-----------------------------------------------------------------------------------------------------
-		if (startPoint.getyCoord() < endPoint.getyCoord()+1e-4) {
-			if (startPoint.getyCoord() <= coord.getyCoord()+1e-4 && endPoint.getyCoord() >= coord.getyCoord()-1e-4)
+		if (startPoint.getyCoord() < endPoint.getyCoord()+round) {
+			if (startPoint.getyCoord() <= coord.getyCoord()+round && endPoint.getyCoord() >= coord.getyCoord()-round)
 				containsY = true;
-		} else if (startPoint.getyCoord() >= coord.getyCoord()-1e-4 && endPoint.getyCoord() <= coord.getyCoord()+1e-4)
+		} else if (startPoint.getyCoord() >= coord.getyCoord()-round && endPoint.getyCoord() <= coord.getyCoord()+round)
 			containsY = true;
 
 		return containsX && containsY;
@@ -305,8 +308,8 @@ public class Edge {
 
 		boolean intersect = true;
 
-		if (edge.getBigX() <= smallX-1e-4 || edge.getSmallX() >= bigX+1e-4 || edge.getBigY() <= smallY-1e-4
-				|| edge.getSmallY() >= bigY+1e-4)
+		if (edge.getBigX() <= smallX-round|| edge.getSmallX() >= bigX+round || edge.getBigY() <= smallY-round
+				|| edge.getSmallY() >= bigY+round)
 			intersect = false;
 
 		return intersect;
@@ -317,11 +320,11 @@ public class Edge {
 		// the lines intersect if the start coordinate and the end coordinate
 		// of one of the edges are not both on the same side
 		//in most cases this will guarantee an intersection, but there are cases where the intersection point will not be part of one of the lines
-		if (testEdge.getStartPoint().dFunction(startPoint, endPoint) <= 1e-4
-				&& testEdge.getEndPoint().dFunction(startPoint, endPoint) <= 1e-4) {
+		if (testEdge.getStartPoint().dFunction(startPoint, endPoint) <= round
+				&& testEdge.getEndPoint().dFunction(startPoint, endPoint) <= round) {
 			intersect = false;
-		} else if (testEdge.getStartPoint().dFunction(startPoint, endPoint) >= -1e-4
-				&& testEdge.getEndPoint().dFunction(startPoint, endPoint) >= -1e-4) {
+		} else if (testEdge.getStartPoint().dFunction(startPoint, endPoint) >= -round
+				&& testEdge.getEndPoint().dFunction(startPoint, endPoint) >= -round) {
 			intersect = false;
 		}
 
@@ -385,16 +388,16 @@ public class Edge {
 	}
 
 	public boolean containsIntersectionPoint(Coordinate intersectionCoord) {
-		if(intersectionCoord.getxCoord()<smallX-1e-4){
+		if(intersectionCoord.getxCoord()<smallX-round){
 			return false;
 		}
-		if(intersectionCoord.getxCoord()>bigX+1e-4){
+		if(intersectionCoord.getxCoord()>bigX+round){
 			return false;
 		}
-		if(intersectionCoord.getyCoord()<smallY-1e-4){
+		if(intersectionCoord.getyCoord()<smallY-round){
 			return false;
 		}
-		if(intersectionCoord.getyCoord()>bigY+1e-4){
+		if(intersectionCoord.getyCoord()>bigY+round){
 			return false;
 		}
 		return true;
@@ -404,16 +407,16 @@ public class Edge {
 		boolean onLine;
 		onLine = intersectionCoord.dFunctionCheck(startPoint, endPoint);
 		if(onLine == false)return false;
-		if(intersectionCoord.getxCoord()<smallX-1e-4){
+		if(intersectionCoord.getxCoord()<smallX-round){
 			return false;
 		}
-		if(intersectionCoord.getxCoord()>bigX+1e-4){
+		if(intersectionCoord.getxCoord()>bigX+round){
 			return false;
 		}
-		if(intersectionCoord.getyCoord()<smallY-1e-4){
+		if(intersectionCoord.getyCoord()<smallY-round){
 			return false;
 		}
-		if(intersectionCoord.getyCoord()>bigY+1e-4){
+		if(intersectionCoord.getyCoord()>bigY+round){
 			return false;
 		}
 		return true;
@@ -475,8 +478,8 @@ public class Edge {
 
 	public boolean edgesOrientatedRight(Edge preEdge, Edge postEdge) {
 		//the edges are right of or parallel with this edge 
-		if(preEdge.getStartPoint().dFunction(startPoint, endPoint)<=1e-4 && 
-				postEdge.getEndPoint().dFunction(startPoint, endPoint) <= 1e-4)
+		if(preEdge.getStartPoint().dFunction(startPoint, endPoint)<=round && 
+				postEdge.getEndPoint().dFunction(startPoint, endPoint) <= round)
 			return true;
 		return false;
 	}

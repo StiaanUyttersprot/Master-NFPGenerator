@@ -12,7 +12,10 @@ public class TouchingEdgePair {
 	private Edge statEdge;
 	private Edge orbEdge;
 	private Coordinate touchPoint;
-
+	
+	private static double angleRound = 1e-4;
+	private static double round = 1e-4;
+	
 	// booleans saying if the touching point equals a start or end point from an
 	// edge
 	private boolean touchStatStart = false;
@@ -182,15 +185,15 @@ public class TouchingEdgePair {
 //		 Math.toDegrees(orbitingAngle));
 
 		//Situation 8: one edge is parallel with the other but starts at the end of the other one
-		if ((stationaryAngle <= orbitingAngle + 1e-6 && stationaryAngle >= orbitingAngle - 1e-6 ) && ( (touchStatEnd && touchOrbStart)||(touchStatStart&&touchOrbEnd) ) ) {
+		if ((stationaryAngle <= orbitingAngle + angleRound && stationaryAngle >= orbitingAngle - angleRound ) && ( (touchStatEnd && touchOrbStart)||(touchStatStart&&touchOrbEnd) ) ) {
 			startAngle = stationaryAngle - Math.PI;
 			endAngle = stationaryAngle + Math.PI;
 
 			return;
 		}
 		//Situation 8.2: edges are parallel and end or start in the same point
-		if (((stationaryAngle <= orbitingAngle  - Math.PI+ 1e-6 && stationaryAngle >= orbitingAngle  - Math.PI- 1e-6 )
-				||(stationaryAngle <= orbitingAngle  + Math.PI+ 1e-6 && stationaryAngle >= orbitingAngle  + Math.PI- 1e-6 )
+		if (((stationaryAngle <= orbitingAngle  - Math.PI+ 1e-6 && stationaryAngle >= orbitingAngle  - Math.PI- angleRound )
+				||(stationaryAngle <= orbitingAngle  + Math.PI+ 1e-6 && stationaryAngle >= orbitingAngle  + Math.PI- angleRound )
 				&& ((touchStatEnd && touchOrbEnd)||(touchStatStart && touchOrbStart)))) {
 			if(touchStatEnd && touchOrbEnd && touchStatStart && touchOrbStart){
 				startAngle = stationaryAngle - Math.PI;
@@ -204,9 +207,9 @@ public class TouchingEdgePair {
 		}
 		
 		//Situation 7
-		if ((stationaryAngle <= orbitingAngle + 1e-6 && stationaryAngle >= orbitingAngle - 1e-6 )
-				||(stationaryAngle <= orbitingAngle  - Math.PI+ 1e-6 && stationaryAngle >= orbitingAngle  - Math.PI- 1e-6 )
-				|| (stationaryAngle <= orbitingAngle  + Math.PI+ 1e-6 && stationaryAngle >= orbitingAngle  + Math.PI- 1e-6 )) {
+		if ((stationaryAngle <= orbitingAngle + 1e-6 && stationaryAngle >= orbitingAngle - angleRound )
+				||(stationaryAngle <= orbitingAngle  - Math.PI+ 1e-6 && stationaryAngle >= orbitingAngle  - Math.PI- angleRound )
+				|| (stationaryAngle <= orbitingAngle  + Math.PI+ 1e-6 && stationaryAngle >= orbitingAngle  + Math.PI- angleRound )) {
 			startAngle = stationaryAngle - Math.PI;
 			endAngle = stationaryAngle;
 			return;
@@ -226,8 +229,8 @@ public class TouchingEdgePair {
 			// stationary edge is located to the right of orbiting edge
 			//we have to check the D-function for the start and end of the stationary edge to see if it is left or right, one of them will be zero, 
 			//the other one will be smaller or bigger then zero
-			if (statEdge.getEndPoint().dFunction(orbEdge.getStartPoint(), orbEdge.getEndPoint()) <= 1e-4 
-					&& statEdge.getStartPoint().dFunction(orbEdge.getStartPoint(), orbEdge.getEndPoint()) <= 1e-4) {
+			if (statEdge.getEndPoint().dFunction(orbEdge.getStartPoint(), orbEdge.getEndPoint()) <= round 
+					&& statEdge.getStartPoint().dFunction(orbEdge.getStartPoint(), orbEdge.getEndPoint()) <= round) {
 				startAngle = orbitingAngle;
 				endAngle = orbitingAngle + Math.PI;
 			}
@@ -381,15 +384,15 @@ public class TouchingEdgePair {
 		// test all possible ranges
 		double vectorAngle = vector.getVectorAngle();		
 		
-		if (startAngle-1e-4 <= vectorAngle && vectorAngle <= endAngle+1e-4)
+		if (startAngle-angleRound <= vectorAngle && vectorAngle <= endAngle+angleRound)
 			return true;
 
 		double rotatedVectorAngle = vectorAngle + 2 * Math.PI;
-		if (startAngle-1e-4 <= rotatedVectorAngle && rotatedVectorAngle <= endAngle+1e-4)
+		if (startAngle-angleRound <= rotatedVectorAngle && rotatedVectorAngle <= endAngle+angleRound)
 			return true;
 
 		double negativeRotatedVectorAngle = vectorAngle - 2 * Math.PI;
-		if (startAngle-1e-4 <= negativeRotatedVectorAngle && negativeRotatedVectorAngle <= endAngle+1e-4)
+		if (startAngle-angleRound <= negativeRotatedVectorAngle && negativeRotatedVectorAngle <= endAngle+angleRound)
 			return true;
 
 		return false;

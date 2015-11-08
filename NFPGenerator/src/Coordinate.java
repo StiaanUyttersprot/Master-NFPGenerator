@@ -7,7 +7,10 @@
 public class Coordinate {
 	private double xCoord;
 	private double yCoord;
-
+	
+	private static double roundingValue = 10000;
+	private static double round = 1e-4;
+	
 	Coordinate(double x, double y) {
 		xCoord = x;
 		yCoord = y;
@@ -116,7 +119,7 @@ public class Coordinate {
 		boolean touching = false;
 		double dValue = (startPoint.getxCoord() - endPoint.getxCoord()) * (startPoint.getyCoord() - yCoord)
 				- (startPoint.getyCoord() - endPoint.getyCoord()) * (startPoint.getxCoord() - xCoord);
-		if(dValue < 1e-4 && dValue > -1e-4)touching = true;
+		if(dValue < round && dValue > -round)touching = true;
 		return touching;
 	}
 
@@ -128,9 +131,10 @@ public class Coordinate {
 	//check if two coordinates are equal (use round to make sure mistakes by rounding in the calculations are ignored
 	public boolean equalValuesRounded(Coordinate coord) {
 
-		if (Math.round(xCoord*10000)/10000 != Math.round(coord.getxCoord()*10000)/10000)
+		
+		if (Math.round(xCoord*roundingValue)/roundingValue != Math.round(coord.getxCoord()*roundingValue)/roundingValue)
 			return false;
-		if (Math.round(yCoord*10000)/10000 != Math.round(coord.getyCoord()*10000)/10000)
+		if (Math.round(yCoord*roundingValue)/roundingValue != Math.round(coord.getyCoord()*roundingValue)/roundingValue)
 			return false;
 		return true;
 	}
@@ -179,7 +183,7 @@ public class Coordinate {
 	}
 	
 	public void roundCoord(){
-		int roundingValue = 1000;
+
 		xCoord = Math.round(xCoord*roundingValue)/roundingValue;
 		yCoord = Math.round(yCoord*roundingValue)/roundingValue;
 	}

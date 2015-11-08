@@ -9,6 +9,7 @@ import java.util.Set;
 public class Orbiting {
 
 	public static int numberOfFails = 0;
+	public static int numberOfSecFails = 0;
 	public static NoFitPolygon generateNFP(MultiPolygon statPoly, MultiPolygon orbPoly) {
 
 		Coordinate bottomCoord = statPoly.findBottomCoord();
@@ -114,9 +115,9 @@ public class Orbiting {
 		
 		
 		//only draw the final result after placing the orbiting polygon back to the startPosition
-		orbPoly.translate(bottomCoord.getxCoord() - topCoord.getxCoord(),
-				bottomCoord.getyCoord() - topCoord.getyCoord());
-		NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
+//		orbPoly.translate(bottomCoord.getxCoord() - topCoord.getxCoord(),
+//				bottomCoord.getyCoord() - topCoord.getyCoord());
+//		NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
 //		
 		return nfp;// TODO resultaat hier zetten
 	}
@@ -133,7 +134,7 @@ public class Orbiting {
 		// start the orbiting
 		do{
 			//Storing data for drawing step by step----------------------------------------------------------------------------------------
-			//NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
+//			NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
 			
 			// ---------------------------------------------------------------------------------------------------------------------
 			// detecting touching edges
@@ -261,6 +262,7 @@ public class Orbiting {
 				}
 				else{
 					System.out.println("inner RIP, perfect fit");
+					numberOfSecFails++;
 				}
 				break;
 			}
@@ -342,5 +344,9 @@ public class Orbiting {
 			stap++;
 		}
 		while(!currentPoint.equalValuesRounded(startPoint) && stap < aantalStappen);
+		if(!currentPoint.equalValuesRounded(startPoint) && stap == aantalStappen){
+			System.out.println("stuck");
+			numberOfFails++;
+		}
 	}
 }
