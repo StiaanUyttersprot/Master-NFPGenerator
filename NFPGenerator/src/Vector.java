@@ -12,6 +12,9 @@ public class Vector {
 	private int edgeNumber;
 	private boolean fromStatEdge;
 
+	
+	private Edge parentEdge;
+	
 	Vector(double x, double y) {
 		xCoord = x;
 		yCoord = y;
@@ -313,6 +316,14 @@ public class Vector {
 
 		}
 		return trimmed;
+	}
+
+	public Edge getParentEdge() {
+		return parentEdge;
+	}
+
+	public void setParentEdge(Edge parentEdge) {
+		this.parentEdge = parentEdge;
 	}
 
 }

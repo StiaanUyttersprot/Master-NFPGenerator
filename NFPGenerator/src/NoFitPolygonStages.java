@@ -70,7 +70,7 @@ public class NoFitPolygonStages {
 		Stage stage = new Stage();
 
 		Group nfpGroup = new Group();
-		Scene scene = new Scene(nfpGroup, sceneSizeX, sceneSizeY, Color.GREY);
+		Scene scene = new Scene(nfpGroup, sceneSizeX, sceneSizeY, Color.WHITESMOKE);
 
 		Line xAxis = new Line(0, sceneSizeY / 2, 10000, sceneSizeY / 2);
 		Line yAxis = new Line(sceneSizeX / 2, 0, sceneSizeX / 2, 10000);
@@ -118,8 +118,8 @@ public class NoFitPolygonStages {
         Polygon polygon = mPolygon.makeOuterPolygon(sceneSizeX, sceneSizeY, resizeFactor);
         
         switch(color){
-        case 0: polygon.setFill(Color.SKYBLUE);break;
-        case 1: polygon.setFill(Color.RED);break;
+        case 0: polygon.setFill(Color.GREY);break;
+        case 1: polygon.setFill(Color.DARKGREY);break;
         }
         polygon.setStrokeWidth(1);
         polygon.setStroke(Color.BLACK);
@@ -129,7 +129,7 @@ public class NoFitPolygonStages {
         Polygon[] holes = mPolygon.makeHoles(sceneSizeX, sceneSizeY, resizeFactor);
         
         for(Polygon hole: holes){
-            hole.setFill(Color.GREY);
+            hole.setFill(Color.WHITESMOKE);
             hole.setStrokeWidth(1);
             hole.setStroke(Color.BLACK);
             group.getChildren().add(hole);

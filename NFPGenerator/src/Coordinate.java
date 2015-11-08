@@ -41,6 +41,10 @@ public class Coordinate {
 	public String toString() {
 		return "( " + xCoord + " , " + yCoord + " ) ";
 	}
+	
+	public String toNfpString(){
+		return xCoord + " " + yCoord;
+	}
 
 	@Override
 	public int hashCode() {

@@ -9,11 +9,15 @@ import java.util.List;
  */
 public class Main {
 
+	private static final String directoryT1 = "D:\\CloudStorage\\Google Drive\\_Master\\Terashima1Polygons\\";
+	private static final String directoryT2 = "D:\\CloudStorage\\Google Drive\\_Master\\Terashima2Polygons\\";
 	/**
 	 * @param args
 	 *            the command line arguments
 	 * @throws java.io.FileNotFoundException
 	 */
+	
+	
 	public static void main(String[] args) throws FileNotFoundException {
 
 		DrawJavaFX drawTool = new DrawJavaFX();
@@ -46,14 +50,34 @@ public class Main {
 		File holes1Data = new File("Holes1.txt");
 		File holes2Data = new File("Holes2.txt");
 		
+		File folderT1 = new File(directoryT1);
+		File[] listOfFilesT1 = folderT1.listFiles();
+		
+		File folderT2 = new File(directoryT2);
+		File[] listOfFilesT2 = folderT2.listFiles();
+		
 		List<MultiPolygon> randomList = new ArrayList<>();
+		List<NoFitPolygon> nfpList = new ArrayList<>();
 		
 		randomList.add(new MultiPolygon(convex1Data));
 		randomList.add(new MultiPolygon(convex2Data));
 		
 		randomList.add(new MultiPolygon(concave1Data));
 		randomList.add(new MultiPolygon(concave2Data));
-
+		
+		List<MultiPolygon> polygonsT1 = new ArrayList<>();
+		List<MultiPolygon> polygonsT2 = new ArrayList<>();
+		
+		System.out.println("T1 to multipolys");
+		for(File polygonT1: listOfFilesT1){
+			polygonsT1.add(new MultiPolygon(polygonT1));
+		}
+		System.out.println("T1 done");
+//		for(File polygonT2: listOfFilesT2){
+//			polygonsT2.add(new MultiPolygon(polygonT2));
+//		}
+		
+		
 		
 		// mPolygon.printPolygonData();
 
@@ -94,34 +118,57 @@ public class Main {
 //					
 //					for(MultiPolygon orb : randomList){
 //						j++;
-//						Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb));
+//						nfpList.add(Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb)));
 //						System.out.println("["+i+"]["+j+"]");
 //					}
 //					i++;
 //				}
 //				
-//				Orbiting.generateNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data));
+//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data)));
 //		
-//				Orbiting.generateNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data));
+//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data)));
 //		
-//				Orbiting.generateNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));
+//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data)));
 //		
-//				Orbiting.generateNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data));
+//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data)));
 //		
-//				Orbiting.generateNFP(new MultiPolygon(interlockingConc1Data), new MultiPolygon(triangleData));
+//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(interlockingConc1Data), new MultiPolygon(triangleData)));
 //				
-//				Orbiting.generateNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc2Data));
+//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc2Data)));
 //			
-//				Orbiting.generateNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc3Data));
+//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc3Data)));
 //
-//				Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(triangleData));
+//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(triangleData)));
 //				
-//				Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(holes2Data));
+//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(holes2Data)));
 //			
-//				Orbiting.generateNFP(new MultiPolygon(interlockingConc3Data), new MultiPolygon(interlockingConc2Data));
-				
-				Orbiting.generateNFP(new MultiPolygon(interlockingConc2Data), new MultiPolygon(interlockingConc3Data));
+//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(interlockingConc3Data), new MultiPolygon(interlockingConc2Data)));
+//				
+//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(interlockingConc2Data), new MultiPolygon(interlockingConc3Data)));
+//			
+//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(block2Data)));
 			
+				int i = 0;
+				int j = 0;
+				int totalIts = 0;
+				for (MultiPolygon stat: polygonsT1) {
+					//if(i == 10)break;
+					j = 0;
+					for (MultiPolygon orb: polygonsT1) {
+						System.out.println("["+i+"]["+j+"]");
+						if(i == 43 && j == 23520){
+					
+							nfpList.add(Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb)));
+							break;
+							}
+						j++;
+				    }
+					if(i==43)break;
+					i++;
+					totalIts++;
+					System.out.println("current total: " + totalIts);
+				}
+				System.out.println("fails: " + Orbiting.numberOfFails);
 				
 //			MultiPolygon holes = new MultiPolygon(holes1Data);
 //			for(int j=0; j<650;j+=10){
@@ -137,7 +184,13 @@ public class Main {
 			endTime = System.currentTimeMillis();
 			duration = (endTime - startTime);
 			
-			System.out.println(duration);
+			System.out.println("duration: " + duration);
+			
+			
+			//print the nfp's------------------------------------------------------------------------
+//			for(NoFitPolygon nfp : nfpList){
+//				System.out.println(nfp.toString());
+//			}
 			
 //		}
 		// ------------------------------------------------------------------------------------

@@ -121,10 +121,12 @@ public class TouchingEdgePair {
 			// vector will be derived from the orbiting edge
 			if (orbEdge.getEndPoint().dFunction(statEdge.getStartPoint(), statEdge.getEndPoint()) > 0) {
 				potentialVector =  orbEdge.makeFullVector(statEdge.getEdgeNumber());
+				potentialVector.setParentEdge(orbEdge);
 			} else {
 				// if the D-function returns 0, edges are parallel, either edge
 				// can be used.
 				potentialVector =  statEdge.makeFullVector(statEdge.getEdgeNumber());
+				potentialVector.setParentEdge(statEdge);
 			}
 		}
 		// ---------------------------------------------------------------------------------------------------------------------
@@ -137,6 +139,7 @@ public class TouchingEdgePair {
 				potentialVector = null;
 			} else {
 				potentialVector = statEdge.makeFullVector(statEdge.getEdgeNumber());
+				potentialVector.setParentEdge(statEdge);
 			}
 		}
 		// ---------------------------------------------------------------------------------------------------------------------
@@ -145,6 +148,7 @@ public class TouchingEdgePair {
 				potentialVector = null;
 			} else {
 				potentialVector = orbEdge.makeFullVector(statEdge.getEdgeNumber());
+				potentialVector.setParentEdge(orbEdge);
 			}
 		}
 		// ---------------------------------------------------------------------------------------------------------------------
@@ -153,10 +157,12 @@ public class TouchingEdgePair {
 
 		else if (touchStatStart || touchStatEnd) {
 			potentialVector = orbEdge.makePartialVector(touchPoint, statEdge.getEdgeNumber());
+			potentialVector.setParentEdge(orbEdge);
 		}
 		// ---------------------------------------------------------------------------------------------------------------------
 		else if (touchOrbStart || touchOrbEnd) {
 			potentialVector = statEdge.makePartialVector(touchPoint, statEdge.getEdgeNumber());
+			potentialVector.setParentEdge(statEdge);
 		}
 		return potentialVector;
 	}

@@ -102,5 +102,40 @@ public class NoFitPolygon {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	public boolean containsPoint(Coordinate coordinate) {
+		Edge testEdge;
+		for(List<Coordinate> partList : nfpPolygonsList){
+			for (int i = 0; i < partList.size(); i++) {
+				
+				testEdge = new Edge(partList.get(i), partList.get((i+1)%partList.size()));
+				
+				if(testEdge.containsPoint(coordinate))return true;
+				if(partList.get(i).equals(coordinate))return true;
+			}
+			
+		}
+		return false;
+	}
+
+	@Override
+	public String toString() {
+		String nfp = "";
+		
+		nfp += nfpPolygonsList.size() + "\n";
+		for(List<Coordinate> partList : nfpPolygonsList){
+			if(partList.size()>1)partList.remove(partList.size()-1);
+			nfp+= partList.size();
+			
+			for(Coordinate coord: partList){
+				nfp+="\n";
+				nfp+= coord.toNfpString();
+			}
+			nfp+="\n\n";
+		}
+		
+		return nfp;
+	}
+	
 	
 }
