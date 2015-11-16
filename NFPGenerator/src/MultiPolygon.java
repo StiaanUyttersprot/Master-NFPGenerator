@@ -69,7 +69,7 @@ public class MultiPolygon {
 		
 		if(checkClockwise(outerPolygon)){
 			
-			changeClockOrientation(outerPolygon);
+			//changeClockOrientation(outerPolygon);
 
 		}
 
@@ -83,7 +83,7 @@ public class MultiPolygon {
 			}
 			
 			if(!checkClockwise(holes[i])){
-				changeClockOrientation(holes[i]);
+				//changeClockOrientation(holes[i]);
 			}
 		}
 		input.close();
@@ -518,7 +518,7 @@ public class MultiPolygon {
 		changedPolygon[0] = polygon[0];
 		for(int i = 1; i < polygon.length; i++){
 			changedPolygon[i] = polygon[polygon.length-i];
-			//System.out.println("placing " + polygon[polygon.length-i].toString() + "to location " + i);
+			System.out.println("placing " + polygon[polygon.length-i].toString() + "to location " + i);
 		}
 		for(int i = 0; i < polygon.length; i++){
 			polygon[i] = changedPolygon[i];

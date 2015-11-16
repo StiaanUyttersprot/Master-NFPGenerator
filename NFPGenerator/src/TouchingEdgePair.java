@@ -13,7 +13,7 @@ public class TouchingEdgePair {
 	private Edge orbEdge;
 	private Coordinate touchPoint;
 	
-	private static double angleRound = 1e-4;
+	private static double angleRound = 1e-6;
 	private static double round = 1e-4;
 	
 	// booleans saying if the touching point equals a start or end point from an
@@ -33,31 +33,31 @@ public class TouchingEdgePair {
 		this.orbEdge = orbEdge;
 		this.touchPoint = touchPoint;
 
-		if (statEdge.getStartPoint().equals(touchPoint)) {
+		if (statEdge.getStartPoint().equalValuesRounded(touchPoint)) {
 			touchStatStart = true;
-		} else if (statEdge.getEndPoint().equals(touchPoint)) {
+		} else if (statEdge.getEndPoint().equalValuesRounded(touchPoint)) {
 			touchStatEnd = true;
 		}
 
-		if (orbEdge.getStartPoint().equals(touchPoint)) {
+		if (orbEdge.getStartPoint().equalValuesRounded(touchPoint)) {
 			touchOrbStart = true;
-		} else if (orbEdge.getEndPoint().equals(touchPoint)) {
+		} else if (orbEdge.getEndPoint().equalValuesRounded(touchPoint)) {
 			touchOrbEnd = true;
 		}
-		if(orbEdge.getStartPoint().equals(statEdge.getStartPoint())){
+		if(orbEdge.getStartPoint().equalValuesRounded(statEdge.getStartPoint())){
 			touchStatStart = true;
 			touchOrbStart = true;
 		}
-		if(orbEdge.getEndPoint().equals(statEdge.getEndPoint())){
+		if(orbEdge.getEndPoint().equalValuesRounded(statEdge.getEndPoint())){
 			touchStatEnd = true;
 			touchOrbEnd = true;
 		}
-		if(orbEdge.getStartPoint().equals(statEdge.getEndPoint())){
+		if(orbEdge.getStartPoint().equalValuesRounded(statEdge.getEndPoint())){
 			
 			touchStatEnd = true;
 			touchOrbStart = true;
 		}
-		if(orbEdge.getEndPoint().equals(statEdge.getStartPoint())){
+		if(orbEdge.getEndPoint().equalValuesRounded(statEdge.getStartPoint())){
 			touchStatStart = true;
 			touchOrbEnd = true;
 		}

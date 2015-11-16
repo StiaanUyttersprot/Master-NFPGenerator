@@ -69,14 +69,23 @@ public class Main {
 		List<MultiPolygon> polygonsT2 = new ArrayList<>();
 		
 		System.out.println("T1 to multipolys");
+		int n = 0;
+		int numberOfPolys = 1000;
 		for(File polygonT1: listOfFilesT1){
+			if(n == numberOfPolys)break;
 			polygonsT1.add(new MultiPolygon(polygonT1));
+			n++;
 		}
-//		System.out.println("T1 done");
-//		for(File polygonT2: listOfFilesT2){
-//			polygonsT2.add(new MultiPolygon(polygonT2));
-//		}
+		n = 0;
+		System.out.println("T1 done");
+		System.out.println("T2 to multipolys");
+		for(File polygonT2: listOfFilesT2){
+			if(n == numberOfPolys)break;
+			polygonsT2.add(new MultiPolygon(polygonT2));
+			n++;
+		}
 		
+		System.out.println("T2 done");
 		
 		
 		// mPolygon.printPolygonData();
@@ -106,72 +115,71 @@ public class Main {
 		long duration;  //divide by 1000000 to get milliseconds.
 		int scaleOfTime = 1000000;
 		List<Long> durations = new ArrayList<>();
-		
+		int totalIts = 0;
 		int numberOfIterations = 100;
 		
-//		for(int j = 0; j<11; j++){
-			startTime = System.currentTimeMillis();
-//			for(int i = 0; i< numberOfIterations; i++){
-//				int i = 0;
-//				for(MultiPolygon stat : randomList){
-//					int j = 0;
-//					
-//					for(MultiPolygon orb : randomList){
-//						j++;
-//						nfpList.add(Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb)));
-//						System.out.println("["+i+"]["+j+"]");
-//					}
-//					i++;
-//				}
-//				
-//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data)));
-//		
-//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data)));
-//		
-//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data)));
-//		
-//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data)));
-//		
-//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(interlockingConc1Data), new MultiPolygon(triangleData)));
-//				
-//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc2Data)));
-//			
-//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc3Data)));
-//
-//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(triangleData)));
-//				
-//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(holes2Data)));
-//			
-//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(interlockingConc3Data), new MultiPolygon(interlockingConc2Data)));
-//				
-//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(interlockingConc2Data), new MultiPolygon(interlockingConc3Data)));
-//			
-//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(block2Data)));
+
+		startTime = System.currentTimeMillis();
+
+		int i = 0;
+		for(MultiPolygon stat : randomList){
+			int j = 0;
 			
-				int i = 0;
-				int j = 0;
-				int totalIts = 0;
-				for (MultiPolygon stat: polygonsT1) {
-					//if(i == 10)break;
-					j = 0;
-					for (MultiPolygon orb: polygonsT1) {
-						System.out.println("["+i+"]["+j+"]");
-//						if(i == 43 && j == 23520){
-					
-							nfpList.add(Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb)));
-//							break;
-//							}
-						totalIts++;
-						j++;
-				    }
-					if(i==30)break;
-					i++;
-					
-					System.out.println("current total: " + totalIts);
-				}
-				System.out.println("current total: " + totalIts);
-				System.out.println("fails: " + Orbiting.numberOfFails);
+			for(MultiPolygon orb : randomList){
+				j++;
+				nfpList.add(Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb)));
+				totalIts++;
+//				System.out.println("["+i+"]["+j+"]");
+			}
+			i++;
+		}
 				
+		nfpList.add(Orbiting.generateNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data)));
+		totalIts++;
+		nfpList.add(Orbiting.generateNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data)));
+		totalIts++;
+		nfpList.add(Orbiting.generateNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data)));
+		totalIts++;
+		nfpList.add(Orbiting.generateNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data)));
+		totalIts++;
+		nfpList.add(Orbiting.generateNFP(new MultiPolygon(interlockingConc1Data), new MultiPolygon(triangleData)));
+		totalIts++;
+		nfpList.add(Orbiting.generateNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc2Data)));
+		totalIts++;
+		nfpList.add(Orbiting.generateNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc3Data)));
+		totalIts++;
+		nfpList.add(Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(triangleData)));
+		totalIts++;
+		nfpList.add(Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(holes2Data)));
+		totalIts++;
+		nfpList.add(Orbiting.generateNFP(new MultiPolygon(interlockingConc3Data), new MultiPolygon(interlockingConc2Data)));
+		totalIts++;
+		nfpList.add(Orbiting.generateNFP(new MultiPolygon(interlockingConc2Data), new MultiPolygon(interlockingConc3Data)));
+		totalIts++;
+		nfpList.add(Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(block2Data)));
+		totalIts++;	
+//		int i = 0;
+//		int j = 0;
+//		
+//		for (MultiPolygon stat: polygonsT2) {
+//			//if(i == 10)break;
+//			j = 0;
+//			for (MultiPolygon orb: polygonsT2) {
+////						System.out.println("["+i+"]["+j+"]");
+////						if(i == 10 && j == 42){
+//			
+//					nfpList.add(Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb)));
+////							break;
+////						}
+//				totalIts++;
+//				j++;
+//		    }
+//			i++;
+//			
+//		}
+		System.out.println("current total: " + totalIts);
+		System.out.println("fails: " + Orbiting.numberOfFails);
+		System.out.println("infinite stuck: " + Orbiting.numberStuckInfinite);
 //			MultiPolygon holes = new MultiPolygon(holes1Data);
 //			for(int j=0; j<650;j+=10){
 //				for(int i=0; i<1000;i+=10){
@@ -183,10 +191,10 @@ public class Main {
 			//System.out.println(new MultiPolygon(holes1Data).pointInPolygon(new Coordinate(400, 100)));
 			
 //			}
-			endTime = System.currentTimeMillis();
-			duration = (endTime - startTime);
-			
-			System.out.println("duration: " + duration);
+		endTime = System.currentTimeMillis();
+		duration = (endTime - startTime);
+		
+		System.out.println("duration: " + duration);
 			
 			
 			//print the nfp's------------------------------------------------------------------------
@@ -198,7 +206,7 @@ public class Main {
 		// ------------------------------------------------------------------------------------
 		// graphical representation
 		 
-		 //drawTool.launchDrawer(args);
+//		 drawTool.launchDrawer(args);
 	}
 /*
 	private static void testCoordinateMethods() {

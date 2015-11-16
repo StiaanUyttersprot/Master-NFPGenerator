@@ -10,6 +10,7 @@ public class Orbiting {
 
 	public static int numberOfFails = 0;
 	public static int numberOfSecFails = 0;
+	public static int numberStuckInfinite = 0;
 	public static NoFitPolygon generateNFP(MultiPolygon statPoly, MultiPolygon orbPoly) {
 
 		Coordinate bottomCoord = statPoly.findBottomCoord();
@@ -112,11 +113,11 @@ public class Orbiting {
 			}
 		}
 		
-		
+	
 		
 		//only draw the final result after placing the orbiting polygon back to the startPosition
-//		orbPoly.translate(bottomCoord.getxCoord() - topCoord.getxCoord(),
-//				bottomCoord.getyCoord() - topCoord.getyCoord());
+		orbPoly.translate(bottomCoord.getxCoord() - topCoord.getxCoord(),
+				bottomCoord.getyCoord() - topCoord.getyCoord());
 //		NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
 //		
 		return nfp;// TODO resultaat hier zetten
@@ -295,7 +296,7 @@ public class Orbiting {
 			//-------------------------------------------------------------------------------------------------------------------------
 			//Print the trimmed vector
 			
-			//System.out.println(" trimmed: " + translationVector);
+//			System.out.println(" trimmed: " + translationVector);
 			
 			//marking the traversed edge-----------------------------------------------------------------------------------------------
 			
@@ -347,6 +348,7 @@ public class Orbiting {
 		if(!currentPoint.equalValuesRounded(startPoint) && stap == aantalStappen){
 			System.out.println("stuck");
 			numberOfFails++;
+			numberStuckInfinite++;
 		}
 	}
 }

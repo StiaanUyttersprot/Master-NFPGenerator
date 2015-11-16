@@ -20,8 +20,8 @@ public class PolygonPairStages {
 	static int aantalPolygonPairStages = 0;
 	static List<MultiPolygon[]> MultiPolygonsToDraw = new ArrayList<>();
 	
-	static double sceneSizeX = 200;
-	static double sceneSizeY = 200;
+	static double sceneSizeX = 300;
+	static double sceneSizeY = 300;
 	
 //	public static void addPolygonPair(MultiPolygon[] multiPolyPair){
 //		aantalPolygonPairStages++;
@@ -88,7 +88,7 @@ public class PolygonPairStages {
 		Stage stage = new Stage();
 		
 		Group multiPolygonPairGroup = new Group();
-		Scene scene = new Scene(multiPolygonPairGroup, sceneSizeX, sceneSizeY, Color.WHITE);
+		Scene scene = new Scene(multiPolygonPairGroup, sceneSizeX, sceneSizeY, Color.WHITESMOKE);
 		
 		Line xAxis = new Line(0,sceneSizeY/2,10000,sceneSizeY/2);
 	    Line yAxis = new Line(sceneSizeX/2,0,sceneSizeX/2,10000);
