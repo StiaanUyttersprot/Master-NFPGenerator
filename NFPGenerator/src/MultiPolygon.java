@@ -491,7 +491,7 @@ public class MultiPolygon {
 			}
 		}
 	}
-	//the next method returns true if the polygon is clockwise
+	//the next method returns true if the polygon is clockwise BUGGED
 	private boolean checkClockwise(Coordinate[] polygon) {
 		double clockwiseValue = 0;
 		
