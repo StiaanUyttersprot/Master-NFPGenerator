@@ -1,6 +1,6 @@
 import java.util.Comparator;
 
-public class EdgeComparator implements Comparator<Vector> {
+public class VectorComparator implements Comparator<Vector> {
 
 	@Override
 	public int compare(Vector vect1, Vector vect2) {

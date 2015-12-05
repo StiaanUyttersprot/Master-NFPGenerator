@@ -118,7 +118,7 @@ public class Orbiting {
 		//only draw the final result after placing the orbiting polygon back to the startPosition
 		orbPoly.translate(bottomCoord.getxCoord() - topCoord.getxCoord(),
 				bottomCoord.getyCoord() - topCoord.getyCoord());
-//		NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
+		NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
 //		
 		return nfp;// TODO resultaat hier zetten
 	}
@@ -135,7 +135,7 @@ public class Orbiting {
 		// start the orbiting
 		do{
 			//Storing data for drawing step by step----------------------------------------------------------------------------------------
-//			NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
+			NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
 			
 			// ---------------------------------------------------------------------------------------------------------------------
 			// detecting touching edges
@@ -208,7 +208,7 @@ public class Orbiting {
 
 			}
 			//sorting by edgenumber and vectors made from stationary edges get priviledges
-			Collections.sort(feasibleVectorList, new EdgeComparator());
+			Collections.sort(feasibleVectorList, new VectorComparator());
 			// ---------------------------------------------------------------------------------------------------------------------
 			//print feasible vectors
 			

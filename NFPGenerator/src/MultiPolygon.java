@@ -69,7 +69,7 @@ public class MultiPolygon {
 		
 		if(checkClockwise(outerPolygon)){
 			
-			//changeClockOrientation(outerPolygon);
+			changeClockOrientation(outerPolygon);
 
 		}
 
@@ -83,7 +83,7 @@ public class MultiPolygon {
 			}
 			
 			if(!checkClockwise(holes[i])){
-				//changeClockOrientation(holes[i]);
+				changeClockOrientation(holes[i]);
 			}
 		}
 		input.close();
@@ -491,7 +491,7 @@ public class MultiPolygon {
 			}
 		}
 	}
-	//the next method returns true if the polygon is clockwise BUGGED
+	//the next method returns true if the polygon is clockwise
 	private boolean checkClockwise(Coordinate[] polygon) {
 		double clockwiseValue = 0;
 		
@@ -506,6 +506,11 @@ public class MultiPolygon {
 				ySum = polygon[i+1].getyCoord() + polygon[i].getyCoord();
 				clockwiseValue += xDiff*ySum;
 				
+			}
+			else{
+				xDiff = polygon[0].getxCoord() - polygon[i].getxCoord();
+				ySum = polygon[0].getyCoord() + polygon[i].getyCoord();
+				clockwiseValue += xDiff*ySum;
 			}
 		}
 		

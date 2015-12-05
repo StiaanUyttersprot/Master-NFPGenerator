@@ -122,40 +122,40 @@ public class Main {
 		startTime = System.currentTimeMillis();
 
 		int i = 0;
-		for(MultiPolygon stat : randomList){
-			int j = 0;
-			
-			for(MultiPolygon orb : randomList){
-				j++;
-				nfpList.add(Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb)));
-				totalIts++;
-//				System.out.println("["+i+"]["+j+"]");
-			}
-			i++;
-		}
-				
-		nfpList.add(Orbiting.generateNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data)));
-		totalIts++;
-		nfpList.add(Orbiting.generateNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data)));
-		totalIts++;
-		nfpList.add(Orbiting.generateNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data)));
-		totalIts++;
-		nfpList.add(Orbiting.generateNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data)));
-		totalIts++;
-		nfpList.add(Orbiting.generateNFP(new MultiPolygon(interlockingConc1Data), new MultiPolygon(triangleData)));
-		totalIts++;
-		nfpList.add(Orbiting.generateNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc2Data)));
-		totalIts++;
-		nfpList.add(Orbiting.generateNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc3Data)));
-		totalIts++;
-		nfpList.add(Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(triangleData)));
-		totalIts++;
-		nfpList.add(Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(holes2Data)));
-		totalIts++;
-		nfpList.add(Orbiting.generateNFP(new MultiPolygon(interlockingConc3Data), new MultiPolygon(interlockingConc2Data)));
-		totalIts++;
-		nfpList.add(Orbiting.generateNFP(new MultiPolygon(interlockingConc2Data), new MultiPolygon(interlockingConc3Data)));
-		totalIts++;
+//		for(MultiPolygon stat : randomList){
+//			int j = 0;
+//			
+//			for(MultiPolygon orb : randomList){
+//				j++;
+//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb)));
+//				totalIts++;
+////				System.out.println("["+i+"]["+j+"]");
+//			}
+//			i++;
+//		}
+//				
+//		nfpList.add(Orbiting.generateNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data)));
+//		totalIts++;
+//		nfpList.add(Orbiting.generateNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data)));
+//		totalIts++;
+//		nfpList.add(Orbiting.generateNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data)));
+//		totalIts++;
+//		nfpList.add(Orbiting.generateNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data)));
+//		totalIts++;
+//		nfpList.add(Orbiting.generateNFP(new MultiPolygon(interlockingConc1Data), new MultiPolygon(triangleData)));
+//		totalIts++;
+//		nfpList.add(Orbiting.generateNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc2Data)));
+//		totalIts++;
+//		nfpList.add(Orbiting.generateNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc3Data)));
+//		totalIts++;
+//		nfpList.add(Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(triangleData)));
+//		totalIts++;
+//		nfpList.add(Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(holes2Data)));
+//		totalIts++;
+//		nfpList.add(Orbiting.generateNFP(new MultiPolygon(interlockingConc3Data), new MultiPolygon(interlockingConc2Data)));
+//		totalIts++;
+//		nfpList.add(Orbiting.generateNFP(new MultiPolygon(interlockingConc2Data), new MultiPolygon(interlockingConc3Data)));
+//		totalIts++;
 		nfpList.add(Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(block2Data)));
 		totalIts++;	
 //		int i = 0;
@@ -177,9 +177,9 @@ public class Main {
 //			i++;
 //			
 //		}
-		System.out.println("current total: " + totalIts);
-		System.out.println("fails: " + Orbiting.numberOfFails);
-		System.out.println("infinite stuck: " + Orbiting.numberStuckInfinite);
+//		System.out.println("current total: " + totalIts);
+//		System.out.println("fails: " + Orbiting.numberOfFails);
+//		System.out.println("infinite stuck: " + Orbiting.numberStuckInfinite);
 //			MultiPolygon holes = new MultiPolygon(holes1Data);
 //			for(int j=0; j<650;j+=10){
 //				for(int i=0; i<1000;i+=10){
@@ -206,7 +206,7 @@ public class Main {
 		// ------------------------------------------------------------------------------------
 		// graphical representation
 		 
-//		 drawTool.launchDrawer(args);
+		 drawTool.launchDrawer(args);
 	}
 /*
 	private static void testCoordinateMethods() {
