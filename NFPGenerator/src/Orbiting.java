@@ -135,7 +135,7 @@ public class Orbiting {
 		// start the orbiting
 		do{
 			//Storing data for drawing step by step----------------------------------------------------------------------------------------
-			NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
+//			NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
 			
 			// ---------------------------------------------------------------------------------------------------------------------
 			// detecting touching edges

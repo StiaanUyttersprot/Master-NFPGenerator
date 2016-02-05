@@ -50,6 +50,12 @@ public class Main {
 		File holes1Data = new File("Holes1.txt");
 		File holes2Data = new File("Holes2.txt");
 		
+		File mink1Data = new File("Mink1.txt");
+		File mink2Data = new File("Mink2.txt");
+		
+		File simple1Data = new File("SimpleFig1.txt");
+		File simple2Data = new File("SimpleFig2.txt");
+		
 		File folderT1 = new File(directoryT1);
 		File[] listOfFilesT1 = folderT1.listFiles();
 		
@@ -68,24 +74,24 @@ public class Main {
 		List<MultiPolygon> polygonsT1 = new ArrayList<>();
 		List<MultiPolygon> polygonsT2 = new ArrayList<>();
 		
-		System.out.println("T1 to multipolys");
-		int n = 0;
-		int numberOfPolys = 1000;
-		for(File polygonT1: listOfFilesT1){
-			if(n == numberOfPolys)break;
-			polygonsT1.add(new MultiPolygon(polygonT1));
-			n++;
-		}
-		n = 0;
-		System.out.println("T1 done");
-		System.out.println("T2 to multipolys");
-		for(File polygonT2: listOfFilesT2){
-			if(n == numberOfPolys)break;
-			polygonsT2.add(new MultiPolygon(polygonT2));
-			n++;
-		}
-		
-		System.out.println("T2 done");
+//		System.out.println("T1 to multipolys");
+//		int n = 0;
+//		int numberOfPolys = 1000;
+//		for(File polygonT1: listOfFilesT1){
+//			if(n == numberOfPolys)break;
+//			polygonsT1.add(new MultiPolygon(polygonT1));
+//			n++;
+//		}
+//		n = 0;
+//		System.out.println("T1 done");
+//		System.out.println("T2 to multipolys");
+//		for(File polygonT2: listOfFilesT2){
+//			if(n == numberOfPolys)break;
+//			polygonsT2.add(new MultiPolygon(polygonT2));
+//			n++;
+//		}
+//		
+//		System.out.println("T2 done");
 		
 		
 		// mPolygon.printPolygonData();
@@ -156,8 +162,13 @@ public class Main {
 //		totalIts++;
 //		nfpList.add(Orbiting.generateNFP(new MultiPolygon(interlockingConc2Data), new MultiPolygon(interlockingConc3Data)));
 //		totalIts++;
-		nfpList.add(Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(block2Data)));
+//		nfpList.add(Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(block2Data)));
+//		totalIts++;	
+		nfpList.add(Orbiting.generateNFP(new MultiPolygon(mink1Data), new MultiPolygon(mink2Data)));
 		totalIts++;	
+//		nfpList.add(Orbiting.generateNFP(new MultiPolygon(simple2Data), new MultiPolygon(simple1Data)));
+//		totalIts++;	
+		
 //		int i = 0;
 //		int j = 0;
 //		
