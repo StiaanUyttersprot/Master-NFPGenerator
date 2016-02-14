@@ -222,6 +222,15 @@ public class Edge {
 		return new Coordinate(xCoord, yCoord);
 	}
 
+	//when a translation is taking place, the values of min and max have to be adjusted
+	public void changeRangeValues(double x, double y) {
+		smallX += x;
+		bigX += x;
+		smallY += y;
+		bigY += y;
+		
+	}
+		
 	public double calcClockwiseValue() {
 		
 		//Sum over the edges, (x2-x1)(y2+y1). If the result is positive the curve is clockwise, if it's negative the curve is counter-clockwise.
@@ -374,6 +383,25 @@ public class Edge {
 	}
 	
 	public boolean containsIntersectionPoint(Coordinate intersectionCoord) {
+		if(intersectionCoord.getxCoord()<smallX-round){
+			return false;
+		}
+		if(intersectionCoord.getxCoord()>bigX+round){
+			return false;
+		}
+		if(intersectionCoord.getyCoord()<smallY-round){
+			return false;
+		}
+		if(intersectionCoord.getyCoord()>bigY+round){
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean containsPoint(Coordinate intersectionCoord) {
+		boolean onLine;
+		onLine = intersectionCoord.dFunctionCheck(startPoint, endPoint);
+		if(onLine == false)return false;
 		if(intersectionCoord.getxCoord()<smallX-round){
 			return false;
 		}

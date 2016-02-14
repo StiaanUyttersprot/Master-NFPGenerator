@@ -265,6 +265,28 @@ public class MultiPolygon {
 		}
 		return polyHoles;
 	}
+	
+	public void translate(double x, double y) {
+
+		for (Coordinate coord : outerPolygon) {
+			coord.move(x, y);
+		}
+
+		for (Coordinate[] hole : holes) {
+			for (Coordinate coord : hole) {
+				coord.move(x, y);
+			}
+		}
+		//for the edges the new minimum and maximum values need to be recalculated
+		for (Edge edge : outerPolygonEdges){
+			edge.changeRangeValues(x, y);
+		}
+		for (Edge[] edgeList : holeEdges){
+			for(Edge edge : edgeList){
+				edge.changeRangeValues(x, y);
+			}
+		}
+	}
 	// ---------------------------------------------------------------------------------------------------------------------------------------
 
 	// print out the data of a polygon

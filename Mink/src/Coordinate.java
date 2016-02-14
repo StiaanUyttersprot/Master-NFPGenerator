@@ -65,6 +65,7 @@ public class Coordinate {
 
 	@Override
 	public boolean equals(Object obj) {
+		
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -72,6 +73,10 @@ public class Coordinate {
 		if (getClass() != obj.getClass())
 			return false;
 		Coordinate other = (Coordinate) obj;
+		if(Math.abs(xCoord)==0)xCoord = Math.abs(xCoord);
+		if(Math.abs(yCoord)==0)yCoord = Math.abs(yCoord);
+		if(Math.abs(other.xCoord)==0)other.xCoord = Math.abs(other.xCoord);
+		if(Math.abs(other.yCoord)==0)other.yCoord = Math.abs(other.yCoord);
 		if (Double.doubleToLongBits(xCoord) != Double.doubleToLongBits(other.xCoord))
 			return false;
 		if (Double.doubleToLongBits(yCoord) != Double.doubleToLongBits(other.yCoord))
@@ -123,7 +128,7 @@ public class Coordinate {
 		return dValue;
 	}
 	
-	//check if the value is zero or not (trying to cope with very small deviation values)
+	//check if the value is zero or not, if zero the point falls on the line (trying to cope with very small deviation values)
 	public boolean dFunctionCheck(Coordinate startPoint, Coordinate endPoint) {
 		boolean touching = false;
 		double dValue = (startPoint.getxCoord() - endPoint.getxCoord()) * (startPoint.getyCoord() - yCoord)
@@ -139,8 +144,10 @@ public class Coordinate {
 
 	//check if two coordinates are equal (use round to make sure mistakes by rounding in the calculations are ignored
 	public boolean equalValuesRounded(Coordinate coord) {
-
-		
+		if(Math.abs(xCoord)==0)xCoord = Math.abs(xCoord);
+		if(Math.abs(yCoord)==0)yCoord = Math.abs(yCoord);
+		if(Math.abs(coord.getxCoord())==0)coord.setxCoord(Math.abs(coord.getxCoord()));
+		if(Math.abs(coord.getyCoord())==0)coord.setyCoord(Math.abs(coord.getyCoord()));
 		if (Math.round(xCoord*roundingValue)/roundingValue != Math.round(coord.getxCoord()*roundingValue)/roundingValue)
 			return false;
 		if (Math.round(yCoord*roundingValue)/roundingValue != Math.round(coord.getyCoord()*roundingValue)/roundingValue)

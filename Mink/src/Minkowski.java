@@ -5,12 +5,21 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Minkowski {
+	public static int numberOfFails = 0;
+	public static int numberStuckInfinite = 0;
+	
+	private static boolean printMinkData = true;
+	private static boolean printEdgeListData = false;
+	private static boolean printBoundaryData = true;
+	private static boolean drawFigures = true;
+	private static boolean handleError = true;
+	
 	static Boolean clockwiseContainsTurningpoints;
 	public static NoFitPolygon generateMinkowskiNFP(MultiPolygon polyA, MultiPolygon polyB) {
 		
 		NoFitPolygon nfp = null;
 		clockwiseContainsTurningpoints = null;
-		boolean printData = true;
+
 		//---------------------------------------------------------------------------------------------
 		//Generate Minkowski sum edge list
 		
@@ -51,7 +60,7 @@ public class Minkowski {
 		calcDeltaAngles(polyASortList);
 		calcDeltaAngles(polyBSortList);
 		
-		if(printData){
+		if(printMinkData){
 			printEdgeList(polyASortList);
 			System.out.println();
 			printEdgeList(polyBSortList);
@@ -104,7 +113,7 @@ public class Minkowski {
 		i = 0;
 		
 		for(List<Edge> edgeListB: dividedListB){
-			if(clockwiseB(edgeListB)&isConcaveB){
+			if(clockwiseB(edgeListB)&&isConcaveB){
 				nextEdgeList = MinkNeg(polyASortList, edgeListB);
 			}
 			else{
@@ -121,23 +130,28 @@ public class Minkowski {
 		}
 		//link the last edge to the first
 		linkEdgeLists(msEdgeList, msEdgeList, polyASortList, true);
-		
-		System.out.println("msEdgeList: ");
-		printSimpleEdgeList(msEdgeList);
+		if(printMinkData){
+			System.out.println("msEdgeList: ");
+			printSimpleEdgeList(msEdgeList);
+		}
 		
 		List<Edge> complexPolygonEdgeList = makeIntoPolygon(msEdgeList);
 //		System.out.println("complexPolygonEdgeList: ");
 //		printEdgeList(complexPolygonEdgeList);
-		
-//		ComplexPolygonStage.addComplexPolygon(complexPolygonEdgeList);
-		
+		if(drawFigures){
+			ComplexPolygonStage.addComplexPolygon(complexPolygonEdgeList);
+		}
 		
 		//---------------------------------------------------------------------------------------------------------------------------------------
 		//algorithm 2
 		List<List<Edge>> trackLineTripList;
 		trackLineTripList = makeTrackLineTrips(complexPolygonEdgeList);
-		ComplexPolygonStage.addTrackLineTrips(trackLineTripList);
-		if(printData){
+		
+		if(drawFigures){
+			ComplexPolygonStage.addTrackLineTrips(trackLineTripList);
+		}
+		
+		if(printMinkData){
 			for(List<Edge> trackLineTrip: trackLineTripList){
 				System.out.println("trackLineTrip");
 				printEdgeList(trackLineTrip);
@@ -151,11 +165,11 @@ public class Minkowski {
 //		//algorithm 3
 		List<List<Edge>> cycleList;
 //		System.out.println("algorithm 3");
-//		
+
 		cycleList = boundarySearch(trackLineTripList);
-		ComplexPolygonStage.addTrackLineTrips(cycleList);
+//		ComplexPolygonStage.addTrackLineTrips(cycleList);
 //		
-		if(printData){
+		if(printMinkData){
 			for(List<Edge> cycle: cycleList){
 				System.out.println("cycle");
 				for(Edge e: cycle){
@@ -164,6 +178,36 @@ public class Minkowski {
 			}
 		}
 		
+		//--------------------------------------------------------------------------------------------------------------------------------------
+		//TODO:check validity of cycles
+		
+		//--------------------------------------------------------------------------------------------------------------------------------------
+		//make NFP and place it at right coordinates
+		
+		if(cycleList.size()==0 && handleError)return null;
+		
+		polyB.replaceByNegative();
+		Coordinate bottomCoord = polyA.findBottomCoord();
+		Coordinate topCoord = polyB.findTopCoord();
+		Vector translationVector = new Vector(bottomCoord.getxCoord() - topCoord.getxCoord(),
+				bottomCoord.getyCoord() - topCoord.getyCoord());
+		Coordinate startCoord = new Coordinate(polyB.getOuterPolygon()[0].translatedTo(translationVector));
+		nfp = makeNFP(cycleList, startCoord);
+		nfp.removeExcessivePoints();
+//		System.out.println(nfp);
+		
+		
+		
+		
+		//draw nfp------------------------------------------------
+		polyB.translate(bottomCoord.getxCoord() - topCoord.getxCoord(),
+				bottomCoord.getyCoord() - topCoord.getyCoord());
+		nfp.setOrbitingPolygon(polyB);
+		nfp.setStationaryPolygon(polyA);
+		if(drawFigures){
+			NoFitPolygonStages.addNFP(nfp);
+		}
+
 		
 		return nfp;
 		
@@ -171,11 +215,40 @@ public class Minkowski {
 
 	private static List<List<Edge>> divideList(List<Edge> polyBSortList) {
 		int aantalToegevoegd = 0;
-		int i = 0;
-		
+		int i = polyBSortList.size()-1;
+		i = 0;
 		//divide B in groups by turningpoint
 		List<List<Edge>> dividedListB = new ArrayList<>();
 		List<Edge> turningGroupB = new ArrayList<>();
+		
+		
+		List<Edge> checkCounterClockwiseGroup = new ArrayList<>();
+		int firstTurningPoint;
+		while(!polyBSortList.get(i).isTurningPoint()){
+
+			i--;
+			if(i<0)i = polyBSortList.size()-1;
+		}
+		firstTurningPoint = i;
+		checkCounterClockwiseGroup.add(polyBSortList.get(i));
+		i = (i+1)%polyBSortList.size();
+		while(!polyBSortList.get(i).isTurningPoint()){
+			checkCounterClockwiseGroup.add(polyBSortList.get(i));
+
+			i = (i+1)%polyBSortList.size();
+		}
+		//stop at next turning point
+		checkCounterClockwiseGroup.add(polyBSortList.get(i));
+		if(clockwiseB(checkCounterClockwiseGroup)){
+			i = firstTurningPoint-1;
+			if(i<0)i = polyBSortList.size()-1;
+		}
+		else{
+			i = firstTurningPoint;
+		}
+		
+		clockwiseContainsTurningpoints = null;
+		
 		
 		while(aantalToegevoegd<polyBSortList.size()){
 			//find starting turning point
@@ -313,7 +386,7 @@ public class Minkowski {
 //		if(clockwiseValue < 0) return true;
 //		else return false;
 		
-		if(clockwiseContainsTurningpoints == null){
+		if(clockwiseContainsTurningpoints == null){//the first time we calculate the value, the following edges can be deducted from this first one
 			
 			double clockwiseValue = 0;
 			
@@ -325,18 +398,25 @@ public class Minkowski {
 			//If the result is positive the curve is clockwise, if it's negative the curve is counter-clockwise.
 			for(Edge e: edgeList){
 				//Sum over the edges, (x2-x1)(y2+y1). If the result is positive the curve is clockwise, if it's negative the curve is counter-clockwise.
-				endCoord = e.getStartPoint();
-				beginCoord = e.getEndPoint();
+				endCoord = e.getEndPoint();
+				beginCoord = e.getStartPoint();
 				xDiff = endCoord.getxCoord() - beginCoord.getxCoord();
 				ySum = endCoord.getyCoord() + beginCoord.getyCoord();
 				clockwiseValue += xDiff*ySum;
 			}
+			//use a helpedge to close the figure to be sure of the direction
+			beginCoord = edgeList.get(edgeList.size()-1).getEndPoint();
+			endCoord = edgeList.get(0).getStartPoint();
+			xDiff = endCoord.getxCoord() - beginCoord.getxCoord();
+			ySum = endCoord.getyCoord() + beginCoord.getyCoord();
+			clockwiseValue += xDiff*ySum;
 			
-			if(clockwiseValue < 0) clockwiseContainsTurningpoints = true;
+			if(clockwiseValue > 0) clockwiseContainsTurningpoints = true;
 			else clockwiseContainsTurningpoints = false;
 			
 		}
-
+		//if the edges that contain turningpoints are clockwise, a next edge that contains a turningpoint will also be clockwise
+		//the edges that don't contain turningpoints will be counterclockwise
 		if(clockwiseContainsTurningpoints){
 			if(edgeList.get(0).isTurningPoint()){
 				return true;
@@ -389,14 +469,12 @@ public class Minkowski {
 	
 	private static List<Edge> MinkPos(List<Edge> qList, List<Edge> rList) {
 		
-		boolean printData = true;
-		
 		List<Edge> mergeList = new ArrayList <> ();
 		mergeList.addAll(qList);
 		mergeList.addAll(rList);
 		Collections.sort(mergeList, new EdgeAngleComparator());
 	
-		if(printData){
+		if(printEdgeListData){
 			System.out.println();
 			System.out.println("qList");
 			printSimpleEdgeList(qList);
@@ -431,6 +509,355 @@ public class Minkowski {
 		int position = mergeListStartPosition;
 //		System.out.println(mergeListStartPosition);
 		boolean toStep4 = false;
+		do{
+			i = (i+1)%qList.size();
+			qi = new Edge(qList.get(i));
+			qiFound = false;
+			
+			if(direction>0){
+//				System.out.println("positive direction");
+				//moving forward through mergeList looking for Qi
+				
+				while(!qiFound){
+//					System.out.println("position: " + position);
+					//if from R
+					if(!mergeList.get(position).isPolygonA()){
+						
+						helpEdge = new Edge(mergeList.get(position));
+						helpEdge.changeEdgeNumber(direction);
+//						System.out.println("inserting edge in sList: b" + helpEdge.getEdgeNumber());
+//						System.out.println("edgeOrigin: b" + mergeList.get(position).getEdgeNumber());
+						bCount++;
+						sList.add(helpEdge);
+					}
+					else{//if from Q
+						if(mergeList.get(position).getEdgeNumber() == qi.getEdgeNumber()){
+							qiFound = true;
+							if(i==0){
+//								System.out.println("go to step 4");
+								toStep4 = true;
+							}
+							else{
+								
+								
+								if(qi.isTurningPoint()){
+									boolean sameAngle = true;
+									boolean hasSameAngleB = false;
+									int z = 0;
+									do{
+										z++;
+										checkPos = (position+z)%mergeList.size();
+										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
+												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+											if(!mergeList.get(checkPos).isPolygonA()){
+												helpEdge = new Edge(mergeList.get(checkPos));
+												helpEdge.changeEdgeNumber(direction);
+												sList.add(helpEdge);
+												bCount++;
+	//											System.out.println("extra add");
+	//											System.out.println("inserting edge in sList: b" + helpEdge.getEdgeNumber());
+												hasSameAngleB = true;
+											}
+										}
+										else sameAngle = false;
+									}while(sameAngle);
+									
+//									System.out.println("inserting edge in sList: a" + qi.getEdgeNumber());
+									sList.add(qi);
+									
+									direction = -1*direction;
+									
+//									System.out.println("qi is turningpoint: " + direction );
+									if(hasSameAngleB){
+										z = 0;
+										sameAngle = true;
+										do{
+											z++;
+											checkPos = (position+z)%mergeList.size();
+											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
+													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+												if(!mergeList.get(checkPos).isPolygonA()){
+													helpEdge = new Edge(mergeList.get(checkPos));
+													helpEdge.changeEdgeNumber(direction);
+													sList.add(helpEdge);
+													bCount++;
+		//											System.out.println("extra add");
+		//											System.out.println("inserting edge in sList: b" + helpEdge.getEdgeNumber());
+													hasSameAngleB = true;
+												}
+											}
+											else sameAngle = false;
+										}while(sameAngle);
+									}
+								}
+								else{
+//									System.out.println("inserting edge in sList: a" + qi.getEdgeNumber());
+									sList.add(qi);
+								}
+//								System.out.println("repeat step 3");
+								
+							}
+						}
+					}
+					
+					position = (position+direction)%mergeList.size();
+					if(position<0){
+						position = mergeList.size()-1;
+					}
+				}
+				
+			}
+			else if(direction<0){
+//				System.out.println("negative direction");
+				//moving backwards through mergeList looking for Qi
+				while(!qiFound){
+//					System.out.println("position: " + position);
+					if(!mergeList.get(position).isPolygonA()){
+						helpEdge = new Edge(mergeList.get(position));
+						helpEdge.changeEdgeNumber(direction);
+//						System.out.println("direction: " + direction);
+//						System.out.println("inserting edge in sList: b" + helpEdge.getEdgeNumber());
+//						System.out.println("inserting edge in sList: b" + helpEdge.getEdgeNumber());
+//						System.out.println("edgeOrigin: b" + mergeList.get(position).getEdgeNumber());
+						sList.add(helpEdge);
+						bCount++;
+					}
+					else{//if from Q
+						if(mergeList.get(position).getEdgeNumber() == qi.getEdgeNumber()){
+							qiFound = true;
+							if(i==0){
+//								System.out.println("go to step 4");
+								toStep4 = true;
+							}
+							else{
+								
+								if(qi.isTurningPoint()){
+									int z = 0;
+									
+									boolean sameAngle = true;
+									boolean hasSameAngleB = false;
+									do{
+										z++;
+										if(position-z<0){
+											checkPos = mergeList.size()+(position-z);
+										}
+										else{
+											checkPos = (position-z);
+										}
+										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
+												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+											if(!mergeList.get(checkPos).isPolygonA()){
+
+												helpEdge = new Edge(mergeList.get(checkPos));
+												helpEdge.changeEdgeNumber(direction);
+//												System.out.println("extra add");
+//												System.out.println("inserting edge in sList: b" + helpEdge.getEdgeNumber());
+												sList.add(helpEdge);
+												bCount++;
+												hasSameAngleB = true;
+											}
+										}
+										else{
+											sameAngle = false;
+										}
+									}while(sameAngle);
+									
+//									System.out.println("inserting edge in sList: a" + qi.getEdgeNumber());
+									sList.add(qi);
+									
+									direction= -1*direction;
+									
+//									System.out.println("qi is turningpoint: " + direction );
+									if(hasSameAngleB){
+										z = 0;
+										sameAngle = true;
+										do{
+											z++;
+											if(position-z<0){
+												checkPos = mergeList.size()+(position-z);
+											}
+											else{
+												checkPos = (position-z);
+											}
+											
+											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
+													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+												if(!mergeList.get(checkPos).isPolygonA()){
+
+													helpEdge = new Edge(mergeList.get(checkPos));
+													helpEdge.changeEdgeNumber(direction);
+//													System.out.println("extra add");
+//													System.out.println("inserting edge in sList: b" + helpEdge.getEdgeNumber());
+													sList.add(helpEdge);
+													bCount++;
+													hasSameAngleB = true;
+												}
+											}
+											else{
+												sameAngle = false;
+											}
+										}while(sameAngle);
+										
+										
+									}
+								}
+								else{
+//									System.out.println("inserting edge in sList: a" + qi.getEdgeNumber());
+									sList.add(qi);
+								}
+//								System.out.println("repeat step 3");
+							}
+						}
+					}
+					position= (position + direction)%mergeList.size();
+//					System.out.println("direction: " + direction);
+//					System.out.println("new position: " + position);
+					if(position < 0){
+						position = mergeList.size()-1;
+					}
+				}
+			}
+			
+		}while(i!=0&&!toStep4);
+		
+		Edge startingEdge = rList.get(0);
+		
+		i = 0;
+		
+		int start = 0;
+		boolean startFound = false;
+		for(Edge e: sList){
+			if(!e.isPolygonA()&&e.getEdgeNumber()==startingEdge.getEdgeNumber()){
+				start = i;
+				startFound = true;
+			}
+			if(startFound && e.getEdgeNumber() == startingEdge.getEdgeNumber()*-1){
+				break;
+			}
+			i++;
+		}
+		
+		//i is the position of r0 in the mergeList
+		i =start;
+		int j = 0;
+		int next = 1;
+		
+		direction = 1;
+		List<Edge> seqList = new ArrayList<>();
+		Edge si = new Edge(sList.get(i));
+		seqList.add(si);
+		bCount--;
+//		countRList.set(0, countRList.get(next)+1);//r0 is added => count+1
+		while(bCount>0 || j<sList.size()-1){
+//		while(j<sList.size()-1){
+			i = (i+1)%sList.size();
+			
+			si = new Edge(sList.get(i));
+			
+			if(si.isPolygonA()){
+				j = j+1;
+				seqList.add(si);
+				
+				if(si.isTurningPoint()){
+					direction*=-1;
+					next = next+direction;
+					if(next<0){
+//						System.out.println("next is: " + next);
+						next = rList.size()-1;
+//						System.out.println("next is " + next);
+					}
+					if(next>rList.size()-1){
+//						System.out.println("next is: " + next);
+						next = 0;
+						
+					}
+//					System.out.println("next is " + next + " in direction " + direction);
+				}
+			}
+			else if(si.getEdgeNumber() == direction * rList.get(next).getEdgeNumber()){
+				j = j+1;
+				bCount--;
+				seqList.add(si);
+//				System.out.println("added b" + si.getEdgeNumber());
+				next = next+direction;
+				if(next<0){
+//						System.out.println("next is: " + next);
+					next = rList.size()-1;
+//						System.out.println("changed to: " + next);
+				}
+				if(next>rList.size()-1){
+//						System.out.println("next is: " + next);
+					next = 0;
+//						System.out.println("changed to: " + next);
+				}
+//				System.out.println("next is " + next + " in direction " + direction);
+			}
+			
+		}
+
+		if(printEdgeListData){
+			System.out.println("seqList");
+			printSimpleEdgeList(seqList);
+		}
+		
+		return seqList;
+		
+	}
+	
+	//we work with aList and bList in this method because we don't want to reverse the original (MinkPos doesn't need reversal)
+	private static List<Edge> MinkNeg(List<Edge> aList, List<Edge> bList) {
+		
+		List<Edge> mergeList = new ArrayList <> ();
+		mergeList.addAll(aList);
+		mergeList.addAll(bList);
+		
+		List<Edge> qList = new ArrayList<>();
+		qList.addAll(aList);
+		
+		List<Edge> rList = new ArrayList<>();
+		rList.addAll(bList);
+		
+		Collections.sort(mergeList, new EdgeAngleComparator());
+		Collections.reverse(mergeList);
+		Collections.reverse(qList);
+		
+//		Collections.reverse(rList);//danger zone
+		if(printEdgeListData){
+			System.out.println();
+			System.out.println("qList");
+			printSimpleEdgeList(aList);
+			System.out.println("rList");
+			printSimpleEdgeList(bList);
+			
+			System.out.println("mergelist:");
+			printSimpleEdgeList(mergeList);
+		}
+		
+		List<Edge> sList = new ArrayList<>();
+		
+		int i = 0;
+		int direction = 1;
+		
+		direction = 1;
+		
+		Edge helpEdge;
+		Edge qi;
+		boolean qiFound = false;
+		
+		if(qList.get(0).isTurningPoint()){
+			direction = -1;
+		}
+		
+		sList.add(new Edge(qList.get(0)));
+		int mergeListStartPosition = 0;
+		while(!mergeList.get(mergeListStartPosition).isPolygonA() || mergeList.get(mergeListStartPosition).getEdgeNumber() != qList.get(0).getEdgeNumber()){
+			mergeListStartPosition++;
+		}
+		int checkPos;
+		int position = mergeListStartPosition;
+//		System.out.println(mergeListStartPosition);
+		boolean toStep4 = false;
+		int bCount = 0;
 		do{
 			i = (i+1)%qList.size();
 			qi = new Edge(qList.get(i));
@@ -646,357 +1073,6 @@ public class Minkowski {
 		
 		i = 0;
 		
-		int start = 0;
-		boolean startFound = false;
-		for(Edge e: sList){
-			if(!e.isPolygonA()&&e.getEdgeNumber()==startingEdge.getEdgeNumber()){
-				start = i;
-				startFound = true;
-			}
-			if(startFound && e.getEdgeNumber() == startingEdge.getEdgeNumber()*-1){
-				break;
-			}
-			i++;
-		}
-		
-		//i is the position of r0 in the mergeList
-		i =start;
-		int j = 0;
-		int next = 1;
-		
-		direction = 1;
-		List<Edge> seqList = new ArrayList<>();
-		Edge si = new Edge(sList.get(i));
-		seqList.add(si);
-		bCount--;
-//		countRList.set(0, countRList.get(next)+1);//r0 is added => count+1
-		while(bCount>0 || j<sList.size()-1){
-//		while(j<sList.size()-1){
-			i = (i+1)%sList.size();
-			
-			si = new Edge(sList.get(i));
-			
-			if(si.isPolygonA()){
-				j = j+1;
-				seqList.add(si);
-				
-				if(si.isTurningPoint()){
-					direction*=-1;
-					next = next+direction;
-					if(next<0){
-//						System.out.println("next is: " + next);
-						next = rList.size()-1;
-//						System.out.println("next is " + next);
-					}
-					if(next>rList.size()-1){
-//						System.out.println("next is: " + next);
-						next = 0;
-						
-					}
-//					System.out.println("next is " + next + " in direction " + direction);
-				}
-			}
-			else if(si.getEdgeNumber() == direction * rList.get(next).getEdgeNumber()){
-				j = j+1;
-				bCount--;
-				seqList.add(si);
-//				System.out.println("added b" + si.getEdgeNumber());
-				next = next+direction;
-				if(next<0){
-//						System.out.println("next is: " + next);
-					next = rList.size()-1;
-//						System.out.println("changed to: " + next);
-				}
-				if(next>rList.size()-1){
-//						System.out.println("next is: " + next);
-					next = 0;
-//						System.out.println("changed to: " + next);
-				}
-//				System.out.println("next is " + next + " in direction " + direction);
-			}
-			
-		}
-
-		if(printData){
-			System.out.println("seqList");
-			printSimpleEdgeList(seqList);
-		}
-		
-		return seqList;
-		
-	}
-	
-	//we work with aList and bList in this method because we don't want to reverse the original (MinkPos doesn't need reversal)
-	private static List<Edge> MinkNeg(List<Edge> aList, List<Edge> bList) {
-		
-		boolean printData = true;
-		
-		List<Edge> mergeList = new ArrayList <> ();
-		mergeList.addAll(aList);
-		mergeList.addAll(bList);
-		
-		List<Edge> qList = new ArrayList<>();
-		qList.addAll(aList);
-		
-		List<Edge> rList = new ArrayList<>();
-		rList.addAll(bList);
-		
-		Collections.sort(mergeList, new EdgeAngleComparator());
-		Collections.reverse(mergeList);
-		Collections.reverse(qList);
-		
-//		Collections.reverse(rList);//danger zone
-		if(printData){
-			System.out.println();
-			System.out.println("qList");
-			printSimpleEdgeList(aList);
-			System.out.println("rList");
-			printSimpleEdgeList(bList);
-			
-			System.out.println("mergelist:");
-			printSimpleEdgeList(mergeList);
-		}
-		
-		List<Edge> sList = new ArrayList<>();
-		
-		int i = 0;
-		int direction = 1;
-		
-		direction = 1;
-		
-		Edge helpEdge;
-		Edge qi;
-		boolean qiFound = false;
-		
-		if(qList.get(0).isTurningPoint()){
-			direction = -1;
-		}
-		
-		sList.add(new Edge(qList.get(0)));
-		int mergeListStartPosition = 0;
-		while(!mergeList.get(mergeListStartPosition).isPolygonA() || mergeList.get(mergeListStartPosition).getEdgeNumber() != qList.get(0).getEdgeNumber()){
-			mergeListStartPosition++;
-		}
-		int checkPos;
-		int position = mergeListStartPosition;
-//		System.out.println(mergeListStartPosition);
-		boolean toStep4 = false;
-		int bCount = 0;
-		do{
-			i = (i+1)%qList.size();
-			qi = new Edge(qList.get(i));
-			qiFound = false;
-			
-			if(direction>0){
-//				System.out.println("positive direction");
-				//moving forward through mergeList looking for Qi
-				
-				while(!qiFound){
-//					System.out.println("position: " + position);
-					//if from R
-					if(!mergeList.get(position).isPolygonA()){
-						
-						helpEdge = new Edge(mergeList.get(position));
-						helpEdge.changeEdgeNumber(direction);
-//						System.out.println("inserting edge in sList: b" + helpEdge.getEdgeNumber());
-//						System.out.println("edgeOrigin: b" + mergeList.get(position).getEdgeNumber());
-						bCount++;
-						sList.add(helpEdge);
-					}
-					else{//if from Q
-						if(mergeList.get(position).getEdgeNumber() == qi.getEdgeNumber()){
-							qiFound = true;
-							if(i==0){
-//								System.out.println("go to step 4");
-								toStep4 = true;
-							}
-							else{
-								
-								
-								if(qi.isTurningPoint()){
-									boolean sameAngle = true;
-									boolean hasSameAngleB = false;
-									int z = 0;
-									do{
-										z++;
-										checkPos = (position+z)%mergeList.size();
-										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
-											if(!mergeList.get(checkPos).isPolygonA()){
-												helpEdge = new Edge(mergeList.get(checkPos));
-												helpEdge.changeEdgeNumber(direction);
-												sList.add(helpEdge);
-												bCount++;
-	//											System.out.println("extra add");
-	//											System.out.println("inserting edge in sList: b" + helpEdge.getEdgeNumber());
-												hasSameAngleB = true;
-											}
-										}
-										else sameAngle = false;
-									}while(sameAngle);
-									
-//									System.out.println("inserting edge in sList: a" + qi.getEdgeNumber());
-									sList.add(qi);
-									
-									direction = -1*direction;
-									
-//									System.out.println("qi is turningpoint: " + direction );
-									if(hasSameAngleB){
-										z = 0;
-										sameAngle = true;
-										do{
-											z++;
-											checkPos = (position+z)%mergeList.size();
-											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
-												if(!mergeList.get(checkPos).isPolygonA()){
-													helpEdge = new Edge(mergeList.get(checkPos));
-													helpEdge.changeEdgeNumber(direction);
-													sList.add(helpEdge);
-													bCount++;
-		//											System.out.println("extra add");
-		//											System.out.println("inserting edge in sList: b" + helpEdge.getEdgeNumber());
-													hasSameAngleB = true;
-												}
-											}
-											else sameAngle = false;
-										}while(sameAngle);
-									}
-								}
-								else{
-//									System.out.println("inserting edge in sList: a" + qi.getEdgeNumber());
-									sList.add(qi);
-								}
-//								System.out.println("repeat step 3");
-								
-							}
-						}
-					}
-					
-					position = (position+direction)%mergeList.size();
-					if(position<0){
-						position = mergeList.size()-1;
-					}
-				}
-				
-			}
-			else if(direction<0){
-//				System.out.println("negative direction");
-				//moving backwards through mergeList looking for Qi
-				while(!qiFound){
-//					System.out.println("position: " + position);
-					if(!mergeList.get(position).isPolygonA()){
-						helpEdge = new Edge(mergeList.get(position));
-						helpEdge.changeEdgeNumber(direction);
-//						System.out.println("direction: " + direction);
-//						System.out.println("inserting edge in sList: b" + helpEdge.getEdgeNumber());
-//						System.out.println("inserting edge in sList: b" + helpEdge.getEdgeNumber());
-//						System.out.println("edgeOrigin: b" + mergeList.get(position).getEdgeNumber());
-						sList.add(helpEdge);
-						bCount++;
-					}
-					else{//if from Q
-						if(mergeList.get(position).getEdgeNumber() == qi.getEdgeNumber()){
-							qiFound = true;
-							if(i==0){
-//								System.out.println("go to step 4");
-								toStep4 = true;
-							}
-							else{
-								
-								if(qi.isTurningPoint()){
-									int z = 0;
-									
-									boolean sameAngle = true;
-									boolean hasSameAngleB = false;
-									do{
-										z++;
-										if(position-z<0){
-											checkPos = mergeList.size()-(position-z);
-										}
-										else{
-											checkPos = (position-z);
-										}
-										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
-											if(!mergeList.get(checkPos).isPolygonA()){
-
-												helpEdge = new Edge(mergeList.get(checkPos));
-												helpEdge.changeEdgeNumber(direction);
-//												System.out.println("extra add");
-//												System.out.println("inserting edge in sList: b" + helpEdge.getEdgeNumber());
-												sList.add(helpEdge);
-												bCount++;
-												hasSameAngleB = true;
-											}
-										}
-										else{
-											sameAngle = false;
-										}
-									}while(sameAngle);
-									
-//									System.out.println("inserting edge in sList: a" + qi.getEdgeNumber());
-									sList.add(qi);
-									
-									direction= -1*direction;
-									
-//									System.out.println("qi is turningpoint: " + direction );
-									if(hasSameAngleB){
-										z = 0;
-										sameAngle = true;
-										do{
-											z++;
-											if(position-z<0){
-												checkPos = mergeList.size()-(position-z);
-											}
-											else{
-												checkPos = (position-z);
-											}
-											
-											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
-												if(!mergeList.get(checkPos).isPolygonA()){
-
-													helpEdge = new Edge(mergeList.get(checkPos));
-													helpEdge.changeEdgeNumber(direction);
-//													System.out.println("extra add");
-//													System.out.println("inserting edge in sList: b" + helpEdge.getEdgeNumber());
-													sList.add(helpEdge);
-													bCount++;
-													hasSameAngleB = true;
-												}
-											}
-											else{
-												sameAngle = false;
-											}
-										}while(sameAngle);
-										
-										
-									}
-								}
-								else{
-//									System.out.println("inserting edge in sList: a" + qi.getEdgeNumber());
-									sList.add(qi);
-								}
-//								System.out.println("repeat step 3");
-							}
-						}
-					}
-					position= (position + direction)%mergeList.size();
-//					System.out.println("direction: " + direction);
-//					System.out.println("new position: " + position);
-					if(position < 0){
-						position = mergeList.size()-1;
-					}
-				}
-			}
-			
-		}while(i!=0&&!toStep4);
-		
-		Edge startingEdge = rList.get(0);
-		
-		i = 0;
-		
 //		System.out.println("rList");
 //		printSimpleEdgeList(rList);
 //		
@@ -1086,7 +1162,7 @@ public class Minkowski {
 			}
 		}
 
-		if(printData){
+		if(printEdgeListData){
 			System.out.println("seqList");
 			printSimpleEdgeList(seqList);
 		}
@@ -1404,25 +1480,31 @@ public class Minkowski {
 	
 	private static List<List<Edge>> boundarySearch(List<List<Edge>> trackLineTripList){
 		
-		boolean printData = false;
-		
-		//if we have 1 fragment that equals the NFP
-		if(trackLineTripList.size()==1){
-			List<Edge> trip = trackLineTripList.get(0);
-			if(trip.get(0).getStartPoint().equals(trip.get(trip.size()-1).getEndPoint())){
-				return trackLineTripList;
-			}
-		}
+		int stuckIterator = 100;
 		
 		List<List<TripIntersection>> allTripIntersectionList = new ArrayList<>();
 		List<TripIntersection> intersectionList;
 		
 		List<Edge>trackLineTrip;
-		List<Edge>trackLineTripI;
 		List<Edge>trackLineTripJ;
+		List<Edge>trackLineTripI;
 		
 		Coordinate intersectionPoint;
-
+		
+		//if we have 1 fragment for calculating the NFP
+		if(trackLineTripList.size()==1){
+			List<Edge> trip = trackLineTripList.get(0);
+			int s = 0;
+			for(Edge e: trip){
+				e.setTripSequenceNumber(s);
+				s++;
+			}
+			
+			if(trip.get(0).getStartPoint().equals(trip.get(trip.size()-1).getEndPoint())){
+				return trackLineTripList;
+			}
+		}
+			
 		for(List<Edge> tl: trackLineTripList){
 			int i = 0;
 			for(Edge e: tl){
@@ -1431,59 +1513,151 @@ public class Minkowski {
 			}
 		}
 
-		for(int j = 0; j < trackLineTripList.size(); j++){
+		for(int i = 0; i < trackLineTripList.size(); i++){
 			intersectionList = new ArrayList<>();
 
-			for(int i = 0; i< trackLineTripList.size();i++){
-				if(i!=j){
+			for(int j = 0; j< trackLineTripList.size();j++){
 					
-					trackLineTripJ = trackLineTripList.get(j);
-					trackLineTripI = trackLineTripList.get(i);
+				trackLineTripI = trackLineTripList.get(i);
+				trackLineTripJ = trackLineTripList.get(j);
 
 //					System.out.println("J");
 //					printEdgeList(trackLineTripJ);
 //					System.out.println("I");
 //					printEdgeList(trackLineTripI);
-					
-					Edge edgeJ;
-					Edge edgeI;
-					
-					for(int k = 0; k < trackLineTripJ.size(); k++){
-						for(int r = 0; r< trackLineTripI.size(); r++){
-							edgeJ = trackLineTripJ.get(k);
-							edgeI = trackLineTripI.get(r);
-
-							if(edgeJ.testIntersect(edgeI)){
-								
-								intersectionPoint = edgeJ.calcIntersection(edgeI);
-
-								if(edgeI.getStartPoint().dFunction(edgeJ)>0){
-									intersectionList.add(new TripIntersection(intersectionPoint,edgeJ, true ));
-								}
-								else{
-									intersectionList.add(new TripIntersection(intersectionPoint,edgeJ, false ));
-								}
+				
+				Edge edgeK;
+				Edge edgeR;
+				
+				for(int k = 0; k < trackLineTripI.size(); k++){
+					for(int r = 0; r< trackLineTripJ.size(); r++){
+						edgeK = trackLineTripI.get(k);
+						edgeR = trackLineTripJ.get(r);
+						
+						/*
+						if(edgeK.testIntersect(edgeR)){
+							
+							intersectionPoint = edgeK.calcIntersection(edgeR);
+							
+							if(edgeR.getStartPoint().dFunction(edgeK)>0){
+								intersectionList.add(new TripIntersection(intersectionPoint,edgeK, true ));
+							}
+							else {
+								intersectionList.add(new TripIntersection(intersectionPoint,edgeK, false ));
 							}
 							
-							else if(edgeJ.getStartPoint().equals(edgeI.getEndPoint())){
-								if(r == trackLineTripI.size()-1){
-									intersectionList.add(new TripIntersection(edgeJ.getStartPoint(), edgeJ, false));
-								}
-								else{
-									if(trackLineTripI.get(r+1).getEndPoint().dFunction(edgeJ)>0){
-										intersectionList.add(new TripIntersection(edgeJ.getStartPoint(), edgeJ, false));
-									}
+						}
+						
+						else if(edgeK.getStartPoint().equals(edgeR.getEndPoint())){
+							if(r == trackLineTripJ.size()-1){
+								intersectionList.add(new TripIntersection(edgeK.getStartPoint(), edgeK, false));
+							}
+							else{
+								if(trackLineTripJ.get(r+1).getEndPoint().dFunction(edgeK)>0){
+									intersectionList.add(new TripIntersection(edgeK.getStartPoint(), edgeK, false));
 								}
 							}
-							else if(edgeJ.getEndPoint().equals(edgeI.getStartPoint())){
-								if(k==trackLineTripJ.size()-1){	
-									intersectionList.add(new TripIntersection(edgeJ.getEndPoint(), edgeJ, true));
+						}
+						else if(edgeK.getEndPoint().equals(edgeR.getStartPoint())){
+							if(k==trackLineTripI.size()-1){	
+								intersectionList.add(new TripIntersection(edgeK.getEndPoint(), edgeK, true));
+							}
+							else{
+								if(trackLineTripJ.get(r).getEndPoint().dFunction(trackLineTripI.get(k+1))<0){
+									intersectionList.add(new TripIntersection(edgeK.getEndPoint(), edgeK, true));
 								}
-								else{
-									if(trackLineTripI.get(r).getEndPoint().dFunction(trackLineTripJ.get(k+1))<0){
-										intersectionList.add(new TripIntersection(edgeJ.getEndPoint(), edgeJ, true));
-									}
+							}
+						}
+						else if(!edgeR.getStartPoint().equals(edgeK.getStartPoint())&&!edgeR.getStartPoint().equals(edgeK.getEndPoint())
+								&&!edgeR.getEndPoint().equals(edgeK.getStartPoint())&&!edgeR.getEndPoint().equals(edgeK.getEndPoint())){
+							if(edgeR.containsPoint(edgeK.getStartPoint())){
+								if(edgeR.getStartPoint().dFunction(edgeK)>0){
+									intersectionList.add(new TripIntersection(edgeK.getStartPoint(),edgeK, true ));
 								}
+								else if(edgeR.getStartPoint().dFunction(edgeK)<0) {
+									intersectionList.add(new TripIntersection(edgeK.getStartPoint(),edgeK, false ));
+								}
+							}
+//							else if(edgeI.containsPoint(edgeJ.getEndPoint())){
+//								if(edgeI.getStartPoint().dFunction(edgeJ)>0){
+//									intersectionList.add(new TripIntersection(edgeJ.getEndPoint(),edgeJ, true ));
+//								}
+//								else{
+//									intersectionList.add(new TripIntersection(edgeJ.getEndPoint(),edgeJ, false ));
+//								}
+//							}
+							else if(edgeK.containsPoint(edgeR.getStartPoint())){
+								if(edgeR.getEndPoint().dFunction(edgeK)<0){
+									intersectionList.add(new TripIntersection(edgeR.getStartPoint(),edgeK, false ));
+								}
+								else if(edgeR.getEndPoint().dFunction(edgeK)>0) {
+									intersectionList.add(new TripIntersection(edgeR.getStartPoint(),edgeK, true ));
+								}
+							}
+							else if(edgeK.containsPoint(edgeR.getEndPoint())){
+								if(edgeR.getStartPoint().dFunction(edgeK)<0){
+									intersectionList.add(new TripIntersection(edgeR.getEndPoint(),edgeK, false ));
+								}
+								else if(edgeR.getStartPoint().dFunction(edgeK)>0) {
+									intersectionList.add(new TripIntersection(edgeR.getEndPoint(),edgeK, true ));
+								}
+							}
+						}
+						*/
+						if(edgeK.getStartPoint().equals(edgeR.getStartPoint())){
+							if(i!=j || k!=r){//if they are from the same trip, they may not be the same edge
+								if(edgeK.getEndPoint().dFunction(edgeR)<0){
+									intersectionList.add(new TripIntersection(edgeK.getStartPoint(),edgeK, false ));
+								}
+								else if(edgeK.getEndPoint().dFunction(edgeR)>0);
+							}
+						}
+						else if(edgeK.getStartPoint().equals(edgeR.getEndPoint())){
+							if((i!=j || k!=r) && r == trackLineTripJ.size()-1){
+								intersectionList.add(new TripIntersection(edgeK.getStartPoint(),edgeK, false ));
+							}
+						}
+						else if(edgeK.getEndPoint().equals(edgeR.getStartPoint())){
+							if(i!=j ||(k!= r-1)){//if they are of the same trip, edgeK may not be the one before edgeR
+								intersectionList.add(new TripIntersection(edgeK.getEndPoint(),edgeK, true ));
+							}	
+						}
+						else if(edgeK.getEndPoint().equals(edgeR.getEndPoint()));
+						
+						else if(edgeR.containsPoint(edgeK.getStartPoint())){
+							if(edgeK.getEndPoint().dFunction(edgeR)>0);
+							else if(edgeK.getEndPoint().dFunction(edgeR)<0){
+								intersectionList.add(new TripIntersection(edgeK.getStartPoint(),edgeK, false ));
+							}
+							else intersectionList.add(new TripIntersection(edgeR.getEndPoint(),edgeK, false ));
+						}
+						else if(edgeR.containsPoint(edgeK.getEndPoint())){
+							if(edgeK.getStartPoint().dFunction(edgeR)>0);	
+							else if(edgeK.getStartPoint().dFunction(edgeR)<=0){
+								intersectionList.add(new TripIntersection(edgeK.getEndPoint(),edgeK, true ));
+							}
+						}
+						else if(edgeK.containsPoint(edgeR.getStartPoint())){
+							if(edgeR.getEndPoint().dFunction(edgeK)>0);
+							else if(edgeR.getEndPoint().dFunction(edgeK)<0){
+								intersectionList.add(new TripIntersection(edgeR.getStartPoint(),edgeK, true ));
+							}
+						}
+						else if(edgeK.containsPoint(edgeR.getEndPoint())){
+							if(edgeR.getStartPoint().dFunction(edgeK)>0);
+							else if(edgeR.getStartPoint().dFunction(edgeK)<0){
+								intersectionList.add(new TripIntersection(edgeR.getEndPoint(),edgeK, false ));
+							}
+						}
+						else if(edgeK.testIntersect(edgeR)){
+							
+							intersectionPoint = edgeK.calcIntersection(edgeR);
+							
+							if(edgeR.getStartPoint().dFunction(edgeK)>0){
+								intersectionList.add(new TripIntersection(intersectionPoint,edgeK, true ));
+							}
+							else if(edgeR.getStartPoint().dFunction(edgeK)<0){
+								intersectionList.add(new TripIntersection(intersectionPoint,edgeK, false ));
 							}
 						}
 					}
@@ -1491,7 +1665,7 @@ public class Minkowski {
 			}
 			Collections.sort(intersectionList, new TripIntersectionComparator());
 			
-			if(printData){
+			if(printBoundaryData){
 				System.out.println("intersectionList:");
 				for(TripIntersection in: intersectionList){
 					System.out.println(in);
@@ -1499,8 +1673,9 @@ public class Minkowski {
 			}
 			
 			allTripIntersectionList.add(intersectionList);
+			
 		}
-
+		
 		//step 2
 		List<List<Edge>> fragmentList = new ArrayList<>();
 		List<Edge> fragment;
@@ -1545,7 +1720,7 @@ public class Minkowski {
 			
 		}
 		
-		if(printData){
+		if(printBoundaryData){
 			int aantalFragmentEdges = 0;
 			for(List<Edge>frag: fragmentList){
 				System.out.println("fragment");
@@ -1563,56 +1738,81 @@ public class Minkowski {
 		List<Edge> fragJ;
 		List<List<Edge>> cycleList = new ArrayList<>();
 		List<Edge> cycle;
-		int stuckIterator = 100;
+		
 		while(numberOfFragments>0 && stuckIterator>0){
 			stuckIterator--;
 //			System.out.println("number of fragments: " + numberOfFragments);
 			for (int i = 0; i < fragmentList.size(); i++) {
-				for (int j = 0; j < fragmentList.size(); j++) {
-					if(i!=j){
-						fragI = fragmentList.get(i);
-						fragJ = fragmentList.get(j);
-						if(fragI.size()!=0&&fragJ.size()!=0){
+				for (int j = 0; j < fragmentList.size(); j++) {						
+					fragI = fragmentList.get(i);
+					fragJ = fragmentList.get(j);
+					if(fragI.size()!=0&&fragJ.size()!=0){
 //							System.out.println("beiden verschillend van 0");
-							if(fragI.get(0).getStartPoint().equalValuesRounded(fragJ.get(fragJ.size()-1).getEndPoint())){
+						if(fragI.get(0).getStartPoint().equalValuesRounded(fragJ.get(fragJ.size()-1).getEndPoint())){
 //								System.out.println("fragments match!");
-								if(fragI.get(fragI.size()-1).getEndPoint().equals(fragJ.get(0).getStartPoint())){
-									
+							if(fragI.get(fragI.size()-1).getEndPoint().equals(fragJ.get(0).getStartPoint())){
+								
 //									fragJ.remove(0);
 //									fragJ.remove(fragJ.size()-1);
-									
-									cycle = new ArrayList<>();
-									cycle.addAll(fragI);
-									cycle.addAll(fragJ);
-									
-									cycleList.add(cycle);
-									
-									fragI.clear();
-									numberOfFragments--;
-									fragJ.clear();	
-									numberOfFragments--;
-								}
-								else{
-//									fragI.remove(0);
-									fragJ.addAll(fragI);
-									
-									fragI.clear();
-									numberOfFragments--;
-								}
-							}
-							else if(fragI.get(fragI.size()-1).getEndPoint().equals(fragJ.get(0).getStartPoint())){
-//								fragJ.remove(0);
-								fragI.addAll(fragJ);
 								
-								fragJ.clear();
+								cycle = new ArrayList<>();
+								cycle.addAll(fragI);
+								cycle.addAll(fragJ);
+								
+								cycleList.add(cycle);
+								
+								fragI.clear();
+								numberOfFragments--;
+								fragJ.clear();	
 								numberOfFragments--;
 							}
+							else{
+//									fragI.remove(0);
+								fragJ.addAll(fragI);
+								
+								fragI.clear();
+								numberOfFragments--;
+							}
+						}
+						else if(fragI.get(fragI.size()-1).getEndPoint().equals(fragJ.get(0).getStartPoint())){
+//								fragJ.remove(0);
+							fragI.addAll(fragJ);
+							
+							fragJ.clear();
+							numberOfFragments--;
 						}
 					}
 				}
 			}
 		}
+		if(cycleList.size()==0) numberOfFails++;
+		else if(stuckIterator==0) numberStuckInfinite++;
 		return cycleList;
+	}
+	
+	private static NoFitPolygon makeNFP(List<List<Edge>> cycleList, Coordinate startCoord) {
+		
+		//find the lowest coordinate of the cycle
+		Coordinate translateFrom = cycleList.get(0).get(0).getStartPoint();
+		for(List<Edge> edgeList: cycleList){
+			for(Edge edge: edgeList){
+				if(edge.getStartPoint().getyCoord()< translateFrom.getyCoord()){
+					translateFrom = edge.getStartPoint();
+				}
+				else if(edge.getStartPoint().getyCoord() == translateFrom.getyCoord()){
+					if(edge.getStartPoint().getxCoord()<translateFrom.getxCoord()){
+						translateFrom = edge.getStartPoint();
+					}
+				}
+			}
+		}
+	
+		Vector translationVector = new Vector(translateFrom, startCoord);
+		
+		NoFitPolygon nfp = new NoFitPolygon(cycleList, translationVector);
+		
+		return nfp;
+		
 	}
 	
 }

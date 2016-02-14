@@ -20,8 +20,8 @@ public class ComplexPolygonStage {
 	static int aantalComplexPolygonStages = 0;
 	static List<List<Edge>> complexPolygonToDraw = new ArrayList<>();
 	
-	static double sceneSizeX = 800;
-	static double sceneSizeY = 800;
+	static double sceneSizeX = 300;
+	static double sceneSizeY = 300;
 	
 //	public static void addPolygonPair(MultiPolygon[] multiPolyPair){
 //		aantalPolygonPairStages++;

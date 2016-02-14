@@ -39,10 +39,12 @@ public class DrawJavaFX extends Application{
     		
     	}
     	
-    	List<Stage> nfpStages = NoFitPolygonStages.drawNFPFigures();
-    	stageWidth = NoFitPolygonStages.getSceneSizeX();
-    	stageHeight = NoFitPolygonStages.getSceneSizeY();
-    	for(Stage stage : nfpStages){
+    	
+    	
+    	List<Stage> compPolyStages = ComplexPolygonStage.drawAllComplexPolygon();
+    	stageWidth = ComplexPolygonStage.getSceneSizeX();
+    	stageHeight = ComplexPolygonStage.getSceneSizeY();
+    	for(Stage stage : compPolyStages){
     		//stageNumber + 1 to make sure it is inside the screen
     		if(stageWidth*(stageNumber+1)> screenSizeX){
     			stageNumber = 0;
@@ -58,11 +60,10 @@ public class DrawJavaFX extends Application{
     		stageNumber++;
     		
     	}
-    	
-    	List<Stage> compPolyStages = ComplexPolygonStage.drawAllComplexPolygon();
-    	stageWidth = ComplexPolygonStage.getSceneSizeX();
-    	stageHeight = ComplexPolygonStage.getSceneSizeY();
-    	for(Stage stage : compPolyStages){
+    	List<Stage> nfpStages = NoFitPolygonStages.drawNFPFigures();
+    	stageWidth = NoFitPolygonStages.getSceneSizeX();
+    	stageHeight = NoFitPolygonStages.getSceneSizeY();
+    	for(Stage stage : nfpStages){
     		//stageNumber + 1 to make sure it is inside the screen
     		if(stageWidth*(stageNumber+1)> screenSizeX){
     			stageNumber = 0;
