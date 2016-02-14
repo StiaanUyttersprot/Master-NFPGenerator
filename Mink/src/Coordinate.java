@@ -91,6 +91,12 @@ public class Coordinate {
 		return distance;
 	}
 
+	public double shortestDistanceToEdge(Edge edge){
+		double distanceToStartPoint = distanceTo(edge.getStartPoint());
+		double anglePointEdge = edge.getStartPoint().calculateAngle(this, edge.getEndPoint());
+		double shortestDistance = distanceToStartPoint*Math.sin(anglePointEdge);
+		return shortestDistance;
+	}
 	// calculating the angle: the coordinate that calls the method is the one
 	// where the angle needs to be calculated
 	public double calculateAngle(Coordinate coord2, Coordinate coord3) {

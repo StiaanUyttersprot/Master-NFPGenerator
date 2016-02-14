@@ -113,13 +113,13 @@ public class Orbiting {
 			}
 		}
 		
-	
-		
 		//only draw the final result after placing the orbiting polygon back to the startPosition
 		orbPoly.translate(bottomCoord.getxCoord() - topCoord.getxCoord(),
 				bottomCoord.getyCoord() - topCoord.getyCoord());
-		NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
+//		NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
 //		
+		nfp.removeExcessivePoints();
+//		System.out.println(nfp);
 		return nfp;// TODO resultaat hier zetten
 	}
 
@@ -350,5 +350,7 @@ public class Orbiting {
 			numberOfFails++;
 			numberStuckInfinite++;
 		}
+		nfp.removeLastDoubleCoordinate();
+		
 	}
 }

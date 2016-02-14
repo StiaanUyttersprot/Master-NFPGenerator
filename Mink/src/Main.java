@@ -61,7 +61,7 @@ public class Main {
 		
 		System.out.println("T1 to multipolys");
 		int n = 0;
-		int numberOfPolys = 1000;
+		int numberOfPolys = 100;
 		for(File polygonT1: listOfFilesT1){
 			if(n == numberOfPolys)break;
 			polygonsT1.add(new MultiPolygon(polygonT1));
@@ -118,19 +118,26 @@ public class Main {
 //		Minkowski.generateMinkowskiNFP(new MultiPolygon(holes2Data), new MultiPolygon(holes1Data)); //correct 2richtingen (zonder gaten)
 //		totalIts++;
 		
+//		Edge testEdge = new Edge(new Coordinate(124, -138), new Coordinate(398, -268));
+//		Coordinate testCoordinate = new Coordinate(326, -234);
+//		System.out.println(testCoordinate.dFunction(testEdge));
+//		System.out.println(testCoordinate.shortestDistanceToEdge(testEdge));
+				
 		int j = 0;
 		
 		i=0;
 		
-		int findIDimensionPoly = 2;
-		int findJDimensionPoly = 232;
+		//polygonsT2.remove(2);
 		
-		boolean testSpecific = true;
+		int findIDimensionPoly = 0;
+		int findJDimensionPoly = 921;
 		
-		for (MultiPolygon stat: polygonsT2) {
+		boolean testSpecific = false;
+		
+		for (MultiPolygon stat: polygonsT1) {
 			if(i > findIDimensionPoly && testSpecific)break;
 			j = 0;
-			for (MultiPolygon orb: polygonsT2) {
+			for (MultiPolygon orb: polygonsT1) {
 						if(testSpecific){
 							if(i == findIDimensionPoly && j == findJDimensionPoly){
 				
@@ -139,7 +146,7 @@ public class Main {
 							}
 						}
 						else{
-							System.out.println("["+i+"]["+j+"]");
+//							System.out.println("["+i+"]["+j+"]");
 							nfpList.add(Minkowski.generateMinkowskiNFP(new MultiPolygon(stat), new MultiPolygon(orb)));
 						}
 				totalIts++;

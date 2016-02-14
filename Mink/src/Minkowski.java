@@ -8,10 +8,10 @@ public class Minkowski {
 	public static int numberOfFails = 0;
 	public static int numberStuckInfinite = 0;
 	
-	private static boolean printMinkData = true;
+	private static boolean printMinkData = false;
 	private static boolean printEdgeListData = false;
-	private static boolean printBoundaryData = true;
-	private static boolean drawFigures = true;
+	private static boolean printBoundaryData = false;
+	private static boolean drawFigures = false;
 	private static boolean handleError = true;
 	
 	static Boolean clockwiseContainsTurningpoints;
@@ -184,7 +184,10 @@ public class Minkowski {
 		//--------------------------------------------------------------------------------------------------------------------------------------
 		//make NFP and place it at right coordinates
 		
-		if(cycleList.size()==0 && handleError)return null;
+		if(cycleList.size()==0 && handleError){
+			System.out.println("failed");
+			return null;
+		}
 		
 		polyB.replaceByNegative();
 		Coordinate bottomCoord = polyA.findBottomCoord();
@@ -1750,7 +1753,7 @@ public class Minkowski {
 //							System.out.println("beiden verschillend van 0");
 						if(fragI.get(0).getStartPoint().equalValuesRounded(fragJ.get(fragJ.size()-1).getEndPoint())){
 //								System.out.println("fragments match!");
-							if(fragI.get(fragI.size()-1).getEndPoint().equals(fragJ.get(0).getStartPoint())){
+							if(fragI.get(fragI.size()-1).getEndPoint().equalValuesRounded(fragJ.get(0).getStartPoint())){
 								
 //									fragJ.remove(0);
 //									fragJ.remove(fragJ.size()-1);
@@ -1774,7 +1777,7 @@ public class Minkowski {
 								numberOfFragments--;
 							}
 						}
-						else if(fragI.get(fragI.size()-1).getEndPoint().equals(fragJ.get(0).getStartPoint())){
+						else if(fragI.get(fragI.size()-1).getEndPoint().equalValuesRounded(fragJ.get(0).getStartPoint())){
 //								fragJ.remove(0);
 							fragI.addAll(fragJ);
 							
@@ -1786,7 +1789,10 @@ public class Minkowski {
 			}
 		}
 		if(cycleList.size()==0) numberOfFails++;
-		else if(stuckIterator==0) numberStuckInfinite++;
+		else if(stuckIterator==0){
+			System.out.println("stuck");
+			numberStuckInfinite++;
+		}
 		return cycleList;
 	}
 	

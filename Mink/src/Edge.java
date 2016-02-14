@@ -401,7 +401,10 @@ public class Edge {
 	public boolean containsPoint(Coordinate intersectionCoord) {
 		boolean onLine;
 		onLine = intersectionCoord.dFunctionCheck(startPoint, endPoint);
-		if(onLine == false)return false;
+		if(onLine == false){
+			double distanceToCoord = intersectionCoord.shortestDistanceToEdge(this);
+			if(distanceToCoord>0.5)return false;
+		};
 		if(intersectionCoord.getxCoord()<smallX-round){
 			return false;
 		}

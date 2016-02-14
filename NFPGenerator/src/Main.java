@@ -74,24 +74,24 @@ public class Main {
 		List<MultiPolygon> polygonsT1 = new ArrayList<>();
 		List<MultiPolygon> polygonsT2 = new ArrayList<>();
 		
-//		System.out.println("T1 to multipolys");
-//		int n = 0;
-//		int numberOfPolys = 1000;
-//		for(File polygonT1: listOfFilesT1){
-//			if(n == numberOfPolys)break;
-//			polygonsT1.add(new MultiPolygon(polygonT1));
-//			n++;
-//		}
-//		n = 0;
-//		System.out.println("T1 done");
-//		System.out.println("T2 to multipolys");
-//		for(File polygonT2: listOfFilesT2){
-//			if(n == numberOfPolys)break;
-//			polygonsT2.add(new MultiPolygon(polygonT2));
-//			n++;
-//		}
-//		
-//		System.out.println("T2 done");
+		System.out.println("T1 to multipolys");
+		int n = 0;
+		int numberOfPolys = 1000;
+		for(File polygonT1: listOfFilesT1){
+			if(n == numberOfPolys)break;
+			polygonsT1.add(new MultiPolygon(polygonT1));
+			n++;
+		}
+		n = 0;
+		System.out.println("T1 done");
+		System.out.println("T2 to multipolys");
+		for(File polygonT2: listOfFilesT2){
+			if(n == numberOfPolys)break;
+			polygonsT2.add(new MultiPolygon(polygonT2));
+			n++;
+		}
+		
+		System.out.println("T2 done");
 		
 		
 		// mPolygon.printPolygonData();
@@ -112,6 +112,7 @@ public class Main {
 		// -------------------------------------------------------------------------------------
 		// orbiting method
 		 
+		System.out.println("Orbiting tests");
 //		Orbiting.generateNFP(new MultiPolygon(multiPolyList.get(3)), new MultiPolygon(multiPolyList.get(0)));
 		
 		
@@ -119,10 +120,10 @@ public class Main {
 		long endTime;
 
 		long duration;  //divide by 1000000 to get milliseconds.
-		int scaleOfTime = 1000000;
+		
 		List<Long> durations = new ArrayList<>();
 		int totalIts = 0;
-		int numberOfIterations = 100;
+//		int numberOfIterations = 1000;
 		
 
 		startTime = System.currentTimeMillis();
@@ -164,30 +165,30 @@ public class Main {
 //		totalIts++;
 //		nfpList.add(Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(block2Data)));
 //		totalIts++;	
-		nfpList.add(Orbiting.generateNFP(new MultiPolygon(mink1Data), new MultiPolygon(mink2Data)));
-		totalIts++;	
-//		nfpList.add(Orbiting.generateNFP(new MultiPolygon(simple2Data), new MultiPolygon(simple1Data)));
+//		nfpList.add(Orbiting.generateNFP(new MultiPolygon(mink1Data), new MultiPolygon(mink2Data)));
 //		totalIts++;	
+//		nfpList.add(Orbiting.generateNFP(new MultiPolygon(simple2Data), new MultiPolygon(simple1Data)));
+//		totalIts++;
 		
 //		int i = 0;
-//		int j = 0;
-//		
-//		for (MultiPolygon stat: polygonsT2) {
-//			//if(i == 10)break;
-//			j = 0;
-//			for (MultiPolygon orb: polygonsT2) {
-////						System.out.println("["+i+"]["+j+"]");
-////						if(i == 10 && j == 42){
-//			
-//					nfpList.add(Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb)));
-////							break;
-////						}
-//				totalIts++;
-//				j++;
-//		    }
-//			i++;
-//			
-//		}
+		int j = 0;
+		
+		for (MultiPolygon stat: polygonsT1) {
+			//if(i == 10)break;
+			j = 0;
+			for (MultiPolygon orb: polygonsT1) {
+//						System.out.println("["+i+"]["+j+"]");
+//						if(i == 10 && j == 42){
+			
+					nfpList.add(Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb)));
+//							break;
+//						}
+				totalIts++;
+				j++;
+		    }
+			i++;
+			
+		}
 //		System.out.println("current total: " + totalIts);
 //		System.out.println("fails: " + Orbiting.numberOfFails);
 //		System.out.println("infinite stuck: " + Orbiting.numberStuckInfinite);
@@ -201,12 +202,15 @@ public class Main {
 //			}
 			//System.out.println(new MultiPolygon(holes1Data).pointInPolygon(new Coordinate(400, 100)));
 			
-//			}
+//		}
 		endTime = System.currentTimeMillis();
 		duration = (endTime - startTime);
 		
 		System.out.println("duration: " + duration);
-			
+		System.out.println("total itterations: " + totalIts);
+		System.out.println(Orbiting.numberOfFails);
+		System.out.println(Orbiting.numberStuckInfinite);
+		System.out.println(Orbiting.numberOfSecFails);
 			
 			//print the nfp's------------------------------------------------------------------------
 //			for(NoFitPolygon nfp : nfpList){

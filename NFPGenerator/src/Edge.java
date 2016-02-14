@@ -216,8 +216,7 @@ public class Edge {
 	}
 
 	private boolean contains(Coordinate coord) {
-		// TODO: kijken of het sneller is eerst de waarde van x op te slaan in
-		// een int, of gewoon altijd in coord er naar te callen
+
 		boolean containsX = false;
 		boolean containsY = false;
 		// check x
@@ -240,8 +239,7 @@ public class Edge {
 	}
 	
 	private boolean containsRounded(Coordinate coord) {
-		// TODO: kijken of het sneller is eerst de waarde van x op te slaan in
-		// een int, of gewoon altijd in coord er naar te callen
+		
 		boolean containsX = false;
 		boolean containsY = false;
 		

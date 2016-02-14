@@ -97,6 +97,27 @@ public class NoFitPolygon {
 		activeList.add(new Coordinate(coord));
 		nfpPolygonsList.add(activeList);
 	}
+	
+	//this method will remove coordinates that aren't necessary to draw the nfp(when more than two points fall on the same line
+	public void removeExcessivePoints(){
+		int start;
+		int checkPoint;
+		for(List<Coordinate> coordinateList: nfpPolygonsList){
+			start = 0;
+			if(coordinateList.size()>1){
+				while(start+1<coordinateList.size()){
+					checkPoint = (start+2)%coordinateList.size();
+					while(coordinateList.size()>1 && start + 1< coordinateList.size()
+							&& coordinateList.get(checkPoint).dFunctionCheck(coordinateList.get(start), coordinateList.get(start+1))){
+						coordinateList.remove(start+1);
+						if(checkPoint>=coordinateList.size())checkPoint = 0;
+					}
+					start++;
+				}
+			}
+			
+		}
+	}
 
 	public boolean pointOnEdge(Coordinate nextStartPoint) {
 		// TODO Auto-generated method stub
@@ -124,7 +145,6 @@ public class NoFitPolygon {
 		
 		nfp += nfpPolygonsList.size() + "\n";
 		for(List<Coordinate> partList : nfpPolygonsList){
-			if(partList.size()>1)partList.remove(partList.size()-1);
 			nfp+= partList.size();
 			
 			for(Coordinate coord: partList){
@@ -135,6 +155,11 @@ public class NoFitPolygon {
 		}
 		
 		return nfp;
+	}
+
+	public void removeLastDoubleCoordinate() {
+		if(activeList.size()>1)activeList.remove(activeList.size()-1);
+		
 	}
 	
 	
