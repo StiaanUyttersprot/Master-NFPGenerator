@@ -10,9 +10,16 @@ public class Main {
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		
+		
+		Minkowski.printMinkData = true;
+		Minkowski.printEdgeListData = true;
+		Minkowski.printBoundaryData = true;
+		Minkowski.drawFigures = true;
+		Minkowski.drawNFP = true;
+		Minkowski.handleError = true;
+		
 		DrawJavaFX drawTool = new DrawJavaFX();
 
-		
 		
 		List<NoFitPolygon> nfpList = new ArrayList<>();
 		
@@ -59,24 +66,24 @@ public class Main {
 		File folderT2 = new File(directoryT2);
 		File[] listOfFilesT2 = folderT2.listFiles();
 		
-		System.out.println("T1 to multipolys");
-		int n = 0;
-		int numberOfPolys = 100;
-		for(File polygonT1: listOfFilesT1){
-			if(n == numberOfPolys)break;
-			polygonsT1.add(new MultiPolygon(polygonT1));
-			n++;
-		}
-		n = 0;
-		System.out.println("T1 done");
-		System.out.println("T2 to multipolys");
-		for(File polygonT2: listOfFilesT2){
-			if(n == numberOfPolys)break;
-			polygonsT2.add(new MultiPolygon(polygonT2));
-			n++;
-		}
-		
-		System.out.println("T2 done");
+//		System.out.println("T1 to multipolys");
+//		int n = 0;
+//		int numberOfPolys = 1000;
+//		for(File polygonT1: listOfFilesT1){
+//			if(n == numberOfPolys)break;
+//			polygonsT1.add(new MultiPolygon(polygonT1));
+//			n++;
+//		}
+//		n = 0;
+//		System.out.println("T1 done");
+//		System.out.println("T2 to multipolys");
+//		for(File polygonT2: listOfFilesT2){
+//			if(n == numberOfPolys)break;
+//			polygonsT2.add(new MultiPolygon(polygonT2));
+//			n++;
+//		}
+////		
+//		System.out.println("T2 done");
 		
 		long startTime;
 		long endTime;
@@ -111,12 +118,30 @@ public class Main {
 //		totalIts++;
 //		Minkowski.generateMinkowskiNFP(new MultiPolygon(convex1Data), new MultiPolygon(concave2Data)); //correct
 //		totalIts++;
-//		Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc1Data), new MultiPolygon(triangleData));
+//		Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc1Data), new MultiPolygon(triangleData));//correct
 //		totalIts++;
-//		Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc2Data),new MultiPolygon(interlockingConc3Data));
+//		Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc2Data),new MultiPolygon(interlockingConc3Data));//correct
 //		totalIts++;
 //		Minkowski.generateMinkowskiNFP(new MultiPolygon(holes2Data), new MultiPolygon(holes1Data)); //correct 2richtingen (zonder gaten)
 //		totalIts++;
+//		Minkowski.generateMinkowskiNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data));//correct
+//		totalIts++;
+//		Minkowski.generateMinkowskiNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data));
+//		totalIts++;
+//		Minkowski.generateMinkowskiNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));
+//		totalIts++;
+		Minkowski.generateMinkowskiNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data));
+		totalIts++;
+//		Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc2Data));//correct
+//		totalIts++;
+//		Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc3Data));
+//		totalIts++;
+//		Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc3Data), new MultiPolygon(interlockingConc2Data));//correct
+//		totalIts++;
+//		Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc2Data), new MultiPolygon(interlockingConc3Data));//correct
+//		totalIts++;
+//		Minkowski.generateMinkowskiNFP(new MultiPolygon(holes1Data), new MultiPolygon(block2Data));//correct
+//		totalIts++;	
 		
 //		Edge testEdge = new Edge(new Coordinate(124, -138), new Coordinate(398, -268));
 //		Coordinate testCoordinate = new Coordinate(326, -234);
@@ -129,32 +154,32 @@ public class Main {
 		
 		//polygonsT2.remove(2);
 		
-		int findIDimensionPoly = 0;
-		int findJDimensionPoly = 921;
-		
-		boolean testSpecific = false;
-		
-		for (MultiPolygon stat: polygonsT1) {
-			if(i > findIDimensionPoly && testSpecific)break;
-			j = 0;
-			for (MultiPolygon orb: polygonsT1) {
-						if(testSpecific){
-							if(i == findIDimensionPoly && j == findJDimensionPoly){
-				
-								nfpList.add(Minkowski.generateMinkowskiNFP(new MultiPolygon(stat), new MultiPolygon(orb)));
-								break;
-							}
-						}
-						else{
+//		int findIDimensionPoly = 2;
+//		int findJDimensionPoly = 15;
+//		
+//		boolean testSpecific = false;
+//		
+//		for (MultiPolygon stat: polygonsT1) {
+//			if(i > findIDimensionPoly && testSpecific)break;
+//			j = 0;
+//			for (MultiPolygon orb: polygonsT2) {
+//						if(testSpecific){
+//							if(i == findIDimensionPoly && j == findJDimensionPoly){
+//				
+//								nfpList.add(Minkowski.generateMinkowskiNFP(new MultiPolygon(stat), new MultiPolygon(orb)));
+//								break;
+//							}
+//						}
+//						else{
 //							System.out.println("["+i+"]["+j+"]");
-							nfpList.add(Minkowski.generateMinkowskiNFP(new MultiPolygon(stat), new MultiPolygon(orb)));
-						}
-				totalIts++;
-				j++;
-		    }
-			i++;
-			
-		}
+//							nfpList.add(Minkowski.generateMinkowskiNFP(new MultiPolygon(stat), new MultiPolygon(orb)));
+//						}
+//				totalIts++;
+//				j++;
+//		    }
+//			i++;
+//			
+//		}
 		System.out.println("current total: " + totalIts);
 		System.out.println("fails: " + Minkowski.numberOfFails);
 		System.out.println("infinite stuck: " + Minkowski.numberStuckInfinite);
@@ -164,7 +189,9 @@ public class Main {
 		
 		System.out.println("duration: " + duration);
 		
-		drawTool.launchDrawer(args);
+		if(Minkowski.drawFigures || Minkowski.drawNFP){
+			drawTool.launchDrawer(args);
+		}
 	}
 
 }

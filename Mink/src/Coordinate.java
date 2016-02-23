@@ -10,8 +10,8 @@ public class Coordinate {
 	private double xCoord;
 	private double yCoord;
 	
-	private static double roundingValue = 1;
-	private static double round = 1;
+	private static double roundingAccuracy = 1e4;//the bigger the more accurate
+	private static double round = 0;
 	
 	Coordinate(double x, double y) {
 		xCoord = x;
@@ -139,7 +139,7 @@ public class Coordinate {
 		boolean touching = false;
 		double dValue = (startPoint.getxCoord() - endPoint.getxCoord()) * (startPoint.getyCoord() - yCoord)
 				- (startPoint.getyCoord() - endPoint.getyCoord()) * (startPoint.getxCoord() - xCoord);
-		if(dValue < round && dValue > -round)touching = true;
+		if(Math.abs(dValue) <= round)touching = true;
 		return touching;
 	}
 
@@ -154,9 +154,9 @@ public class Coordinate {
 		if(Math.abs(yCoord)==0)yCoord = Math.abs(yCoord);
 		if(Math.abs(coord.getxCoord())==0)coord.setxCoord(Math.abs(coord.getxCoord()));
 		if(Math.abs(coord.getyCoord())==0)coord.setyCoord(Math.abs(coord.getyCoord()));
-		if (Math.round(xCoord*roundingValue)/roundingValue != Math.round(coord.getxCoord()*roundingValue)/roundingValue)
+		if (Math.round(xCoord*roundingAccuracy)/roundingAccuracy != Math.round(coord.getxCoord()*roundingAccuracy)/roundingAccuracy)
 			return false;
-		if (Math.round(yCoord*roundingValue)/roundingValue != Math.round(coord.getyCoord()*roundingValue)/roundingValue)
+		if (Math.round(yCoord*roundingAccuracy)/roundingAccuracy != Math.round(coord.getyCoord()*roundingAccuracy)/roundingAccuracy)
 			return false;
 		return true;
 	}
@@ -198,8 +198,8 @@ public class Coordinate {
 	}
 	
 	public void roundCoord(){
-		xCoord = Math.round(xCoord*roundingValue)/roundingValue;
-		yCoord = Math.round(yCoord*roundingValue)/roundingValue;
+		xCoord = Math.round(xCoord*roundingAccuracy)/roundingAccuracy;
+		yCoord = Math.round(yCoord*roundingAccuracy)/roundingAccuracy;
 	}
 
 	public void replaceByNegative() {

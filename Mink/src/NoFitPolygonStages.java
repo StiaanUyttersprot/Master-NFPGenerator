@@ -13,8 +13,8 @@ public class NoFitPolygonStages {
 	static int aantalNFPStages = 0;
 	static List<NoFitPolygon> nfpToDraw = new ArrayList<>();
 
-	static double sceneSizeX = 300;
-	static double sceneSizeY = 300;
+	static double sceneSizeX = 800;
+	static double sceneSizeY = 800;
 
 	public static int getAantalNFPStages() {
 		return aantalNFPStages;

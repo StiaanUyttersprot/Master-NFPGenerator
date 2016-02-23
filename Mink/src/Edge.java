@@ -23,7 +23,7 @@ public class Edge {
 	
 	private int tripSequenceNumber;
 	
-	private static double round = 1;
+	private static double round = 1e-5;
 	
 	//values for boundarySearch
 	private boolean positive;
@@ -279,7 +279,7 @@ public class Edge {
 	@Override
 	public String toString() {
 		return "Edge [startPoint=" + startPoint + ", endPoint=" + endPoint + ", edgeNumber=" + edgeNumber
-				+ ", edgeAngle=" + Math.toDegrees(edgeAngle) + ", deltaAngle=" + Math.toDegrees(deltaAngle) + ", turningPoint=" + turningPoint +", polygon A=" + polygonA + "]";
+				+ ", edgeAngle=" + edgeAngle + ", deltaAngle=" + deltaAngle + ", turningPoint=" + turningPoint +", polygon A=" + polygonA + "]";
 	}
 
 	public boolean isPolygonA() {
@@ -402,8 +402,9 @@ public class Edge {
 		boolean onLine;
 		onLine = intersectionCoord.dFunctionCheck(startPoint, endPoint);
 		if(onLine == false){
-			double distanceToCoord = intersectionCoord.shortestDistanceToEdge(this);
-			if(distanceToCoord>0.5)return false;
+//			double distanceToCoord = intersectionCoord.shortestDistanceToEdge(this);
+//			if(distanceToCoord>=0)return false;
+			return false;
 		};
 		if(intersectionCoord.getxCoord()<smallX-round){
 			return false;

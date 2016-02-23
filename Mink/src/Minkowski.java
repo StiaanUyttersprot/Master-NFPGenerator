@@ -8,13 +8,15 @@ public class Minkowski {
 	public static int numberOfFails = 0;
 	public static int numberStuckInfinite = 0;
 	
-	private static boolean printMinkData = false;
-	private static boolean printEdgeListData = false;
-	private static boolean printBoundaryData = false;
-	private static boolean drawFigures = false;
-	private static boolean handleError = true;
+	public static boolean printMinkData = false;
+	public static boolean printEdgeListData = false;
+	public static boolean printBoundaryData = false;
+	public static boolean drawFigures = false;
+	public static boolean drawNFP = false;
+	public static boolean handleError = true;
 	
 	static Boolean clockwiseContainsTurningpoints;
+	
 	public static NoFitPolygon generateMinkowskiNFP(MultiPolygon polyA, MultiPolygon polyB) {
 		
 		NoFitPolygon nfp = null;
@@ -154,7 +156,8 @@ public class Minkowski {
 		if(printMinkData){
 			for(List<Edge> trackLineTrip: trackLineTripList){
 				System.out.println("trackLineTrip");
-				printEdgeList(trackLineTrip);
+//				printEdgeList(trackLineTrip);
+				printGeoList(trackLineTrip);
 	//			printSimpleEdgeList(trackLineTrip);
 			}
 		}
@@ -172,9 +175,10 @@ public class Minkowski {
 		if(printMinkData){
 			for(List<Edge> cycle: cycleList){
 				System.out.println("cycle");
-				for(Edge e: cycle){
-					System.out.println(e);
-				}
+				printGeoList(cycle);
+//				for(Edge e: cycle){
+//					System.out.println(e);
+//				}
 			}
 		}
 		
@@ -196,7 +200,7 @@ public class Minkowski {
 				bottomCoord.getyCoord() - topCoord.getyCoord());
 		Coordinate startCoord = new Coordinate(polyB.getOuterPolygon()[0].translatedTo(translationVector));
 		nfp = makeNFP(cycleList, startCoord);
-		nfp.removeExcessivePoints();
+//		nfp.removeExcessivePoints();
 //		System.out.println(nfp);
 		
 		
@@ -207,7 +211,10 @@ public class Minkowski {
 				bottomCoord.getyCoord() - topCoord.getyCoord());
 		nfp.setOrbitingPolygon(polyB);
 		nfp.setStationaryPolygon(polyA);
-		if(drawFigures){
+		
+		System.out.println(nfp.toString());
+		if(drawNFP){
+			
 			NoFitPolygonStages.addNFP(nfp);
 		}
 
@@ -362,6 +369,15 @@ public class Minkowski {
 			}
 			else System.out.print("b"+e.getEdgeNumber());
 			System.out.print(", ");
+		}
+		System.out.println();
+	}
+	
+	private static void printGeoList(List<Edge> list) {
+		System.out.println(list.get(0).getStartPoint().getxCoord() + ", " + list.get(0).getStartPoint().getyCoord());
+		for(Edge e: list){
+			System.out.println(e.getEndPoint().getxCoord() + ", " + e.getEndPoint().getyCoord());
+			
 		}
 		System.out.println();
 	}
@@ -1607,9 +1623,13 @@ public class Minkowski {
 							}
 						}
 						*/
+						if(edgeK.getStartPoint().equals(edgeR.getEndPoint()) && edgeK.getEndPoint().equals(edgeR.getStartPoint())){
+							intersectionList.add(new TripIntersection(edgeK.getStartPoint(),edgeK, false ));
+							intersectionList.add(new TripIntersection(edgeK.getEndPoint(),edgeK, true ));
+						}
 						if(edgeK.getStartPoint().equals(edgeR.getStartPoint())){
 							if(i!=j || k!=r){//if they are from the same trip, they may not be the same edge
-								if(edgeK.getEndPoint().dFunction(edgeR)<0){
+								if(edgeK.getEndPoint().dFunction(edgeR)<=0){
 									intersectionList.add(new TripIntersection(edgeK.getStartPoint(),edgeK, false ));
 								}
 								else if(edgeK.getEndPoint().dFunction(edgeR)>0);
@@ -1621,6 +1641,7 @@ public class Minkowski {
 							}
 						}
 						else if(edgeK.getEndPoint().equals(edgeR.getStartPoint())){
+
 							if(i!=j ||(k!= r-1)){//if they are of the same trip, edgeK may not be the one before edgeR
 								intersectionList.add(new TripIntersection(edgeK.getEndPoint(),edgeK, true ));
 							}	
@@ -1727,7 +1748,7 @@ public class Minkowski {
 			int aantalFragmentEdges = 0;
 			for(List<Edge>frag: fragmentList){
 				System.out.println("fragment");
-				printEdgeList(frag);
+				printGeoList(frag);
 				aantalFragmentEdges += frag.size();
 			}
 			System.out.println(aantalFragmentEdges);
@@ -1792,7 +1813,18 @@ public class Minkowski {
 		else if(stuckIterator==0){
 			System.out.println("stuck");
 			numberStuckInfinite++;
+			if(printBoundaryData){
+				System.out.println("resting fragments: ");
+				for(List<Edge> frag: fragmentList){
+					
+					if(frag.size()>0){
+						System.out.println("fragment");
+						printGeoList(frag);
+					}
+				}
+			}
 		}
+		
 		return cycleList;
 	}
 	
