@@ -322,6 +322,11 @@ public class MultiPolygon {
 			// replace topCoord
 			if (coord.getyCoord() > topCoord.getyCoord())
 				topCoord = coord;
+			else if(coord.getyCoord() == topCoord.getyCoord()){
+				if(coord.getxCoord() > topCoord.getxCoord()){
+					topCoord = coord;
+				}
+			}
 		}
 		highestCoord = topCoord;
 		return topCoord;
@@ -524,5 +529,198 @@ public class MultiPolygon {
 			e.calcInverseEdgeAngle();
 		}
 		
+	}
+
+	public boolean overlapping(MultiPolygon polyA) {
+		int f = 0;
+		int k;
+		boolean overlap = false;
+		while(f < polyA.getOuterPolygonEdges().length && !overlap){
+			Edge edgeA = polyA.getOuterPolygonEdges()[f];
+			f++;
+			k = 0;
+			while(k < getOuterPolygonEdges().length && !overlap){
+				Edge edgeB = getOuterPolygonEdges()[k];
+				k++;
+				if(edgeA.testIntersectWithoutBorders(edgeB)){
+					overlap = true;
+				}
+				if(edgeA.containsPoint(edgeB.getStartPoint())&&!edgeB.getEndPoint().dFunctionCheck(edgeA.getStartPoint(), edgeA.getEndPoint())){
+					if(!edgeA.getStartPoint().equalValuesRounded(edgeB.getStartPoint())&&!edgeA.getStartPoint().equalValuesRounded(edgeB.getEndPoint())){
+						if(!edgeA.getEndPoint().equalValuesRounded(edgeB.getStartPoint())&&!edgeA.getEndPoint().equalValuesRounded(edgeB.getEndPoint())){
+							if(edgeB.getEndPoint().dFunction(edgeA)>0)overlap = true;
+						}
+					}
+				}
+			}
+		}
+		return overlap;
+		
+	}
+	
+	public static boolean polygonsIntersectPointInPolygon(MultiPolygon statPoly, MultiPolygon orbPoly) {
+		//System.out.println("testing next location");
+		boolean isOnEdge;
+		boolean middlePointOnEdge;
+		boolean touchedOuterEdge = false;
+		boolean touchedHoleEdge = false;
+		int i= 1;
+		//orbPoly.printPolygonData();
+		if(polygonsIntersectEdgeIntersect(statPoly, orbPoly))return true;
+		for(Coordinate coord: orbPoly.getOuterPolygon()){
+			//System.out.println("checking coord" + coord);
+			isOnEdge = false;
+			for(Edge statEdge: statPoly.getOuterPolygonEdges()){
+				if(statEdge.containsPoint(coord)){
+					isOnEdge = true;
+					touchedOuterEdge = true;
+				}
+			}
+			for(Edge[] holes: statPoly.getHoleEdges()){
+				for(Edge statEdge: holes){
+					if(statEdge.containsPoint(coord)){
+						isOnEdge = true;
+						touchedHoleEdge = true;
+					}
+					
+				}
+			}
+			if(touchedHoleEdge && touchedOuterEdge)return true;
+			//our method for seeing if a point is in the polygon does not give a certain result for points that fall on the edge
+			if(statPoly.pointInPolygon(coord)&&!isOnEdge){
+				return true;
+			}
+			if(isOnEdge){
+				middlePointOnEdge = false;
+				Edge edgeToTest = new Edge(coord, orbPoly.getOuterPolygon()[i]);
+				for(Edge statEdge: statPoly.getOuterPolygonEdges()){
+					if(statEdge.testIntersect(edgeToTest)) return true;
+				}
+				for(Edge[] holes: statPoly.getHoleEdges()){
+					for(Edge statEdge: holes){
+						if(statEdge.testIntersect(edgeToTest)) return true;
+					}
+				}
+				
+				Coordinate middlePoint = edgeToTest.getMiddlePointEdge();
+				//System.out.println("calc the midpoint "+ middlePoint);
+				for(Edge statEdge: statPoly.getOuterPolygonEdges()){
+					if(statEdge.containsPoint(middlePoint)){
+						middlePointOnEdge = true;
+						//System.out.println("is on stat edge");
+					}
+					
+				}
+				for(Edge[] holes: statPoly.getHoleEdges()){
+					for(Edge statEdge: holes){
+						if(statEdge.containsPoint(middlePoint)){
+							middlePointOnEdge = true;
+							//System.out.println("is on stathole Edge");
+						}
+						
+					}
+				}
+				//System.out.println("is middlepoint on edge: " + middlePointOnEdge);
+				if(!middlePointOnEdge){
+					if(statPoly.pointInPolygon(middlePoint))return true;
+				}
+			}
+			i++;
+			if(i > orbPoly.getOuterPolygon().length-1)i = 0;
+		}
+		i = 1;
+		for(Coordinate coord: statPoly.getOuterPolygon()){
+			//System.out.println(" this one 2" + coord);
+			isOnEdge = false;
+			for(Edge statEdge: orbPoly.getOuterPolygonEdges()){
+				if(statEdge.containsPoint(coord))isOnEdge = true;
+			}
+			//our method for seeing if a point is in the polygon does not give a certain result for points that fall on the edge
+			if(!isOnEdge && orbPoly.pointInPolygon(coord)){
+				return true;
+			}
+			if(isOnEdge){
+				middlePointOnEdge = false;
+				Edge edgeToTest = new Edge(coord, statPoly.getOuterPolygon()[i]);
+				for(Edge orbEdge: orbPoly.getOuterPolygonEdges()){
+					if(orbEdge.testIntersect(edgeToTest)) return true;
+				}
+				for(Edge[] holes: orbPoly.getHoleEdges()){
+					for(Edge orbEdge: holes){
+						if(orbEdge.testIntersect(edgeToTest)) return true;
+					}
+				}
+				Coordinate middlePoint = edgeToTest.getMiddlePointEdge();
+				//System.out.println("calc the midpoint "+ middlePoint);
+				for(Edge orbEdge: orbPoly.getOuterPolygonEdges()){
+					if(orbEdge.containsPoint(middlePoint)) middlePointOnEdge = true;
+				}
+				for(Edge[] holes: orbPoly.getHoleEdges()){
+					for(Edge orbEdge: holes){
+						if(orbEdge.containsPoint(middlePoint)) middlePointOnEdge = true;
+					}
+				}
+				if(!middlePointOnEdge){
+					if(orbPoly.pointInPolygon(middlePoint))return true;
+				}
+			}
+			i++;
+			if(i > statPoly.getOuterPolygon().length-1)i = 0;
+		}
+		return false;
+	}
+	public static boolean polygonsIntersectEdgeIntersect(MultiPolygon statPoly, MultiPolygon orbPoly) {
+		
+//		Vector placeOrbPolyVector;//the vector used to place the orbiting polygon in its starting position
+		
+			
+//		orbPoly.translate(placeOrbPolyVector);
+		//TODO kijken of het niet sneller is met een methode om te kijken of een punt binnen het polygon valt (sowieso)
+		//outside check 
+		//System.out.println("testing next location");
+		for(Edge outerStatEdge: statPoly.getOuterPolygonEdges()){
+			for(Edge outerOrbEdge : orbPoly.getOuterPolygonEdges()){
+				
+				if(outerOrbEdge.testIntersect(outerStatEdge)){
+					//System.out.println("intersection");
+					return true;
+				}
+			}
+		}
+		//check orb outer with stat holes
+		for(Edge outerOrbEdge: orbPoly.getOuterPolygonEdges()){
+			for(Edge[] statHoles : statPoly.getHoleEdges()){
+				for(Edge statHoleEdge: statHoles){
+					if(outerOrbEdge.testIntersect(statHoleEdge)){
+						return true;
+					}
+				}
+				
+			}
+		}
+		//check stat outer with orb holes
+		for(Edge outerStatEdge: statPoly.getOuterPolygonEdges()){
+			for(Edge[] orbHoles : orbPoly.getHoleEdges()){
+				for(Edge orbHoleEdge: orbHoles){
+					if(outerStatEdge.testIntersect(orbHoleEdge)){
+						return true;
+					}
+				}
+			}
+		}
+		//check holes
+		for(Edge[] orbHoles : orbPoly.getHoleEdges()){
+			for(Edge orbHoleEdge: orbHoles){
+				for(Edge[] statHoles : statPoly.getHoleEdges()){
+					for(Edge statHoleEdge: statHoles){
+						if(orbHoleEdge.testIntersect(statHoleEdge)){
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+
 	}
 }

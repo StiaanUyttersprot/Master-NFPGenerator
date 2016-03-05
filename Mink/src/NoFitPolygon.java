@@ -39,9 +39,30 @@ public class NoFitPolygon {
 		orbitingPolygon = new MultiPolygon(nfp.getOrbitingPolygon());
 	}
 
-	public NoFitPolygon(List<List<Edge>> minkowskiEdgeList, Vector translationVector){
+	public NoFitPolygon(List<List<Edge>> minkowskiCycleList, Vector translationVector){
 		nfpPolygonsList = new ArrayList<>();
-		for(List<Edge> edgeList: minkowskiEdgeList){
+		int nCycles = minkowskiCycleList.size();
+		int outerCycleIndex = 0;
+		double lowestX = Double.MAX_VALUE;
+		double lowestY = Double.MAX_VALUE;
+		List<Edge> edgeList;
+		for(int i = 0; i< minkowskiCycleList.size(); i++){
+			edgeList = minkowskiCycleList.get(i);
+			for(Edge edge: edgeList){
+				if(edge.getStartPoint().getxCoord()<lowestX){
+					lowestX = edge.getStartPoint().getxCoord();
+					outerCycleIndex = i;
+				}
+				if(edge.getStartPoint().getyCoord()<lowestY){
+					lowestY = edge.getStartPoint().getyCoord();
+					outerCycleIndex = i;
+				}
+			}
+		}
+		int currentCycle = outerCycleIndex;
+		for(int i =0; i<nCycles; i++){
+			edgeList = minkowskiCycleList.get(currentCycle);
+			currentCycle = (currentCycle+1)%nCycles;
 			activeList = new ArrayList<>();
 			for(Edge edge: edgeList){
 				activeList.add(edge.getStartPoint().translatedTo(translationVector));

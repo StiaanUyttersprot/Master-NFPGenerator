@@ -1,11 +1,15 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 
 public class NoFitPolygonStages {
@@ -116,15 +120,33 @@ public class NoFitPolygonStages {
 		double resizeFactor = sceneSizeY/biggestValue/2;
 		
         Polygon polygon = mPolygon.makeOuterPolygon(sceneSizeX, sceneSizeY, resizeFactor);
-        
+        Circle refPoint = new Circle(resizeFactor * mPolygon.getOuterPolygon()[0].getxCoord() + sceneSizeX / 2,
+        		-1* resizeFactor *mPolygon.getOuterPolygon()[0].getyCoord() + sceneSizeY / 2 , 5);
         switch(color){
-        case 0: polygon.setFill(Color.GREY);break;
-        case 1: polygon.setFill(Color.DARKGREY);break;
+        case 0:{
+	        	polygon.setFill(new Color(0.3,0.3,0.3,1));
+	        	refPoint.setFill(new Color(0.3,0.3,0.3,1));
+	        	refPoint.setStrokeType(StrokeType.INSIDE);
+	        	refPoint.setStrokeWidth(1);
+	        	refPoint.setStroke(Color.BLACK);
+	        	break;
         }
+        case 1: {
+	        	polygon.setFill(Color.DARKGRAY);
+	        	refPoint.setFill(Color.DARKGREY);
+	        	
+	        	break;
+        	}
+        }
+        refPoint.setStrokeType(StrokeType.INSIDE);
+    	refPoint.setStrokeWidth(1);
+    	refPoint.setStroke(Color.BLACK);
         polygon.setStrokeWidth(1);
         polygon.setStroke(Color.BLACK);
         
+        
         group.getChildren().add(polygon);
+        group.getChildren().add(refPoint);
         
         Polygon[] holes = mPolygon.makeHoles(sceneSizeX, sceneSizeY, resizeFactor);
         

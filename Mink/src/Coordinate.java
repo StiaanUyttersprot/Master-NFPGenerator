@@ -48,7 +48,7 @@ public class Coordinate {
 	}
 	
 	public String toNfpString(){
-		return xCoord + " " + yCoord;
+		return xCoord + ", " + yCoord;
 	}
 
 	@Override

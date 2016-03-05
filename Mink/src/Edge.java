@@ -334,6 +334,33 @@ public class Edge {
 		return intersection;
 	}
 	
+	public boolean testIntersectWithoutBorders(Edge edge) {
+		Coordinate intersectionCoord;
+		boolean intersection = false;
+
+		// if the bounding boxes intersect, line intersection
+		// has to be checked
+		if (boundingBoxIntersect(edge)) {
+//			System.out.println("bounding box");
+			if (lineIntersect(edge)) {
+//				System.out.println("lineIntersect");
+				intersectionCoord = calcIntersection(edge);
+				
+				if(containsIntersectionPoint(intersectionCoord)&&edge.containsIntersectionPoint(intersectionCoord)){
+					
+//					intersection = true;
+					if(intersectionCoord.equalValuesRounded(edge.getStartPoint())||intersectionCoord.equalValuesRounded(edge.getEndPoint())
+							||intersectionCoord.equalValuesRounded(startPoint)||intersectionCoord.equalValuesRounded(endPoint)){
+						//System.out.println("endpoint");
+					}
+					else intersection = true;
+				}
+			}
+			
+		}
+		return intersection;
+	}
+	
 	public void calculateRanges() {
 
 		Coordinate start = getStartPoint();
@@ -455,6 +482,12 @@ public class Edge {
 
 	}
 
+	public Coordinate getMiddlePointEdge() {
+		double midxCoord = (startPoint.getxCoord()+endPoint.getxCoord())/2;
+		double midyCoord = (startPoint.getyCoord()+endPoint.getyCoord())/2;
+		return new Coordinate(midxCoord, midyCoord);
+	}
+	
 	public boolean equalValuesRounded(Edge edge) {
 		if(!startPoint.equalValuesRounded(edge.getEndPoint()))return false;
 		if(!endPoint.equalValuesRounded(edge.getEndPoint()))return false;

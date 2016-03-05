@@ -203,18 +203,20 @@ public class Minkowski {
 //		nfp.removeExcessivePoints();
 //		System.out.println(nfp);
 		
-		
-		
-		
-		//draw nfp------------------------------------------------
-		polyB.translate(bottomCoord.getxCoord() - topCoord.getxCoord(),
-				bottomCoord.getyCoord() - topCoord.getyCoord());
 		nfp.setOrbitingPolygon(polyB);
 		nfp.setStationaryPolygon(polyA);
 		
-		System.out.println(nfp.toString());
+		//remove faulty cycles------------------------------------------------------------------------------------------------------
+		removeFaultyCycles(nfp);
+				
+		//draw nfp------------------------------------------------
+		polyB.translate(bottomCoord.getxCoord() - topCoord.getxCoord(),
+				bottomCoord.getyCoord() - topCoord.getyCoord());
+		
+		
+		
 		if(drawNFP){
-			
+			System.out.println(nfp.toString());
 			NoFitPolygonStages.addNFP(nfp);
 		}
 
@@ -1531,7 +1533,14 @@ public class Minkowski {
 				i++;
 			}
 		}
-
+		List<List<Edge>> fragmentList = new ArrayList<>();
+		List<Edge> fragment;
+		List<Edge> fragI;
+		List<Edge> fragJ;
+		List<Edge> fragS;
+		List<List<Edge>> cycleList = new ArrayList<>();
+		List<Edge> cycle;
+		
 		for(int i = 0; i < trackLineTripList.size(); i++){
 			intersectionList = new ArrayList<>();
 
@@ -1628,10 +1637,26 @@ public class Minkowski {
 							intersectionList.add(new TripIntersection(edgeK.getEndPoint(),edgeK, true ));
 						}
 						if(edgeK.getStartPoint().equals(edgeR.getStartPoint())){
+							if(k>0 && r>0){
+								if(edgeK.getEndPoint().dFunction(edgeR)>0){
+									Edge edgeKless = trackLineTripI.get(k-1);
+									Edge edgeRless = trackLineTripJ.get(r-1);
+									
+									if(edgeKless.getStartPoint().dFunction(edgeRless)<0){
+										cycle = new ArrayList<>();
+										cycle.add(new Edge(edgeK.getStartPoint(), edgeK.getStartPoint()));
+										cycleList.add(cycle);
+									}
+								}
+								
+							}
+						}
+						if(edgeK.getStartPoint().equals(edgeR.getStartPoint())){
 							if(i!=j || k!=r){//if they are from the same trip, they may not be the same edge
 								if(edgeK.getEndPoint().dFunction(edgeR)<=0){
 									intersectionList.add(new TripIntersection(edgeK.getStartPoint(),edgeK, false ));
 								}
+								
 								else if(edgeK.getEndPoint().dFunction(edgeR)>0);
 							}
 						}
@@ -1646,7 +1671,9 @@ public class Minkowski {
 								intersectionList.add(new TripIntersection(edgeK.getEndPoint(),edgeK, true ));
 							}	
 						}
-						else if(edgeK.getEndPoint().equals(edgeR.getEndPoint()));
+						else if(edgeK.getEndPoint().equals(edgeR.getEndPoint())){
+							intersectionList.add(new TripIntersection(edgeK.getEndPoint(),edgeK, true ));
+						}
 						
 						else if(edgeR.containsPoint(edgeK.getStartPoint())){
 							if(edgeK.getEndPoint().dFunction(edgeR)>0);
@@ -1701,8 +1728,7 @@ public class Minkowski {
 		}
 		
 		//step 2
-		List<List<Edge>> fragmentList = new ArrayList<>();
-		List<Edge> fragment;
+		
 		int k = 0;
 		for(int i = 0; i<allTripIntersectionList.size(); i++){
 //			fragment = new ArrayList<>();
@@ -1747,37 +1773,98 @@ public class Minkowski {
 		if(printBoundaryData){
 			int aantalFragmentEdges = 0;
 			for(List<Edge>frag: fragmentList){
-				System.out.println("fragment");
+				System.out.println("fragments");
 				printGeoList(frag);
 				aantalFragmentEdges += frag.size();
 			}
 			System.out.println(aantalFragmentEdges);
 		}
-		
+		if(drawFigures){
+			ComplexPolygonStage.addTrackLineTrips(fragmentList);
+		}
 		//step 3
 //		System.out.println("starting step 3");
 		
 		int numberOfFragments = fragmentList.size();
-		List<Edge> fragI;
-		List<Edge> fragJ;
-		List<List<Edge>> cycleList = new ArrayList<>();
-		List<Edge> cycle;
 		
-		while(numberOfFragments>0 && stuckIterator>0){
+		//booleans to check if there are fragments that fit, throw away if there aren't
+		boolean keepFragmentEnd = false;
+		boolean keepFragmentBegin = false;
+		
+		for(int i = 0; i< fragmentList.size(); i++){
+			fragI = fragmentList.get(i);
+			for(int j = 0; j< fragmentList.size(); j++){
+				fragJ = fragmentList.get(j);
+				if(fragJ.size()>0){
+					
+					if(fragI.get(fragI.size()-1).getEndPoint().equalValuesRounded(fragJ.get(0).getStartPoint())){
+						keepFragmentEnd = true;
+					}
+					if(fragI.get(0).getStartPoint().equalValuesRounded(fragJ.get(fragJ.size()-1).getEndPoint())){
+						keepFragmentBegin = true;
+					}
+				}
+			}
+			if(!(keepFragmentBegin && keepFragmentEnd))fragI.clear();
+		}
+		for(int i = 0; i< fragmentList.size(); i++){
+			fragI = fragmentList.get(i);
+			for(int j = i+1; j< fragmentList.size(); j++){
+				fragJ = fragmentList.get(j);
+				if(fragI.size()==1 && fragJ.size()==1){
+					if(fragI.get(0).getEndPoint().equalValuesRounded(fragJ.get(0).getStartPoint())){
+						if(fragJ.get(0).getEndPoint().equalValuesRounded(fragI.get(0).getStartPoint())){
+							cycle = new ArrayList<>();
+							cycle.addAll(fragI);
+							cycle.addAll(fragJ);
+							
+							fragI.clear();
+							fragJ.clear();
+				
+							cycleList.add(cycle);
+						}
+					}
+				}
+			}
+		}
+		
+		while(fragmentList.size()>0 && stuckIterator>0){
 			stuckIterator--;
-//			System.out.println("number of fragments: " + numberOfFragments);
+			boolean uselessFragment;
 			for (int i = 0; i < fragmentList.size(); i++) {
+				uselessFragment = true;//if fragment i never has a matching start or end it will be deemed useless
+				fragI = fragmentList.get(i);
+				
 				for (int j = 0; j < fragmentList.size(); j++) {						
-					fragI = fragmentList.get(i);
+					
 					fragJ = fragmentList.get(j);
 					if(fragI.size()!=0&&fragJ.size()!=0){
-//							System.out.println("beiden verschillend van 0");
+
 						if(fragI.get(0).getStartPoint().equalValuesRounded(fragJ.get(fragJ.size()-1).getEndPoint())){
-//								System.out.println("fragments match!");
-							if(fragI.get(fragI.size()-1).getEndPoint().equalValuesRounded(fragJ.get(0).getStartPoint())){
+							
+							uselessFragment = false;
+							
+							for(int s = 0; s< fragmentList.size();s++){
+								fragS = fragmentList.get(s);
+								if(j!=s){
+									if(fragJ.size()!=0&&fragS.size()!=0){
+
+										if(fragJ.get(fragJ.size()-1).getEndPoint().equalValuesRounded(fragS.get(0).getStartPoint())){
+											if(fragS.get(0).getEndPoint().dFunction(fragI.get(0))<0){
+												fragI = fragmentList.get(s);
+											}
+//											if(fragS.get(0).getEndPoint().equalValuesRounded(fragJ.get(fragJ.size()-1).getStartPoint())){
+//												fragI = fragmentList.get(s);
+//												break;
+//											}
+										}
+										
+									}
+								}
 								
-//									fragJ.remove(0);
-//									fragJ.remove(fragJ.size()-1);
+							}
+							
+							if(fragI.get(fragI.size()-1).getEndPoint().equalValuesRounded(fragJ.get(0).getStartPoint())){
 								
 								cycle = new ArrayList<>();
 								cycle.addAll(fragI);
@@ -1786,20 +1873,37 @@ public class Minkowski {
 								cycleList.add(cycle);
 								
 								fragI.clear();
+								
+								
 								numberOfFragments--;
 								fragJ.clear();	
 								numberOfFragments--;
 							}
 							else{
-//									fragI.remove(0);
+
 								fragJ.addAll(fragI);
 								
 								fragI.clear();
+								
 								numberOfFragments--;
 							}
 						}
 						else if(fragI.get(fragI.size()-1).getEndPoint().equalValuesRounded(fragJ.get(0).getStartPoint())){
-//								fragJ.remove(0);
+							
+							uselessFragment = false;
+							
+							for(int s = 0; s< fragmentList.size();s++){
+								fragS = fragmentList.get(s);
+								if(fragI.size()!=0&&fragS.size()!=0){
+
+									if(fragI.get(fragI.size()-1).getEndPoint().equalValuesRounded(fragS.get(0).getStartPoint())){
+										if(fragS.get(0).getEndPoint().dFunction(fragJ.get(0))<0){
+											fragJ = fragmentList.get(s);
+										}
+									}
+								}
+								
+							}
 							fragI.addAll(fragJ);
 							
 							fragJ.clear();
@@ -1807,8 +1911,21 @@ public class Minkowski {
 						}
 					}
 				}
+				if(uselessFragment){
+					fragI.clear();
+					numberOfFragments--;
+				}
+			}
+			int f = 0;
+			while( f <fragmentList.size()){
+				if(fragmentList.get(f).size()==0){
+					fragmentList.remove(f);
+				}
+				else f++;
+				
 			}
 		}
+		
 		if(cycleList.size()==0) numberOfFails++;
 		else if(stuckIterator==0){
 			System.out.println("stuck");
@@ -1853,4 +1970,51 @@ public class Minkowski {
 		
 	}
 	
+	
+	private static void removeFaultyCycles(NoFitPolygon nfp) {
+		MultiPolygon polyA = nfp.getStationaryPolygon();
+		MultiPolygon polyB = nfp.getOrbitingPolygon();
+		
+		List<List<Coordinate>> nfpCycleList = nfp.getNfpPolygonsList();
+		
+		boolean faultyCycle = false;
+		int j, f, k;
+		
+		for(int i= 0; i< nfpCycleList.size(); i++){
+			faultyCycle = false;
+			j =0;
+			
+			while(j<nfpCycleList.get(i).size() && !faultyCycle){
+				Coordinate nfpCoord = nfpCycleList.get(i).get(j);
+				
+				polyB.translate(nfpCoord.getxCoord()-polyB.getOuterPolygon()[0].getxCoord(), nfpCoord.getyCoord()-polyB.getOuterPolygon()[0].getyCoord());
+				
+				j++;
+				faultyCycle = polyB.overlapping(polyA);
+				
+			}
+			if(faultyCycle){
+				nfpCycleList.get(i).clear();
+			}
+//			for(Coordinate nfpCoord: nfpCycleList.get(i)){
+//				polyB.translate(nfpCoord.getxCoord(), nfpCoord.getyCoord());
+//				for(Edge edgeA: polyA.getOuterPolygonEdges()){
+//					for(Edge edgeB : polyB.getOuterPolygonEdges()){
+//						if(edgeA.testIntersect(edgeB)){
+//							faultyCycle = true;
+//						}
+//					}
+//				}
+//			}
+		}
+		f = 0;
+		while( f <nfpCycleList.size()){
+			if(nfpCycleList.get(f).size()==0){
+				nfpCycleList.remove(f);
+			}
+			else f++;	
+		}
+		
+	}
+
 }
