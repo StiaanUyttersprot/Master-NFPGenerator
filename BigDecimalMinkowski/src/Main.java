@@ -10,22 +10,22 @@ public class Main {
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		
-		System.out.println("Minkowski");
+		System.out.println("Big Decimal Mink");
 		
-		Minkowski.printMinkData = false;
-		Minkowski.printEdgeListData = false;
-		Minkowski.printBoundaryData = false;
+		Minkowski.printMinkData = true;
+		Minkowski.printEdgeListData = true;
+		Minkowski.printBoundaryData = true;
 		Minkowski.drawFigures = false;
 		Minkowski.drawNFP = true;
 		Minkowski.handleError = true;
 		
 		boolean testMass = true;
 		
-		boolean testSpecific = true;
-		int findIDimensionPoly = 10;
-		int findJDimensionPoly = 41;
+		boolean testSpecific = false;
+		int findIDimensionPoly = 98;
+		int findJDimensionPoly = 49;
 		int numberOfPolys = 100;
-		//3861
+		
 		if(testSpecific){
 			Minkowski.printMinkData = true;
 			Minkowski.printEdgeListData = true;
@@ -40,6 +40,7 @@ public class Main {
 			Minkowski.drawFigures = false;
 			Minkowski.drawNFP = false;
 		}
+		
 		
 		DrawJavaFX drawTool = new DrawJavaFX();
 
@@ -124,7 +125,6 @@ public class Main {
 		startTime = System.currentTimeMillis();
 
 		int i = 0;
-		System.out.println("Minkowski tests");
 		
 		if(!testMass){
 			Minkowski.generateMinkowskiNFP(new MultiPolygon(simple2Data), new MultiPolygon(simple1Data)); //correct
@@ -155,20 +155,20 @@ public class Main {
 			totalIts++;
 			Minkowski.generateMinkowskiNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data));
 			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));
-			totalIts++;
 			Minkowski.generateMinkowskiNFP(new MultiPolygon(jigsaw1Data), new MultiPolygon(jigsaw2Data));
 			totalIts++;	
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data));//correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc2Data));//correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc3Data));//correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc3Data), new MultiPolygon(interlockingConc2Data));//correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(holes1Data), new MultiPolygon(block2Data));//correct
-			totalIts++;	
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));//correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data));//correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc2Data));//correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc3Data));//correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc3Data), new MultiPolygon(interlockingConc2Data));//correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(holes1Data), new MultiPolygon(block2Data));//correct
+//			totalIts++;	
 		}
 				
 		

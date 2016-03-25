@@ -23,6 +23,7 @@ public class Orbiting {
 		NoFitPolygon nfp = new NoFitPolygon(orbPoly.getOuterPolygon()[0], statPoly, orbPoly);
 		// we need to choose a vector to translate with an angle that is closest
 		// to the last angle chosen to translate
+//		NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
 		
 		orbitPolygon(nfp, statPoly, orbPoly, true);
 		
@@ -117,8 +118,8 @@ public class Orbiting {
 		orbPoly.translate(bottomCoord.getxCoord() - topCoord.getxCoord(),
 				bottomCoord.getyCoord() - topCoord.getyCoord());
 //		NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
-//		
-		nfp.removeExcessivePoints();
+		
+//		nfp.removeExcessivePoints();
 //		System.out.println(nfp);
 		return nfp;// TODO resultaat hier zetten
 	}
@@ -207,7 +208,7 @@ public class Orbiting {
 				}
 
 			}
-			//sorting by edgenumber and vectors made from stationary edges get priviledges
+			//sorting by edgenumber and vectors made from stationary edges get privileges
 			Collections.sort(feasibleVectorList, new VectorComparator());
 			// ---------------------------------------------------------------------------------------------------------------------
 			//print feasible vectors
@@ -225,11 +226,9 @@ public class Orbiting {
 			
 			Vector translationVector;
 			if (feasibleVectorList.size() > 1) {
-				//sort the vectors from smallest to largest angle
-				
 				
 				int i = 0;
-				// look for the vector that is closest in angle to the one
+				// look for the vector that is closest in edgenumber to the one
 				// previously translated by
 				while (i < feasibleVectorList.size() && feasibleVectorList.get(i).getEdgeNumber() < previousEdge ) {
 					i++;
@@ -251,7 +250,7 @@ public class Orbiting {
 
 				// if the value of i is smaller then the listsize, a next vector
 				// is found, if it reaches the end, it means the next vector is
-				// the one with the smallest angle
+				// the one with the smallest edgenumber
 				if (i < feasibleVectorList.size()) {
 					translationVector = feasibleVectorList.get(i);
 				} else
@@ -350,7 +349,8 @@ public class Orbiting {
 			numberOfFails++;
 			numberStuckInfinite++;
 		}
-		nfp.removeLastDoubleCoordinate();
+		//for graphics don't remove it
+//		nfp.removeLastDoubleCoordinate();
 		
 	}
 }

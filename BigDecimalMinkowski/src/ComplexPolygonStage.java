@@ -97,36 +97,34 @@ public class ComplexPolygonStage {
 	private static Stage drawComplexPolygon(List<Edge> complexPolygon) {
 		Stage stage = new Stage();
 		
-		Color background = Color.web("0xc8c5b4");
-		
 		Group complexPolygonGroup = new Group();
-		Scene scene = new Scene(complexPolygonGroup, sceneSizeX, sceneSizeY, background);
+		Scene scene = new Scene(complexPolygonGroup, sceneSizeX, sceneSizeY, Color.WHITESMOKE);
 		
-//		Line xAxis = new Line(0,sceneSizeY/2,10000,sceneSizeY/2);
-//	    Line yAxis = new Line(sceneSizeX/2,0,sceneSizeX/2,10000);
-//        
-//		complexPolygonGroup.getChildren().add(xAxis);
-//		complexPolygonGroup.getChildren().add(yAxis);
+		Line xAxis = new Line(0,sceneSizeY/2,10000,sceneSizeY/2);
+	    Line yAxis = new Line(sceneSizeX/2,0,sceneSizeX/2,10000);
+        
+		complexPolygonGroup.getChildren().add(xAxis);
+		complexPolygonGroup.getChildren().add(yAxis);
         
 		double biggestXCoordValue = 0;//biggest value of x and y coords of the polygons, used for autoscaling
 		double biggestYCoordValue = 0;
 		for(Edge e: complexPolygon){
-			if(Math.abs(e.getStartPoint().getxCoord())>biggestXCoordValue){
-				biggestXCoordValue = Math.abs(e.getStartPoint().getxCoord());
+			if(Math.abs(e.getStartPoint().getxCoord().doubleValue())>biggestXCoordValue){
+				biggestXCoordValue = Math.abs(e.getStartPoint().getxCoord().doubleValue());
 			}
-			if(Math.abs(e.getEndPoint().getxCoord())>biggestXCoordValue){
-				biggestXCoordValue = Math.abs(e.getEndPoint().getxCoord());
+			if(Math.abs(e.getEndPoint().getxCoord().doubleValue())>biggestXCoordValue){
+				biggestXCoordValue = Math.abs(e.getEndPoint().getxCoord().doubleValue());
 			}
-			if(Math.abs(e.getStartPoint().getyCoord())>biggestYCoordValue){
-				biggestYCoordValue = Math.abs(e.getStartPoint().getyCoord());
+			if(Math.abs(e.getStartPoint().getyCoord().doubleValue())>biggestYCoordValue){
+				biggestYCoordValue = Math.abs(e.getStartPoint().getyCoord().doubleValue());
 			}
-			if(Math.abs(e.getEndPoint().getyCoord())>biggestYCoordValue){
-				biggestYCoordValue = Math.abs(e.getEndPoint().getyCoord());
+			if(Math.abs(e.getEndPoint().getyCoord().doubleValue())>biggestYCoordValue){
+				biggestYCoordValue = Math.abs(e.getEndPoint().getyCoord().doubleValue());
 			}
 		}
 		double biggestValue = Math.max(biggestXCoordValue, biggestYCoordValue);
 //		System.out.println("biggest value: " + biggestValue);
-		makeComplexPolygonScene(complexPolygonGroup, complexPolygon, 0, biggestValue);
+		makeComplexPolygonScene(complexPolygonGroup, complexPolygon, 0, biggestValue+50);
 		
         stage.setScene(scene);
         //stage.show();
@@ -139,16 +137,14 @@ public class ComplexPolygonStage {
 		double resizeFactor = sceneSizeY/biggestValue/2;
 //		System.out.println(resizeFactor);
 		Line edge = new Line(0,sceneSizeY/2,10000,sceneSizeY/2);
-		Color sligthlyLighterBlack = Color.web("0x201F18");
 		
 		for(Edge e: complexPolygon){
 			
-			edge = new Line(resizeFactor*e.getStartPoint().getxCoord() +(sceneSizeX/2),
-					-resizeFactor*e.getStartPoint().getyCoord()+(sceneSizeY/2),
-					resizeFactor*e.getEndPoint().getxCoord()+(sceneSizeX/2),
-					-resizeFactor*e.getEndPoint().getyCoord()+(sceneSizeY/2));
-			edge.setStrokeWidth(6);
-			edge.setStroke(sligthlyLighterBlack);
+			edge = new Line(resizeFactor*e.getStartPoint().getxCoord().doubleValue() +(sceneSizeX/2),
+					-resizeFactor*e.getStartPoint().getyCoord().doubleValue()+(sceneSizeY/2),
+					resizeFactor*e.getEndPoint().getxCoord().doubleValue()+(sceneSizeX/2),
+					-resizeFactor*e.getEndPoint().getyCoord().doubleValue()+(sceneSizeY/2));
+			edge.setStrokeWidth(4);
 			group.getChildren().add(edge);
 			
 		}

@@ -56,6 +56,9 @@ public class Main {
 		File simple1Data = new File("SimpleFig1.txt");
 		File simple2Data = new File("SimpleFig2.txt");
 		
+		File jigsaw1Data = new File("Jigsaw1.txt");
+		File jigsaw2Data = new File("Jigsaw2.txt");
+		
 		File folderT1 = new File(directoryT1);
 		File[] listOfFilesT1 = folderT1.listFiles();
 		
@@ -128,7 +131,7 @@ public class Main {
 
 		startTime = System.currentTimeMillis();
 
-		int i = 0;
+//		int i = 0;
 //		for(MultiPolygon stat : randomList){
 //			int j = 0;
 //			
@@ -140,7 +143,9 @@ public class Main {
 //			}
 //			i++;
 //		}
-//				
+//		
+//		nfpList.add(Orbiting.generateNFP(new MultiPolygon(concave1Data), new MultiPolygon(concave2Data)));
+//		totalIts++;
 //		nfpList.add(Orbiting.generateNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data)));
 //		totalIts++;
 //		nfpList.add(Orbiting.generateNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data)));
@@ -169,15 +174,17 @@ public class Main {
 //		totalIts++;	
 //		nfpList.add(Orbiting.generateNFP(new MultiPolygon(simple2Data), new MultiPolygon(simple1Data)));
 //		totalIts++;
+//		nfpList.add(Orbiting.generateNFP(new MultiPolygon(jigsaw1Data), new MultiPolygon(jigsaw2Data)));
+//		totalIts++;
 		
-//		int i = 0;
+		int i = 0;
 		int j = 0;
 		
-		for (MultiPolygon stat: polygonsT1) {
+		for (MultiPolygon stat: polygonsT2) {
 			//if(i == 10)break;
 			j = 0;
-			for (MultiPolygon orb: polygonsT1) {
-//						System.out.println("["+i+"]["+j+"]");
+			for (MultiPolygon orb: polygonsT2) {
+						System.out.println("["+i+"]["+j+"]");
 //						if(i == 10 && j == 42){
 			
 					nfpList.add(Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb)));
@@ -189,9 +196,9 @@ public class Main {
 			i++;
 			
 		}
-//		System.out.println("current total: " + totalIts);
-//		System.out.println("fails: " + Orbiting.numberOfFails);
-//		System.out.println("infinite stuck: " + Orbiting.numberStuckInfinite);
+		System.out.println("current total: " + totalIts);
+		System.out.println("fails: " + Orbiting.numberOfFails);
+		System.out.println("infinite stuck: " + Orbiting.numberStuckInfinite);
 //			MultiPolygon holes = new MultiPolygon(holes1Data);
 //			for(int j=0; j<650;j+=10){
 //				for(int i=0; i<1000;i+=10){
@@ -221,7 +228,7 @@ public class Main {
 		// ------------------------------------------------------------------------------------
 		// graphical representation
 		 
-		 drawTool.launchDrawer(args);
+//		 drawTool.launchDrawer(args);
 	}
 /*
 	private static void testCoordinateMethods() {

@@ -1,8 +1,8 @@
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Polyline;
 
 public class NoFitPolygon {
 
@@ -40,6 +40,38 @@ public class NoFitPolygon {
 		orbitingPolygon = new MultiPolygon(nfp.getOrbitingPolygon());
 	}
 
+	public NoFitPolygon(List<List<Edge>> minkowskiCycleList, Vector translationVector){
+		nfpPolygonsList = new ArrayList<>();
+		int nCycles = minkowskiCycleList.size();
+		int outerCycleIndex = 0;
+		BigDecimal lowestX = new BigDecimal(Double.MAX_VALUE);
+		BigDecimal lowestY = new BigDecimal(Double.MAX_VALUE);
+		List<Edge> edgeList;
+		for(int i = 0; i< minkowskiCycleList.size(); i++){
+			edgeList = minkowskiCycleList.get(i);
+			for(Edge edge: edgeList){
+				if(edge.getStartPoint().getxCoord().compareTo(lowestX)<0){
+					lowestX = edge.getStartPoint().getxCoord();
+					outerCycleIndex = i;
+				}
+				if(edge.getStartPoint().getyCoord().compareTo(lowestY)<0){
+					lowestY = edge.getStartPoint().getyCoord();
+					outerCycleIndex = i;
+				}
+			}
+		}
+		int currentCycle = outerCycleIndex;
+		for(int i =0; i<nCycles; i++){
+			edgeList = minkowskiCycleList.get(currentCycle);
+			currentCycle = (currentCycle+1)%nCycles;
+			activeList = new ArrayList<>();
+			for(Edge edge: edgeList){
+				activeList.add(edge.getStartPoint().translatedTo(translationVector));
+			}
+			nfpPolygonsList.add(activeList);
+		}
+	}
+	
 	public List<List<Coordinate>> getNfpPolygonsList() {
 		return nfpPolygonsList;
 	}
@@ -77,44 +109,28 @@ public class NoFitPolygon {
 	}
 	
 	
-	//for Graphic image
-	public Polyline[] toPolylineList(double xSize, double ySize, double sizeFactor) {
+	//for Graphical image
+	public Polygon[] toPolygonList(double xSize, double ySize, double sizeFactor) {
 		
-		Polyline[] polygonList = new Polyline[nfpPolygonsList.size()];
+		Polygon[] polygonList = new Polygon[nfpPolygonsList.size()];
 		for (int i = 0; i < nfpPolygonsList.size(); i++) {
-			polygonList[i] = new Polyline();
+			polygonList[i] = new Polygon();
 			for (Coordinate coord : nfpPolygonsList.get(i)) {
-				polygonList[i].getPoints().add(sizeFactor * coord.getxCoord() + xSize / 2);
+				polygonList[i].getPoints().add(sizeFactor * coord.getxCoord().doubleValue() + xSize / 2);
 				// yCoord*-1 to invert to normal axis
-				polygonList[i].getPoints().add(-1 * sizeFactor * coord.getyCoord() + ySize / 2);
+				polygonList[i].getPoints().add(-1 * sizeFactor * coord.getyCoord().doubleValue() + ySize / 2);
 			}
 		}
 		
 		return polygonList;
 	}
-	
-	//for Graphical image
-		public Polygon[] toPolygonList(double xSize, double ySize, double sizeFactor) {
-			
-			Polygon[] polygonList = new Polygon[nfpPolygonsList.size()];
-			for (int i = 0; i < nfpPolygonsList.size(); i++) {
-				polygonList[i] = new Polygon();
-				for (Coordinate coord : nfpPolygonsList.get(i)) {
-					polygonList[i].getPoints().add(sizeFactor * coord.getxCoord() + xSize / 2);
-					// yCoord*-1 to invert to normal axis
-					polygonList[i].getPoints().add(-1 * sizeFactor * coord.getyCoord() + ySize / 2);
-				}
-			}
-			
-			return polygonList;
-		}
 
 	public void startNewActiveList(Coordinate coord){
 		activeList = new ArrayList<>();
 		activeList.add(new Coordinate(coord));
 		nfpPolygonsList.add(activeList);
 	}
-	
+
 	//this method will remove coordinates that aren't necessary to draw the nfp(when more than two points fall on the same line
 	public void removeExcessivePoints(){
 		int start;
@@ -135,27 +151,7 @@ public class NoFitPolygon {
 			
 		}
 	}
-
-	public boolean pointOnEdge(Coordinate nextStartPoint) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean containsPoint(Coordinate coordinate) {
-		Edge testEdge;
-		for(List<Coordinate> partList : nfpPolygonsList){
-			for (int i = 0; i < partList.size(); i++) {
-				
-				testEdge = new Edge(partList.get(i), partList.get((i+1)%partList.size()));
-				
-				if(testEdge.containsPoint(coordinate))return true;
-				if(partList.get(i).equals(coordinate))return true;
-			}
-			
-		}
-		return false;
-	}
-
+	
 	@Override
 	public String toString() {
 		String nfp = "";
@@ -172,11 +168,6 @@ public class NoFitPolygon {
 		}
 		
 		return nfp;
-	}
-
-	public void removeLastDoubleCoordinate() {
-		if(activeList.size()>1)activeList.remove(activeList.size()-1);
-		
 	}
 	
 	

@@ -343,6 +343,11 @@ public class MultiPolygon {
 			// replace topCoord
 			if (coord.getyCoord() > topCoord.getyCoord())
 				topCoord = coord;
+			else if(coord.getyCoord() == topCoord.getyCoord()){
+				if(coord.getxCoord() > topCoord.getxCoord()){
+					topCoord = coord;
+				}
+			}
 		}
 		return topCoord;
 	}
