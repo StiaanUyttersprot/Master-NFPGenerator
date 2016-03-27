@@ -11,8 +11,8 @@ public class Edge {
 	private Coordinate startPoint;
 	private Coordinate endPoint;
 	private int edgeNumber;
-	private BigDecimal edgeAngle;
-	private BigDecimal deltaAngle;
+	private double edgeAngle;
+	private double deltaAngle;
 	
 	// values to be used for bounding box intersection
 	private BigDecimal smallX;
@@ -101,7 +101,7 @@ public class Edge {
 		System.out.println(startPoint.toString() + ";" + endPoint.toString());
 	}
 
-public BigDecimal getEdgeAngle() {
+public double getEdgeAngle() {
 		
 		return edgeAngle;
 	}
@@ -172,20 +172,21 @@ public BigDecimal getEdgeAngle() {
 
 	public void calcEdgeAngle(){
 		//edgeAngle = Math.atan2(endPoint.getyCoord()-startPoint.getyCoord(), endPoint.getxCoord()- startPoint.getxCoord());
-		BigDecimal numerator = endPoint.getyCoord().subtract(startPoint.getyCoord(),mc);
-		numerator.setScale(200);
+		double numerator = endPoint.getyCoord().doubleValue()- startPoint.getyCoord().doubleValue();
 		
-		BigDecimal denominator = endPoint.getxCoord().subtract(startPoint.getxCoord(), mc);
-		denominator.setScale(200);
-		edgeAngle = new BigDecimal(Math.atan2(numerator.doubleValue(), denominator.doubleValue()));
+		double denominator = endPoint.getxCoord().doubleValue()- startPoint.getxCoord().doubleValue();
+
+//		double doubleEdge = Math.atan2(numerator.doubleValue(), denominator.doubleValue());
+//		System.out.println(doubleEdge);
+		edgeAngle = Math.atan2(numerator, denominator);
 //		System.out.println(edgeAngle);
 	}
 	
 	public void calcInverseEdgeAngle() {
 		//edgeAngle = Math.atan2(startPoint.getyCoord() - endPoint.getyCoord(), startPoint.getxCoord() - endPoint.getxCoord());
-		BigDecimal numerator = startPoint.getyCoord().subtract(endPoint.getyCoord(), mc);
-		BigDecimal denominator = startPoint.getxCoord().subtract(endPoint.getxCoord(), mc);
-		edgeAngle = BigDecimalMath.atan2(numerator,denominator);
+		double numerator = startPoint.getyCoord().doubleValue() - endPoint.getyCoord().doubleValue();
+		double denominator = startPoint.getxCoord().doubleValue() - endPoint.getxCoord().doubleValue();
+		edgeAngle = Math.atan2(numerator,denominator);
 	}
 	public Coordinate calcIntersection(Edge testEdge) {
 		/*
@@ -260,7 +261,7 @@ public BigDecimal getEdgeAngle() {
 		return false;
 	}
 
-	public void setEdgeAngle(BigDecimal edgeAngle) {
+	public void setEdgeAngle(double edgeAngle) {
 		this.edgeAngle = edgeAngle;
 	}
 
@@ -272,11 +273,11 @@ public BigDecimal getEdgeAngle() {
 		this.edgeLabel = edgeLabel;
 	}
 
-	public BigDecimal getDeltaAngle() {
+	public double getDeltaAngle() {
 		return deltaAngle;
 	}
 
-	public void setDeltaAngle(BigDecimal deltaAngle) {
+	public void setDeltaAngle(double deltaAngle) {
 		this.deltaAngle = deltaAngle;
 	}
 
@@ -305,11 +306,11 @@ public BigDecimal getEdgeAngle() {
 	public void replaceByNegative() {
 		startPoint.replaceByNegative();
 		endPoint.replaceByNegative();
-		if(edgeAngle.compareTo(BigDecimal.ZERO)>0){
-			edgeAngle = edgeAngle.subtract(BigDecimalMath.pi(MathContext.DECIMAL128));
+		if(edgeAngle>0){
+			edgeAngle -= Math.PI;
 		}
 		else{
-			edgeAngle = edgeAngle.add(BigDecimalMath.pi(MathContext.DECIMAL128));
+			edgeAngle += Math.PI;
 		}
 	}
 

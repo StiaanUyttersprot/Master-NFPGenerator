@@ -19,7 +19,7 @@ public class Main {
 		Minkowski.drawNFP = true;
 		Minkowski.handleError = true;
 		
-		boolean testMass = true;
+		boolean testMass = false;
 		
 		boolean testSpecific = true;
 		int findIDimensionPoly = 10;
@@ -45,6 +45,9 @@ public class Main {
 
 		
 		List<NoFitPolygon> nfpList = new ArrayList<>();
+		
+		File thesisAData = new File("thesisexA.txt");
+		File thesisBData = new File("thesisexB.txt");
 		
 		File simple1Data = new File("SimpleFig1.txt");
 		File simple2Data = new File("SimpleFig2.txt");
@@ -127,48 +130,51 @@ public class Main {
 		System.out.println("Minkowski tests");
 		
 		if(!testMass){
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(simple2Data), new MultiPolygon(simple1Data)); //correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(simple1Data), new MultiPolygon(simple2Data)); //correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(mink1Data), new MultiPolygon(mink2Data)); //correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(mink2Data), new MultiPolygon(mink1Data)); //correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(convex1Data), new MultiPolygon(convex2Data)); //correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(concave1Data), new MultiPolygon(concave2Data)); // correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(concave2Data), new MultiPolygon(concave1Data)); //correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(concave1Data), new MultiPolygon(convex2Data)); //correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(convex1Data), new MultiPolygon(concave2Data)); //correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc1Data), new MultiPolygon(triangleData));//correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc2Data),new MultiPolygon(interlockingConc3Data));//correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(holes2Data), new MultiPolygon(holes1Data)); //correct 2richtingen (zonder gaten)
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data));//correct
-			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(thesisAData), new MultiPolygon(thesisBData)); //correct
+//			totalIts++;
+//			
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(simple2Data), new MultiPolygon(simple1Data)); //correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(simple1Data), new MultiPolygon(simple2Data)); //correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(mink1Data), new MultiPolygon(mink2Data)); //correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(mink2Data), new MultiPolygon(mink1Data)); //correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(convex1Data), new MultiPolygon(convex2Data)); //correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(concave1Data), new MultiPolygon(concave2Data)); // correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(concave2Data), new MultiPolygon(concave1Data)); //correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(concave1Data), new MultiPolygon(convex2Data)); //correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(convex1Data), new MultiPolygon(concave2Data)); //correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc1Data), new MultiPolygon(triangleData));//correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc2Data),new MultiPolygon(interlockingConc3Data));//correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(holes2Data), new MultiPolygon(holes1Data)); //correct 2richtingen (zonder gaten)
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data));//correct
+//			totalIts++;
 			Minkowski.generateMinkowskiNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data));
 			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(jigsaw1Data), new MultiPolygon(jigsaw2Data));
-			totalIts++;	
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data));//correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc2Data));//correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc3Data));//correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc3Data), new MultiPolygon(interlockingConc2Data));//correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(holes1Data), new MultiPolygon(block2Data));//correct
-			totalIts++;	
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(jigsaw1Data), new MultiPolygon(jigsaw2Data));
+//			totalIts++;	
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data));//correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc2Data));//correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc3Data));//correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc2Data), new MultiPolygon(interlockingConc3Data));//correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(holes1Data), new MultiPolygon(block2Data));//correct
+//			totalIts++;	
 		}
 				
 		

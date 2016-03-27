@@ -73,18 +73,18 @@ public class NoFitPolygonStages {
 
 		Stage stage = new Stage();
 
-		Color background = Color.web("0xc8c5b4");
+		Color background = Color.WHITESMOKE;
 		
 		Group nfpGroup = new Group();
 		Scene scene = new Scene(nfpGroup, sceneSizeX, sceneSizeY, background);
 
 		
 		
-//		Line xAxis = new Line(0, sceneSizeY / 2, 10000, sceneSizeY / 2);
-//		Line yAxis = new Line(sceneSizeX / 2, 0, sceneSizeX / 2, 10000);
-//
-//		nfpGroup.getChildren().add(xAxis);
-//		nfpGroup.getChildren().add(yAxis);
+		Line xAxis = new Line(0, sceneSizeY / 2, 10000, sceneSizeY / 2);
+		Line yAxis = new Line(sceneSizeX / 2, 0, sceneSizeX / 2, 10000);
+
+		nfpGroup.getChildren().add(xAxis);
+		nfpGroup.getChildren().add(yAxis);
 
 		double biggestXCoordValue = nfp.getStationaryPolygon().getBiggestX() + nfp.getOrbitingPolygon().getBiggestX();
 		double biggestYCoordValue = nfp.getStationaryPolygon().getBiggestY() + nfp.getOrbitingPolygon().getBiggestY();
@@ -111,7 +111,7 @@ public class NoFitPolygonStages {
 		
 		for(Polygon polygon : nfpPolygonList){
 			polygon.setStrokeWidth(5);
-	        polygon.setStroke(sligthlyLighterBlack);
+	        polygon.setStroke(Color.BLACK);
 	        polygon.setFill(Color.TRANSPARENT);
 	        group.getChildren().add(polygon);
 		}
@@ -124,8 +124,8 @@ public class NoFitPolygonStages {
 		double resizeFactor = sceneSizeY/biggestValue/2;
 		
 		Color background = Color.web("0xc8c5b4");
-		Color aColor = Color.web("0xC4392C");
-		Color bColor = Color.web("0xEEE8C8");
+		Color aColor = Color.GREY;
+		Color bColor = Color.DARKGREY;
 		
 		Color sligthlyLighterBlack = Color.web("0x201F18");
 		
@@ -153,7 +153,7 @@ public class NoFitPolygonStages {
         }
        
         polygon.setStrokeWidth(2);
-        polygon.setStroke(sligthlyLighterBlack);
+        polygon.setStroke(Color.BLACK);
         
         
         group.getChildren().add(polygon);

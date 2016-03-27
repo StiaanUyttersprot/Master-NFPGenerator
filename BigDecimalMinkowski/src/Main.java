@@ -22,8 +22,8 @@ public class Main {
 		boolean testMass = true;
 		
 		boolean testSpecific = false;
-		int findIDimensionPoly = 98;
-		int findJDimensionPoly = 49;
+		int findIDimensionPoly = 14;
+		int findJDimensionPoly = 89;
 		int numberOfPolys = 100;
 		
 		if(testSpecific){
@@ -157,18 +157,18 @@ public class Main {
 			totalIts++;
 			Minkowski.generateMinkowskiNFP(new MultiPolygon(jigsaw1Data), new MultiPolygon(jigsaw2Data));
 			totalIts++;	
-//			Minkowski.generateMinkowskiNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));//correct
-//			totalIts++;
-//			Minkowski.generateMinkowskiNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data));//correct
-//			totalIts++;
-//			Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc2Data));//correct
-//			totalIts++;
-//			Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc3Data));//correct
-//			totalIts++;
-//			Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc3Data), new MultiPolygon(interlockingConc2Data));//correct
-//			totalIts++;
-//			Minkowski.generateMinkowskiNFP(new MultiPolygon(holes1Data), new MultiPolygon(block2Data));//correct
-//			totalIts++;	
+			Minkowski.generateMinkowskiNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));//correct
+			totalIts++;
+			Minkowski.generateMinkowskiNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data));//correct
+			totalIts++;
+			Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc2Data));//correct
+			totalIts++;
+			Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc3Data));//correct
+			totalIts++;
+			Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc3Data), new MultiPolygon(interlockingConc2Data));//correct
+			totalIts++;
+			Minkowski.generateMinkowskiNFP(new MultiPolygon(holes1Data), new MultiPolygon(block2Data));//correct
+			totalIts++;	
 		}
 				
 		
@@ -185,10 +185,10 @@ public class Main {
 		if(testMass){
 			
 			
-			for (MultiPolygon stat: polygonsT2) {
+			for (MultiPolygon stat: polygonsT1) {
 				if(i > findIDimensionPoly && testSpecific)break;
 				j = 0;
-				for (MultiPolygon orb: polygonsT2) {
+				for (MultiPolygon orb: polygonsT1) {
 							if(testSpecific){
 								if(i == findIDimensionPoly && j == findJDimensionPoly){
 					

@@ -1209,11 +1209,11 @@ public class Minkowski {
 		i = msEdgeList.size()-1;
 		
 		if(msEdgeList.get(i).getEdgeNumber()<0&&msEdgeList.get(i).isPolygonA())excessiveEdgesAPositive = false;
-		while(msEdgeList.get(i).isPolygonA() && !closePolygon){//remove the excessive a edges after the last b edge
-			firstExcessiveEdgeANumber = msEdgeList.get(i).getEdgeNumber();
-			msEdgeList.remove(i);
-			i--;
-		}
+//		while(msEdgeList.get(i).isPolygonA() && !closePolygon){//remove the excessive a edges after the last b edge
+//			firstExcessiveEdgeANumber = msEdgeList.get(i).getEdgeNumber();
+//			msEdgeList.remove(i);
+//			i--;
+//		}
 		while(i>=0 && !msEdgeList.get(i).isPolygonA()){
 			i--;
 		}

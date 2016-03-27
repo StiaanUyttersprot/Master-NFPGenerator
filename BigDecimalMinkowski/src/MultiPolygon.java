@@ -40,7 +40,7 @@ public class MultiPolygon {
 	private BigDecimal smallestY = new BigDecimal(Double.MAX_VALUE);
 	
 	private int scale = 10;
-	private MathContext mc = MathContext.DECIMAL32;
+	private MathContext mc = MathContext.DECIMAL128;
 	// constructor reads file to create a polygon
 	MultiPolygon(File file) throws FileNotFoundException {
 
@@ -500,26 +500,26 @@ public class MultiPolygon {
 		
 		for(int i = 0; i< outerPolygonEdges.length;i++){
 			if(i > 0){
-				outerPolygonEdges[i].setDeltaAngle(outerPolygonEdges[i].getEdgeAngle().subtract(outerPolygonEdges[i-1].getEdgeAngle()));
+				outerPolygonEdges[i].setDeltaAngle(outerPolygonEdges[i].getEdgeAngle() - outerPolygonEdges[i-1].getEdgeAngle());
 			}
 			else{
-				outerPolygonEdges[i].setDeltaAngle(outerPolygonEdges[i].getEdgeAngle().subtract(outerPolygonEdges[outerPolygonEdges.length-1].getEdgeAngle()));
+				outerPolygonEdges[i].setDeltaAngle(outerPolygonEdges[i].getEdgeAngle() - outerPolygonEdges[outerPolygonEdges.length-1].getEdgeAngle());
 			}
-			if(outerPolygonEdges[i].getDeltaAngle().compareTo(BigDecimalMath.pi(mc)) > 0){
-				outerPolygonEdges[i].setDeltaAngle(outerPolygonEdges[i].getDeltaAngle().subtract(BigDecimalMath.TWO.multiply(BigDecimalMath.pi(mc))));
+			if(outerPolygonEdges[i].getDeltaAngle() > Math.PI){
+				outerPolygonEdges[i].setDeltaAngle(outerPolygonEdges[i].getDeltaAngle() - 2* Math.PI);
 			}
-			else if(outerPolygonEdges[i].getDeltaAngle().compareTo(BigDecimalMath.pi(mc).negate()) < 0){
-				outerPolygonEdges[i].setDeltaAngle(outerPolygonEdges[i].getDeltaAngle().add(BigDecimalMath.TWO.multiply(BigDecimalMath.pi(mc))));
+			else if(outerPolygonEdges[i].getDeltaAngle() < -Math.PI){
+				outerPolygonEdges[i].setDeltaAngle(outerPolygonEdges[i].getDeltaAngle() + 2* Math.PI);
 			}
 		}
 		for(int i = 0; i< outerPolygonEdges.length;i++){
 			if(i > 0){
-				if(Math.signum(outerPolygonEdges[i].getDeltaAngle().doubleValue())!= Math.signum(outerPolygonEdges[i-1].getDeltaAngle().doubleValue())){
+				if(Math.signum(outerPolygonEdges[i].getDeltaAngle())!= Math.signum(outerPolygonEdges[i-1].getDeltaAngle())){
 					outerPolygonEdges[i].setTurningPoint(true);
 				}
 			}
 			else{
-				if(Math.signum(outerPolygonEdges[i].getDeltaAngle().doubleValue())!= Math.signum(outerPolygonEdges[outerPolygonEdges.length-1].getDeltaAngle().doubleValue())){
+				if(Math.signum(outerPolygonEdges[i].getDeltaAngle())!= Math.signum(outerPolygonEdges[outerPolygonEdges.length-1].getDeltaAngle())){
 					outerPolygonEdges[i].setTurningPoint(true);
 				}
 			}
