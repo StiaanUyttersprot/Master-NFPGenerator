@@ -37,65 +37,37 @@ public class Orbiting {
 		///---------------------------------------------------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------------------------------------------------
 		Edge possibleStartEdge;
-		Coordinate nextStartPoint;
-
-//		while(!statPoly.allEdgesTraversed()){
-//			possibleStartEdge = statPoly.findUntraversedEdge();
-//			System.out.println();
-//			System.out.println("possible start edge: " + possibleStartEdge);
-//			possibleStartEdge.markTraversed();
-//			nextStartPoint = statPoly.searchStartPoint(possibleStartEdge, orbPoly);
-//			System.out.println(nextStartPoint);
-//			if(nextStartPoint != null){
-//				nfp.startNewActiveList(orbPoly.getOuterPolygon()[0]);
-//				//startpoint has been found, now to start orbiting here
-//				
-//				// start the orbiting
-//				orbitPolygon(nfp, statPoly, orbPoly);
-//			}
-//			//System.out.println("heeeyooooooooo");
-//		}
-//		while(!orbPoly.allEdgesTraversed()){
-//			possibleStartEdge = orbPoly.findUntraversedEdge();
-//			possibleStartEdge.markTraversed();
-//			nextStartPoint = statPoly.searchOrbStartPoint(possibleStartEdge, orbPoly);
-//			if(nextStartPoint != null){
-//				nfp.startNewActiveList(orbPoly.getOuterPolygon()[0]);
-//				//startpoint has been found, now to start orbiting here
-//				
-//				// start the orbiting
-//				orbitPolygon(nfp, statPoly, orbPoly);
-//			}
-//		}
-		
-		
-		//-----------------------------------------------------------------------------------------------------------
-		//2e manier
 		
 		List<Coordinate[]> startPointList;
 		Vector placeOrbPoly;
 		
 		while(!statPoly.allEdgesTraversed()){
+			
 			possibleStartEdge = statPoly.findUntraversedEdge();
 			possibleStartEdge.markTraversed();
 			startPointList = statPoly.searchStartPointList(possibleStartEdge, orbPoly);
 			for(Coordinate[] startPoint: startPointList){
+				
 				if(!nfp.containsPoint(startPoint[1])){
 					
 					placeOrbPoly = new Vector(orbPoly.getOuterPolygon()[0], startPoint[1]);
 					orbPoly.translate(placeOrbPoly);
-					nfp.startNewActiveList(orbPoly.getOuterPolygon()[0]);
-					//startpoint has been found, now to start orbiting here
-					
-					// start the orbiting
-					orbitPolygon(nfp, statPoly, orbPoly, false);
-					//NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
+					//check for perfectly overlapping polygons
+					if(!perfectOverlap(statPoly, orbPoly)){
+						nfp.startNewActiveList(orbPoly.getOuterPolygon()[0]);
+						//startpoint has been found, now to start orbiting here
+						
+						// start the orbiting
+						orbitPolygon(nfp, statPoly, orbPoly, false);
+						//NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
+					}
 				}
 				
 			}
 			//System.out.println("heeeyooooooooo");
 		}
 		while(!orbPoly.allEdgesTraversed()){
+			
 			possibleStartEdge = orbPoly.findUntraversedEdge();
 			possibleStartEdge.markTraversed();
 			startPointList = statPoly.searchOrbStartPointList(possibleStartEdge, orbPoly);
@@ -104,24 +76,49 @@ public class Orbiting {
 					
 					placeOrbPoly = new Vector(orbPoly.getOuterPolygon()[0], startPoint[1]);
 					orbPoly.translate(placeOrbPoly);
-					nfp.startNewActiveList(orbPoly.getOuterPolygon()[0]);
-					//startpoint has been found, now to start orbiting here
-					
-					// start the orbiting
-					orbitPolygon(nfp, statPoly, orbPoly, false);
-					//NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
+					if(!perfectOverlap(statPoly, orbPoly)){
+						nfp.startNewActiveList(orbPoly.getOuterPolygon()[0]);
+						//startpoint has been found, now to start orbiting here
+						
+						// start the orbiting
+						orbitPolygon(nfp, statPoly, orbPoly, false);
+						//NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
+					}
 				}
 			}
 		}
 		
 		//only draw the final result after placing the orbiting polygon back to the startPosition
-		orbPoly.translate(bottomCoord.getxCoord() - topCoord.getxCoord(),
-				bottomCoord.getyCoord() - topCoord.getyCoord());
+//		orbPoly.translate(bottomCoord.getxCoord() - topCoord.getxCoord(),
+//				bottomCoord.getyCoord() - topCoord.getyCoord());
 //		NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
 		
 //		nfp.removeExcessivePoints();
 //		System.out.println(nfp);
 		return nfp;// TODO resultaat hier zetten
+	}
+
+	private static boolean perfectOverlap(MultiPolygon statPoly, MultiPolygon orbPoly) {
+		boolean perfectOverlap = true;
+		int startIndex = 0;
+		if(statPoly.getOuterPolygon().length==orbPoly.getOuterPolygon().length){
+			while(startIndex<statPoly.getOuterPolygon().length && !statPoly.getOuterPolygon()[0].equalValuesRounded(orbPoly.getOuterPolygon()[startIndex])){
+				startIndex++;
+			}
+			int j = startIndex;
+			if(j == statPoly.getOuterPolygon().length)return false;
+			for(int i = 0; i<statPoly.getOuterPolygon().length; i++){
+				if(statPoly.getOuterPolygon()[i].equalValuesRounded(orbPoly.getOuterPolygon()[j])){
+					j = (j+1)%orbPoly.getOuterPolygon().length;
+				}
+				else{
+					perfectOverlap = false;
+					break;
+				}
+			}
+			return perfectOverlap;
+		}
+		else return false;
 	}
 
 	private static void orbitPolygon(NoFitPolygon nfp, MultiPolygon statPoly, MultiPolygon orbPoly, boolean outer) {
@@ -131,7 +128,7 @@ public class Orbiting {
 		Coordinate startPoint = new Coordinate(orbPoly.getOuterPolygon()[0]);
 		Coordinate currentPoint = orbPoly.getOuterPolygon()[0];
 
-		int aantalStappen = 50;
+		int aantalStappen = 2000;
 		int stap = 0;
 		// start the orbiting
 		do{
@@ -193,7 +190,6 @@ public class Orbiting {
 //				System.out.println("vector angle being tested: " + Math.toDegrees(vector.getVectorAngle()));
 				while (feasibleVector && i < touchingEdgeList.size()) {
 					TouchingEdgePair tEP = touchingEdgeList.get(i);
-					
 					//we use rounded angles to avoid rounding errors
 					if (!tEP.isFeasibleVectorWithRounding(vector)){
 						feasibleVector = false;
@@ -237,13 +233,47 @@ public class Orbiting {
 				
 				///look if the point after translation with this vector is the same as the previously visited point, if this is true, we skip this vector to not get stuck
 				if(i < feasibleVectorList.size()&&usedTranslationVectorList.size()>0&&nfp.getActiveList().size()> 1){
-					Coordinate previousPoint = nfp.getActiveList().get(nfp.getActiveList().size()-2);
 					
-					Coordinate nextPoint = currentPoint.translatedTo(feasibleVectorList.get(i));
+					double lastAngle = usedTranslationVectorList.get(usedTranslationVectorList.size()-1).getVectorAngle();
 					
-					if(nextPoint.equals(previousPoint)){
-						i++;
+					double nextAngle = feasibleVectorList.get(i).getVectorAngle();
+					
+					if(Math.abs(nextAngle - lastAngle)==Math.PI){
+						int nFeas = feasibleVectorList.size()-1;
+						i = (i+1)%feasibleVectorList.size();
+						nextAngle = feasibleVectorList.get(i).getVectorAngle();
+						while(nFeas>0 && Math.abs(nextAngle - lastAngle)==Math.PI){
+							i = (i+1)%feasibleVectorList.size();
+							nextAngle = feasibleVectorList.get(i).getVectorAngle();
+							nFeas--;
+						}
+						
 					}
+					
+//					int nFeas = feasibleVectorList.size();
+//					int usedIndex = usedTranslationVectorList.size()-1;
+//					
+//					while(nFeas>0 && usedIndex >= 0 && usedTranslationVectorList.size() >1){
+//						
+//						if(feasibleVectorList.get(i).getVectorAngle() == usedTranslationVectorList.get(usedIndex).getVectorAngle()){
+//							usedIndex--;
+//						}
+//						else if(Math.abs(feasibleVectorList.get(i).getVectorAngle() - usedTranslationVectorList.get(usedIndex).getVectorAngle()) == Math.PI){
+//							i = (i+1)%feasibleVectorList.size();
+//							nFeas--;
+//						}
+//						else break;
+//						
+//					}
+//					Coordinate previousPoint = nfp.getActiveList().get(nfp.getActiveList().size()-2);
+//					
+//					Coordinate nextPoint = currentPoint.translatedTo(feasibleVectorList.get(i));
+//					nFeas = feasibleVectorList.size();
+//					while(nFeas>0 && nextPoint.equals(previousPoint)){
+//						i = (i+1)%feasibleVectorList.size();
+//						nFeas--;
+//						nextPoint = currentPoint.translatedTo(feasibleVectorList.get(i));		
+//					}
 					
 				}
 				
@@ -261,54 +291,15 @@ public class Orbiting {
 					numberOfFails++;
 				}
 				else{
-					System.out.println("inner RIP, perfect fit");
+//					System.out.println("inner RIP, perfect fit");
 					numberOfSecFails++;
 				}
 				break;
 			}
 			else translationVector = feasibleVectorList.get(0);
-
-			//find the longest vector with the same angle as the translation vector---------------------------------------------------
-			
-//			double translationAngle = translationVector.getVectorAngle();
-//			for(Vector vect: feasibleVectorList){
-//				if(vect.getVectorAngle()<=translationAngle + 1e-4 && vect.getVectorAngle()>=translationAngle - 1e-4){
-//					if(vect.getLengthSquared()> translationVector.getLengthSquared()){
-//						translationVector = vect;
-//						
-//					}
-//				}
-//			}
-			
-			// -----------------------------------------------------------------------------------------------------------------------
-			// trimming the feasible vectors
-
-			// the testEdge will be the edge that starts in a coordinate of the
-			// polygon and ends in the translation of that coordinate
-//			Edge testEdge;
-//			Coordinate intersectionCoord;
 			
 			translationVector.trimFeasibleVector(orbPoly, statPoly, true);
 			translationVector.trimFeasibleVector(statPoly, orbPoly, false);
-			
-	
-			//-------------------------------------------------------------------------------------------------------------------------
-			//Print the trimmed vector
-			
-//			System.out.println(" trimmed: " + translationVector);
-			
-			//marking the traversed edge-----------------------------------------------------------------------------------------------
-			
-//			if(translationVector.isFromStatEdge()){
-//				statPoly.getOuterPolygonEdges()[translationVector.getEdgeNumber()].markTraversed();
-//			}
-//			else{
-//				for(Vector vect: feasibleVectorList){
-//					if(vect.isFromStatEdge()&&vect.getVectorAngle()==translationVector.getVectorAngle()){
-//						statPoly.getOuterPolygonEdges()[vect.getEdgeNumber()].markTraversed();
-//					}
-//				}
-//			}
 			
 			//-------------------------------------------------------------------------------------------------------------------------
 			//translating the polygon and storing the data in the nfp
@@ -348,6 +339,7 @@ public class Orbiting {
 			System.out.println("stuck");
 			numberOfFails++;
 			numberStuckInfinite++;
+//			NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
 		}
 		//for graphics don't remove it
 //		nfp.removeLastDoubleCoordinate();

@@ -481,4 +481,9 @@ public class Edge {
 			return true;
 		return false;
 	}
+	
+	public void replaceByNegative() {
+		startPoint.replaceByNegative();
+		endPoint.replaceByNegative();
+	}
 }

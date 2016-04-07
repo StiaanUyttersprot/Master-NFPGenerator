@@ -61,9 +61,9 @@ public class MultiPolygon {
 
 		for (int i = 0; i < nPoints; i++) {
 
-			readX = new BigDecimal(input.nextDouble(), mc);
+			readX = new BigDecimal(input.nextDouble()*100, mc);
 			readX = readX.setScale(scale);
-			readY = new BigDecimal(input.nextDouble(), mc);
+			readY = new BigDecimal(input.nextDouble()*100, mc);
 			readY = readY.setScale(scale);
 			outerPolygon[i] = new Coordinate(readX, readY);
 			
@@ -562,5 +562,18 @@ public class MultiPolygon {
 		}
 		return overlap;
 		
+	}
+	
+	public void shiftNinety() {
+		for(Coordinate coord: outerPolygon){
+			coord.rotateNinety();
+		}
+		for(Coordinate[] hole: holes){
+			for(Coordinate coord: hole){
+				coord.rotateNinety();
+			}
+		}
+		
+		createEdges();
 	}
 }

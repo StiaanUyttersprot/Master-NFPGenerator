@@ -16,6 +16,7 @@ import javafx.scene.shape.Polygon;
  */
 public class MultiPolygon {
 
+	public static int totalCoords = 0;
 	private int nHoles; // the number of holes
 
 	private Coordinate[] outerPolygon; // the polygon that envelops the holes
@@ -43,11 +44,12 @@ public class MultiPolygon {
 		int nPoints = input.nextInt();// number of points of the polygon that is
 										// currently being read (this value
 										// changes when holes are read too)
-
+		totalCoords+=nPoints;
 		// used for autoscaling in drawtool
 		double readX;
 		double readY;
 
+		
 		outerPolygon = new Coordinate[nPoints];
 		holes = new Coordinate[nHoles][];
 
@@ -310,6 +312,11 @@ public class MultiPolygon {
 			// replace bottomCoord
 			if (coord.getyCoord() < bottomCoord.getyCoord())
 				bottomCoord = coord;
+			else if(coord.getyCoord() == bottomCoord.getyCoord()){
+				if(coord.getxCoord() < bottomCoord.getxCoord()){
+					bottomCoord = coord;
+				}
+			}
 		}
 		lowestCoord = bottomCoord;
 		return bottomCoord;
@@ -722,5 +729,18 @@ public class MultiPolygon {
 		}
 		return false;
 
+	}
+
+	public void shiftNinety() {
+		for(Coordinate coord: outerPolygon){
+			coord.rotateNinety();
+		}
+		for(Coordinate[] hole: holes){
+			for(Coordinate coord: hole){
+				coord.rotateNinety();
+			}
+		}
+		
+		createEdges();
 	}
 }

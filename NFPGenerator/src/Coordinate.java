@@ -187,4 +187,19 @@ public class Coordinate {
 		xCoord = Math.round(xCoord*roundingValue)/roundingValue;
 		yCoord = Math.round(yCoord*roundingValue)/roundingValue;
 	}
+	
+	public void replaceByNegative() {
+		
+		this.xCoord = -xCoord;
+		this.yCoord = -yCoord;
+		
+	}
+
+	public void rotateNinety() {
+		double helpXCoord = -yCoord;
+		
+		this.yCoord = xCoord;
+		this.xCoord = helpXCoord;
+		
+	}
 }

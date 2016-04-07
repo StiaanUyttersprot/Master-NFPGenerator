@@ -332,6 +332,11 @@ public class MultiPolygon {
 			// replace bottomCoord
 			if (coord.getyCoord() < bottomCoord.getyCoord())
 				bottomCoord = coord;
+			else if(coord.getyCoord() == bottomCoord.getyCoord()){
+				if(coord.getxCoord() < bottomCoord.getxCoord()){
+					bottomCoord = coord;
+				}
+			}
 		}
 		return bottomCoord;
 	}
@@ -422,6 +427,7 @@ public class MultiPolygon {
 		
 		return touchingEdges;
 	}
+	
 	
 	public List<TouchingEdgePair> findTouchingEdgesWithoutTravMark(MultiPolygon orbPoly) {
 
@@ -567,16 +573,19 @@ public class MultiPolygon {
 			if(!outerPolygonEdges[i].isTraversed()) untraversedEdge = outerPolygonEdges[i];
 			//System.out.println(1);
 			i++;
+			
 		}
 		i = 0;
 		int j;
 		while(untraversedEdge == null && i < holeEdges.length){
 			j = 0;
+			
 			//System.out.println(2);
 			while(untraversedEdge == null && j < holeEdges[i].length){
 				if(!holeEdges[i][j].isTraversed()) untraversedEdge = holeEdges[i][j];
 				//System.out.println(3);
 				j++;
+				
 			}
 			i++;
 		}
@@ -859,7 +868,7 @@ public class MultiPolygon {
 		boolean startPointPossible = false;
 		Vector placeOrbPolyVector;
 		
-		Vector nextPossibleSpotVector;
+		Vector nextPossibleSpotVector = null;
 		
 		for(int i=0; i< orbPoly.getOuterPolygon().length; i++){
 			Coordinate orbPoint = new Coordinate(orbPoly.getOuterPolygon()[i]);
@@ -900,11 +909,16 @@ public class MultiPolygon {
 					nextPossibleSpotVector.trimFeasibleVector(orbPoly, this, true);
 					nextPossibleSpotVector.trimFeasibleVector(this, orbPoly, false);
 					
+					if(nextPossibleSpotVector.getLengthSquared()==0)break;
+					
 					orbPoly.translate(nextPossibleSpotVector);
 					//PolygonPairStages.addPolygonPair(this, orbPoly);
 					currentStartPoint.translate(nextPossibleSpotVector);
 				}
-				if(currentStartPoint.equals(possibleStartEdge.getEndPoint())&&!polygonsIntersectPointInPolygon(this, orbPoly)){
+				if(nextPossibleSpotVector.getLengthSquared()==0){
+					//it wil not lead to a start point
+				}
+				else if(currentStartPoint.equals(possibleStartEdge.getEndPoint())&&!polygonsIntersectPointInPolygon(this, orbPoly)){
 //					System.out.println("current start: " + currentStartPoint);
 					startOrbStat = new Coordinate[2];
 					startOrbStat[0] =new Coordinate(currentStartPoint);
@@ -977,13 +991,14 @@ public class MultiPolygon {
 //						System.out.println(currentStartPoint + " heyo " + possibleStartOrbEdge.getEndPoint());
 //						System.out.println(orbitingStartPoint);
 						orbPoly.translate(nextPossibleSpotVector);
-						
-						
 						//currentStartPoint.translate(nextPossibleSpotVector);
 						//orbitingStartPoint.translate(nextPossibleSpotVector);
-					}while(!currentStartPoint.equals(possibleStartOrbEdge.getEndPoint())&&(polygonsIntersectPointInPolygon(this, orbPoly)));
-					
-					if(currentStartPoint.equals(possibleStartOrbEdge.getEndPoint())&&!polygonsIntersectPointInPolygon(this, orbPoly)){
+					}while(!currentStartPoint.equals(possibleStartOrbEdge.getEndPoint())&&(polygonsIntersectPointInPolygon(this, orbPoly))
+							&& nextPossibleSpotVector.getLengthSquared()!=0);
+					if(nextPossibleSpotVector.getLengthSquared()==0){
+						//it wil not lead to a start point
+					}
+					else if(currentStartPoint.equals(possibleStartOrbEdge.getEndPoint())&&!polygonsIntersectPointInPolygon(this, orbPoly)){
 //						System.out.println("current start: " + currentStartPoint);
 						startOrbStat = new Coordinate[2];
 						
@@ -1084,6 +1099,8 @@ public class MultiPolygon {
 		int i= 1;
 		//orbPoly.printPolygonData();
 		if(polygonsIntersectEdgeIntersect(statPoly, orbPoly))return true;
+		if(polygonsIntersectEdgeOverlap(statPoly, orbPoly))return true;
+		
 		for(Coordinate coord: orbPoly.getOuterPolygon()){
 			//System.out.println("checking coord" + coord);
 			isOnEdge = false;
@@ -1187,12 +1204,28 @@ public class MultiPolygon {
 		return false;
 	}
 	
+
+	private boolean polygonsIntersectEdgeOverlap(MultiPolygon statPoly, MultiPolygon orbPoly) {
+		for(Edge e: statPoly.getOuterPolygonEdges()){
+			for(Edge f: orbPoly.getOuterPolygonEdges()){
+				if(e.getAngle() == f.getAngle()){
+					if(e.containsPoint(f.getStartPoint())||e.containsIntersectionPoint(f.getEndPoint())){
+						return true;
+					}
+					if(f.containsPoint(e.getStartPoint())||f.containsPoint(e.getEndPoint()))return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	//-----------------------------------------------------------------------------------------------------------------------------
 //	http://alienryderflex.com/polygon/
 
 //  The function will return true if the point x,y is inside the polygon, or
 //  false if it is not.  If the point is exactly on the edge of the polygon,
 //  then the function may return true or false.
+
 
 	public boolean pointInPolygon(Coordinate coord) {
 
@@ -1370,5 +1403,32 @@ public class MultiPolygon {
 		}
 		return false;
 
+	}
+
+	public void replaceByNegative() {
+		
+		for(Coordinate coord: outerPolygon){
+			coord.replaceByNegative();
+		}
+		for(Coordinate[] hole: holes){
+			for(Coordinate coord: hole){
+				coord.replaceByNegative();
+			}
+		}
+		createEdges();
+		
+	}
+
+	public void shiftNinety() {
+		for(Coordinate coord: outerPolygon){
+			coord.rotateNinety();
+		}
+		for(Coordinate[] hole: holes){
+			for(Coordinate coord: hole){
+				coord.rotateNinety();
+			}
+		}
+		
+		createEdges();
 	}
 }

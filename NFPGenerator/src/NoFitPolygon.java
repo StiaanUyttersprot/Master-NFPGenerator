@@ -151,7 +151,6 @@ public class NoFitPolygon {
 				if(testEdge.containsPoint(coordinate))return true;
 				if(partList.get(i).equals(coordinate))return true;
 			}
-			
 		}
 		return false;
 	}

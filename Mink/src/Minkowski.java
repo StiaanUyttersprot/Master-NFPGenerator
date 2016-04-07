@@ -22,6 +22,7 @@ public class Minkowski {
 		NoFitPolygon nfp = null;
 		clockwiseContainsTurningpoints = null;
 
+		
 		//---------------------------------------------------------------------------------------------
 		//Generate Minkowski sum edge list
 		
@@ -181,7 +182,6 @@ public class Minkowski {
 //				}
 			}
 		}
-		
 		//--------------------------------------------------------------------------------------------------------------------------------------
 		//TODO:check validity of cycles
 		
@@ -494,6 +494,8 @@ public class Minkowski {
 		mergeList.addAll(qList);
 		mergeList.addAll(rList);
 		Collections.sort(mergeList, new EdgeAngleComparator());
+		
+		int angleRound = 1000;
 	
 		if(printEdgeListData){
 			System.out.println();
@@ -568,8 +570,8 @@ public class Minkowski {
 									do{
 										z++;
 										checkPos = (position+z)%mergeList.size();
-										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*angleRound)==
+												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*angleRound)){
 											if(!mergeList.get(checkPos).isPolygonA()){
 												helpEdge = new Edge(mergeList.get(checkPos));
 												helpEdge.changeEdgeNumber(direction);
@@ -595,8 +597,8 @@ public class Minkowski {
 										do{
 											z++;
 											checkPos = (position+z)%mergeList.size();
-											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*angleRound)==
+													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*angleRound)){
 												if(!mergeList.get(checkPos).isPolygonA()){
 													helpEdge = new Edge(mergeList.get(checkPos));
 													helpEdge.changeEdgeNumber(direction);
@@ -665,8 +667,8 @@ public class Minkowski {
 										else{
 											checkPos = (position-z);
 										}
-										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*angleRound)==
+												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*angleRound)){
 											if(!mergeList.get(checkPos).isPolygonA()){
 
 												helpEdge = new Edge(mergeList.get(checkPos));
@@ -701,8 +703,8 @@ public class Minkowski {
 												checkPos = (position-z);
 											}
 											
-											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*angleRound)==
+													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*angleRound)){
 												if(!mergeList.get(checkPos).isPolygonA()){
 
 													helpEdge = new Edge(mergeList.get(checkPos));
@@ -832,6 +834,8 @@ public class Minkowski {
 		mergeList.addAll(aList);
 		mergeList.addAll(bList);
 		
+		int angleRound = 1000;
+		
 		List<Edge> qList = new ArrayList<>();
 		qList.addAll(aList);
 		
@@ -917,8 +921,8 @@ public class Minkowski {
 									do{
 										z++;
 										checkPos = (position+z)%mergeList.size();
-										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*angleRound)==
+												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*angleRound)){
 											if(!mergeList.get(checkPos).isPolygonA()){
 												helpEdge = new Edge(mergeList.get(checkPos));
 												helpEdge.changeEdgeNumber(direction);
@@ -944,8 +948,8 @@ public class Minkowski {
 										do{
 											z++;
 											checkPos = (position+z)%mergeList.size();
-											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*angleRound)==
+													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*angleRound)){
 												if(!mergeList.get(checkPos).isPolygonA()){
 													helpEdge = new Edge(mergeList.get(checkPos));
 													helpEdge.changeEdgeNumber(direction);
@@ -1014,8 +1018,8 @@ public class Minkowski {
 										else{
 											checkPos = (position-z);
 										}
-										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*angleRound)==
+												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*angleRound)){
 											if(!mergeList.get(checkPos).isPolygonA()){
 
 												helpEdge = new Edge(mergeList.get(checkPos));
@@ -1050,8 +1054,8 @@ public class Minkowski {
 												checkPos = (position-z);
 											}
 											
-											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*angleRound)==
+													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*angleRound)){
 												if(!mergeList.get(checkPos).isPolygonA()){
 
 													helpEdge = new Edge(mergeList.get(checkPos));
@@ -1720,27 +1724,35 @@ public class Minkowski {
 		//booleans to check if there are fragments that fit, throw away if there aren't
 		boolean keepFragmentEnd = false;
 		boolean keepFragmentBegin = false;
-		
-		for(int i = 0; i< fragmentList.size(); i++){
-			fragI = fragmentList.get(i);
-			
-			keepFragmentEnd = false;
-			keepFragmentBegin = false;
-			
-			for(int j = 0; j< fragmentList.size(); j++){
-				fragJ = fragmentList.get(j);
-				if(fragJ.size()>0){
-					
-					if(fragI.get(fragI.size()-1).getEndPoint().equalValuesRounded(fragJ.get(0).getStartPoint())){
-						keepFragmentEnd = true;
-					}
-					if(fragI.get(0).getStartPoint().equalValuesRounded(fragJ.get(fragJ.size()-1).getEndPoint())){
-						keepFragmentBegin = true;
+		int newNFragments = numberOfFragments;
+		int oldNFragments;
+		do{
+			oldNFragments = newNFragments;
+			for(int i = 0; i< fragmentList.size(); i++){
+				fragI = fragmentList.get(i);
+				
+				keepFragmentEnd = false;
+				keepFragmentBegin = false;
+				
+				for(int j = 0; j< fragmentList.size(); j++){
+					fragJ = fragmentList.get(j);
+					if(fragJ.size()>0&&fragI.size()>0){
+						
+						if(fragI.get(fragI.size()-1).getEndPoint().equalValuesRounded(fragJ.get(0).getStartPoint())){
+							keepFragmentEnd = true;
+						}
+						if(fragI.get(0).getStartPoint().equalValuesRounded(fragJ.get(fragJ.size()-1).getEndPoint())){
+							keepFragmentBegin = true;
+						}
 					}
 				}
+				if(!(keepFragmentBegin && keepFragmentEnd)){
+					if(fragI.size()!=0)newNFragments--;
+					fragI.clear();
+					
+				}
 			}
-			if(!(keepFragmentBegin && keepFragmentEnd))fragI.clear();
-		}
+		}while(oldNFragments != newNFragments);
 		for(int i = 0; i< fragmentList.size(); i++){
 			fragI = fragmentList.get(i);
 			for(int j = i+1; j< fragmentList.size(); j++){

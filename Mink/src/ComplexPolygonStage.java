@@ -20,8 +20,8 @@ public class ComplexPolygonStage {
 	static int aantalComplexPolygonStages = 0;
 	static List<List<Edge>> complexPolygonToDraw = new ArrayList<>();
 	
-	static double sceneSizeX = 800;
-	static double sceneSizeY = 800;
+	static double sceneSizeX = 300;
+	static double sceneSizeY = 300;
 	
 //	public static void addPolygonPair(MultiPolygon[] multiPolyPair){
 //		aantalPolygonPairStages++;
@@ -126,7 +126,7 @@ public class ComplexPolygonStage {
 		}
 		double biggestValue = Math.max(biggestXCoordValue, biggestYCoordValue);
 //		System.out.println("biggest value: " + biggestValue);
-		makeComplexPolygonScene(complexPolygonGroup, complexPolygon, 0, biggestValue + 300);
+		makeComplexPolygonScene(complexPolygonGroup, complexPolygon, 0, biggestValue + 10);
 		
         stage.setScene(scene);
         //stage.show();

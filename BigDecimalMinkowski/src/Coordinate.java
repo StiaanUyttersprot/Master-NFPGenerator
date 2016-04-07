@@ -16,7 +16,7 @@ public class Coordinate {
 	private static MathContext mc = MathContext.UNLIMITED;
 	
 	private static BigDecimal roundingValue = new BigDecimal(1);
-	private static BigDecimal round = new BigDecimal(1);
+	private static BigDecimal round = new BigDecimal(1e-4);
 	
 	Coordinate(BigDecimal x, BigDecimal y) {
 		xCoord = x;
@@ -179,9 +179,9 @@ public class Coordinate {
 //		if(coord.getxCoord().abs().compareTo(BigDecimal.ZERO)==0)coord.setxCoord(coord.getxCoord().abs());
 //		if(coord.getyCoord().abs().compareTo(BigDecimal.ZERO)==0)coord.setyCoord(coord.getyCoord().abs());
 		
-		if (xCoord.compareTo(coord.getxCoord())!=0)
+		if (((xCoord.subtract(coord.getxCoord())).abs()).compareTo(round)>0)
 			return false;
-		if (yCoord.compareTo(coord.getyCoord())!=0)
+		if (((yCoord.subtract(coord.getyCoord())).abs()).compareTo(round)>0)
 			return false;
 		return true;
 	}
@@ -244,6 +244,14 @@ public BigDecimal getLengthSquared() {
 		translationEdge.setEndPoint(edgeEnd);
 		translationEdge.calculateRanges();
 		return translationEdge;
+		
+	}
+	
+	public void rotateNinety() {
+		BigDecimal helpXCoord = yCoord.negate();
+		
+		this.yCoord = xCoord;
+		this.xCoord = helpXCoord;
 		
 	}
 }

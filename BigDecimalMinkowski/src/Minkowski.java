@@ -570,8 +570,8 @@ for(int i = 0; i< polySortList.size();i++){
 									do{
 										z++;
 										checkPos = (position+z)%mergeList.size();
-										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*10)==
+												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*10)){
 											if(!mergeList.get(checkPos).isPolygonA()){
 												helpEdge = new Edge(mergeList.get(checkPos));
 												helpEdge.changeEdgeNumber(direction);
@@ -597,8 +597,8 @@ for(int i = 0; i< polySortList.size();i++){
 										do{
 											z++;
 											checkPos = (position+z)%mergeList.size();
-											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*10)==
+													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*10)){
 												if(!mergeList.get(checkPos).isPolygonA()){
 													helpEdge = new Edge(mergeList.get(checkPos));
 													helpEdge.changeEdgeNumber(direction);
@@ -667,8 +667,8 @@ for(int i = 0; i< polySortList.size();i++){
 										else{
 											checkPos = (position-z);
 										}
-										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*10)==
+												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*10)){
 											if(!mergeList.get(checkPos).isPolygonA()){
 
 												helpEdge = new Edge(mergeList.get(checkPos));
@@ -703,8 +703,8 @@ for(int i = 0; i< polySortList.size();i++){
 												checkPos = (position-z);
 											}
 											
-											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*10)==
+													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*10)){
 												if(!mergeList.get(checkPos).isPolygonA()){
 
 													helpEdge = new Edge(mergeList.get(checkPos));
@@ -919,8 +919,8 @@ for(int i = 0; i< polySortList.size();i++){
 									do{
 										z++;
 										checkPos = (position+z)%mergeList.size();
-										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*10)==
+												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*10)){
 											if(!mergeList.get(checkPos).isPolygonA()){
 												helpEdge = new Edge(mergeList.get(checkPos));
 												helpEdge.changeEdgeNumber(direction);
@@ -946,8 +946,8 @@ for(int i = 0; i< polySortList.size();i++){
 										do{
 											z++;
 											checkPos = (position+z)%mergeList.size();
-											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*10)==
+													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*10)){
 												if(!mergeList.get(checkPos).isPolygonA()){
 													helpEdge = new Edge(mergeList.get(checkPos));
 													helpEdge.changeEdgeNumber(direction);
@@ -1016,8 +1016,8 @@ for(int i = 0; i< polySortList.size();i++){
 										else{
 											checkPos = (position-z);
 										}
-										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*10)==
+												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*10)){
 											if(!mergeList.get(checkPos).isPolygonA()){
 
 												helpEdge = new Edge(mergeList.get(checkPos));
@@ -1052,8 +1052,8 @@ for(int i = 0; i< polySortList.size();i++){
 												checkPos = (position-z);
 											}
 											
-											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle()))==
-													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle()))){
+											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*10)==
+													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*10)){
 												if(!mergeList.get(checkPos).isPolygonA()){
 
 													helpEdge = new Edge(mergeList.get(checkPos));
@@ -1722,25 +1722,36 @@ for(int i = 0; i< polySortList.size();i++){
 		//booleans to check if there are fragments that fit, throw away if there aren't
 		boolean keepFragmentEnd = false;
 		boolean keepFragmentBegin = false;
-		
-		for(int i = 0; i< fragmentList.size(); i++){
-			keepFragmentEnd = false;
-			keepFragmentBegin = false;
-			fragI = fragmentList.get(i);
-			for(int j = 0; j< fragmentList.size(); j++){
-				fragJ = fragmentList.get(j);
-				if(fragJ.size()>0){
-					
-					if(fragI.get(fragI.size()-1).getEndPoint().equalValuesRounded(fragJ.get(0).getStartPoint())){
-						keepFragmentEnd = true;
-					}
-					if(fragI.get(0).getStartPoint().equalValuesRounded(fragJ.get(fragJ.size()-1).getEndPoint())){
-						keepFragmentBegin = true;
+		int newNFragments = numberOfFragments;
+		int oldNFragments;
+		do{
+			oldNFragments = newNFragments;
+			for(int i = 0; i< fragmentList.size(); i++){
+				fragI = fragmentList.get(i);
+				
+				keepFragmentEnd = false;
+				keepFragmentBegin = false;
+				
+				for(int j = 0; j< fragmentList.size(); j++){
+					fragJ = fragmentList.get(j);
+					if(fragJ.size()>0&&fragI.size()>0){
+						
+						if(fragI.get(fragI.size()-1).getEndPoint().equalValuesRounded(fragJ.get(0).getStartPoint())){
+							keepFragmentEnd = true;
+						}
+						if(fragI.get(0).getStartPoint().equalValuesRounded(fragJ.get(fragJ.size()-1).getEndPoint())){
+							keepFragmentBegin = true;
+						}
 					}
 				}
+				if(!(keepFragmentBegin && keepFragmentEnd)){
+					if(fragI.size()!=0)newNFragments--;
+					fragI.clear();
+					
+				}
 			}
-			if(!(keepFragmentBegin && keepFragmentEnd))fragI.clear();
-		}
+		}while(oldNFragments != newNFragments);	
+		
 		if(printBoundaryData){
 			int aantalFragmentEdges = 0;
 			for(List<Edge>frag: fragmentList){

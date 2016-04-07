@@ -1,5 +1,3 @@
-import java.math.BigInteger;
-
 /**
  *
  * @author Stiaan
@@ -10,8 +8,8 @@ public class Coordinate {
 	private double xCoord;
 	private double yCoord;
 	
-	private static double roundingAccuracy = 1e4;//the bigger the more accurate
-	private static double round = 0;
+	private static double roundingAccuracy = 0.01;//the bigger the more accurate
+	private static double round = 1;
 	
 	Coordinate(double x, double y) {
 		xCoord = x;
@@ -150,13 +148,10 @@ public class Coordinate {
 
 	//check if two coordinates are equal (use round to make sure mistakes by rounding in the calculations are ignored
 	public boolean equalValuesRounded(Coordinate coord) {
-		if(Math.abs(xCoord)==0)xCoord = Math.abs(xCoord);
-		if(Math.abs(yCoord)==0)yCoord = Math.abs(yCoord);
-		if(Math.abs(coord.getxCoord())==0)coord.setxCoord(Math.abs(coord.getxCoord()));
-		if(Math.abs(coord.getyCoord())==0)coord.setyCoord(Math.abs(coord.getyCoord()));
-		if (Math.round(xCoord*roundingAccuracy)/roundingAccuracy != Math.round(coord.getxCoord()*roundingAccuracy)/roundingAccuracy)
+		
+		if (Math.abs(xCoord - coord.getxCoord())>round)
 			return false;
-		if (Math.round(yCoord*roundingAccuracy)/roundingAccuracy != Math.round(coord.getyCoord()*roundingAccuracy)/roundingAccuracy)
+		if (Math.abs(yCoord - coord.getyCoord())>round)
 			return false;
 		return true;
 	}
@@ -218,6 +213,14 @@ public class Coordinate {
 		translationEdge.setEndPoint(edgeEnd);
 		translationEdge.calculateRanges();
 		return translationEdge;
+		
+	}
+
+	public void rotateNinety() {
+		double helpXCoord = -yCoord;
+		
+		this.yCoord = xCoord;
+		this.xCoord = helpXCoord;
 		
 	}
 }
