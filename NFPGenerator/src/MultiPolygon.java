@@ -24,6 +24,8 @@ public class MultiPolygon {
 	private Edge[][] holeEdges;
 
 	private Scanner input;
+	
+	public static double round = 1e-4;
 
 	private double biggestX = 0;
 	private double biggestY = 0;
@@ -909,13 +911,13 @@ public class MultiPolygon {
 					nextPossibleSpotVector.trimFeasibleVector(orbPoly, this, true);
 					nextPossibleSpotVector.trimFeasibleVector(this, orbPoly, false);
 					
-					if(nextPossibleSpotVector.getLengthSquared()==0)break;
+					if(nextPossibleSpotVector.getLengthSquared()<round)break;
 					
 					orbPoly.translate(nextPossibleSpotVector);
 					//PolygonPairStages.addPolygonPair(this, orbPoly);
 					currentStartPoint.translate(nextPossibleSpotVector);
 				}
-				if(nextPossibleSpotVector.getLengthSquared()==0){
+				if(nextPossibleSpotVector.getLengthSquared()<round){
 					//it wil not lead to a start point
 				}
 				else if(currentStartPoint.equals(possibleStartEdge.getEndPoint())&&!polygonsIntersectPointInPolygon(this, orbPoly)){
@@ -994,8 +996,8 @@ public class MultiPolygon {
 						//currentStartPoint.translate(nextPossibleSpotVector);
 						//orbitingStartPoint.translate(nextPossibleSpotVector);
 					}while(!currentStartPoint.equals(possibleStartOrbEdge.getEndPoint())&&(polygonsIntersectPointInPolygon(this, orbPoly))
-							&& nextPossibleSpotVector.getLengthSquared()!=0);
-					if(nextPossibleSpotVector.getLengthSquared()==0){
+							&& nextPossibleSpotVector.getLengthSquared()>=round);
+					if(nextPossibleSpotVector.getLengthSquared()<round){
 						//it wil not lead to a start point
 					}
 					else if(currentStartPoint.equals(possibleStartOrbEdge.getEndPoint())&&!polygonsIntersectPointInPolygon(this, orbPoly)){
@@ -1208,11 +1210,19 @@ public class MultiPolygon {
 	private boolean polygonsIntersectEdgeOverlap(MultiPolygon statPoly, MultiPolygon orbPoly) {
 		for(Edge e: statPoly.getOuterPolygonEdges()){
 			for(Edge f: orbPoly.getOuterPolygonEdges()){
-				if(e.getAngle() == f.getAngle()){
-					if(e.containsPoint(f.getStartPoint())||e.containsIntersectionPoint(f.getEndPoint())){
-						return true;
+				if(Math.abs(e.getAngle() - f.getAngle())%(Math.PI*2)==0){
+					if(!e.getStartPoint().equalValuesRounded(f.getEndPoint())&&!e.getEndPoint().equalValuesRounded(f.getStartPoint())){
+						if(e.getEndPoint().equalValuesRounded(f.getEndPoint())){
+							return true;
+						}
+						if(e.getStartPoint().equalValuesRounded(f.getStartPoint())){
+							return true;
+						}
+						if(e.containsPoint(f.getStartPoint())||e.containsPoint(f.getEndPoint())){
+							return true;
+						}
+						if(f.containsPoint(e.getStartPoint())||f.containsPoint(e.getEndPoint()))return true;
 					}
-					if(f.containsPoint(e.getStartPoint())||f.containsPoint(e.getEndPoint()))return true;
 				}
 			}
 		}

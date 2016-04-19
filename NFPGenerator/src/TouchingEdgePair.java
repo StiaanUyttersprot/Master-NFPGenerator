@@ -13,8 +13,8 @@ public class TouchingEdgePair {
 	private Edge orbEdge;
 	private Coordinate touchPoint;
 	
-	private static double angleRound = 1e-6;
-	private static double round = 1e-4;
+	public static double angleRound = 1e-6;
+	public static double round = 1e-4;
 	
 	// booleans saying if the touching point equals a start or end point from an
 	// edge

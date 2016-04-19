@@ -62,9 +62,7 @@ public class Orbiting {
 						//NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
 					}
 				}
-				
 			}
-			//System.out.println("heeeyooooooooo");
 		}
 		while(!orbPoly.allEdgesTraversed()){
 			
@@ -128,7 +126,7 @@ public class Orbiting {
 		Coordinate startPoint = new Coordinate(orbPoly.getOuterPolygon()[0]);
 		Coordinate currentPoint = orbPoly.getOuterPolygon()[0];
 
-		int aantalStappen = 2000;
+		int aantalStappen = 10000;
 		int stap = 0;
 		// start the orbiting
 		do{

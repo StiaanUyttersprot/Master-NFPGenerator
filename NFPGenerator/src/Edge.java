@@ -10,7 +10,7 @@ public class Edge {
 	private int edgeNumber;
 	private boolean traversed = false;
 	
-	private static double round = 1e-4;
+	public static double round = 1e-4;
 
 	// values to be used for bounding box intersection
 	private double smallX;

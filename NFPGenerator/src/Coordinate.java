@@ -7,9 +7,8 @@
 public class Coordinate {
 	private double xCoord;
 	private double yCoord;
-	
-	private static double roundingValue = 10000;
-	private static double round = 1e-4;
+
+	public static double round = 1e-4;
 	
 	Coordinate(double x, double y) {
 		xCoord = x;
@@ -132,9 +131,9 @@ public class Coordinate {
 	public boolean equalValuesRounded(Coordinate coord) {
 
 		
-		if (Math.round(xCoord*roundingValue)/roundingValue != Math.round(coord.getxCoord()*roundingValue)/roundingValue)
+		if (Math.abs(xCoord - coord.getxCoord())>round)
 			return false;
-		if (Math.round(yCoord*roundingValue)/roundingValue != Math.round(coord.getyCoord()*roundingValue)/roundingValue)
+		if (Math.abs(yCoord - coord.getyCoord())>round)
 			return false;
 		return true;
 	}
@@ -182,11 +181,6 @@ public class Coordinate {
 		yCoord+=vector.getyCoord();
 	}
 	
-	public void roundCoord(){
-
-		xCoord = Math.round(xCoord*roundingValue)/roundingValue;
-		yCoord = Math.round(yCoord*roundingValue)/roundingValue;
-	}
 	
 	public void replaceByNegative() {
 		

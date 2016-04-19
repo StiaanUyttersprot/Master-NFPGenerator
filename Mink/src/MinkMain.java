@@ -18,6 +18,10 @@ public class MinkMain {
 	private static final String jakobs2 = "testsets\\jakobs2\\";
 	private static final String mao = "testsets\\mao\\";
 	private static final String marques = "testsets\\marques\\";
+	private static final String polygons_3 = "testsets\\polygons_3\\";
+	private static final String polygons_5 = "testsets\\polygons_5\\";
+	private static final String polygons_7 = "testsets\\polygons_7\\";
+	private static final String polygons_10 = "testsets\\polygons_10\\";
 	private static final String polygons_20 = "testsets\\polygons_20\\";
 	private static final String polygons_50 = "testsets\\polygons_50\\";
 	private static final String polygons_100 = "testsets\\polygons_100\\";
@@ -35,17 +39,18 @@ public class MinkMain {
 		Minkowski.printMinkData = false;
 		Minkowski.printEdgeListData = false;
 		Minkowski.printBoundaryData = false;
-		Minkowski.drawFigures = true;
-		Minkowski.drawNFP = false;
+		Minkowski.drawFigures = false;
+		Minkowski.drawNFP = true;
 		Minkowski.handleError = true;
 		
-		boolean testMass = true;
+		boolean testMass = false;
+		boolean testSpecial = true;
+		boolean testSpecific = true;
 		
-		boolean testSpecific = false;
 		int findIDimensionPoly = 228;
 		int findJDimensionPoly = 192;
 		int numberOfPolys = 100;
-		//3861
+
 		if(testSpecific){
 			Minkowski.printMinkData = true;
 			Minkowski.printEdgeListData = true;
@@ -149,6 +154,18 @@ public class MinkMain {
 		folder = new File(marques);
 		File[] marques = folder.listFiles();
 		
+		folder = new File(polygons_3);
+		File[] polygons_3 = folder.listFiles();
+		
+		folder = new File(polygons_5);
+		File[] polygons_5 = folder.listFiles();
+		
+		folder = new File(polygons_7);
+		File[] polygons_7 = folder.listFiles();
+		
+		folder = new File(polygons_10);
+		File[] polygons_10 = folder.listFiles();
+		
 		folder = new File(polygons_20);
 		File[] polygons_20 = folder.listFiles();
 		
@@ -180,13 +197,16 @@ public class MinkMain {
 		File[] swim = folder.listFiles();
 
 		if(testMass){
+//			System.out.println("Terashima1");
+//			System.out.println("---------------");
+//			generateNFPsForList(listOfFilesT1, 1);
+//			
+			Coordinate.round = 0.0;
 			System.out.println("Terashima1");
 			System.out.println("---------------");
 			generateNFPsForList(listOfFilesT1, 1);
 			
-			System.out.println("Terashima1");
-			System.out.println("---------------");
-			generateNFPsForList(listOfFilesT1, 1);
+			
 			
 			System.out.println("Terashima2");
 			System.out.println("---------------");
@@ -194,8 +214,9 @@ public class MinkMain {
 			
 			System.out.println("albano");
 			System.out.println("---------------");
-			generateNFPsForList(albano, 1);
+			generateNFPsForList(albano, 4);
 			
+//			Coordinate.round = 10;
 			System.out.println("blaz");
 			System.out.println("---------------");
 			generateNFPsForList(blaz, 4);
@@ -248,9 +269,40 @@ public class MinkMain {
 			System.out.println("---------------");
 			generateNFPsForList(shirts, 4);
 			
+			Coordinate.round = 1;
+			
 			System.out.println("swim");
 			System.out.println("---------------");
 			generateNFPsForList(swim, 4);
+			
+//			System.out.println("polygons_3");
+//			System.out.println("---------------");
+//			generateNFPsForList(polygons_3, 4);
+//			
+//			System.out.println("polygons_5");
+//			System.out.println("---------------");
+//			generateNFPsForList(polygons_5, 4);
+//			
+//			System.out.println("polygons_7");
+//			System.out.println("---------------");
+//			generateNFPsForList(polygons_7, 4);
+//			
+//			Coordinate.round = 10;
+//			System.out.println("polygons_10");
+//			System.out.println("---------------");
+//			generateNFPsForList(polygons_10, 4);
+//			
+//			System.out.println("polygons_20");
+//			System.out.println("---------------");
+//			generateNFPsForList(polygons_20, 4);
+//			
+//			System.out.println("polygons_50");
+//			System.out.println("---------------");
+//			generateNFPsForList(polygons_50, 2);
+//			
+//			System.out.println("polygons_100");
+//			System.out.println("---------------");
+//			generateNFPsForList(polygons_100, 1);
 		}
 		
 		long startTime;
@@ -267,52 +319,93 @@ public class MinkMain {
 
 		int i = 0;
 		
-		if(!testMass){
+		if(testSpecial){
+			
+			System.out.println("speciale gevallen");
+			System.out.println("----------------------");
 			Minkowski.generateMinkowskiNFP(new MultiPolygon(thesisAData), new MultiPolygon(thesisBData)); //correct
 			totalIts++;
 			
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(simple2Data), new MultiPolygon(simple1Data)); //correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(simple1Data), new MultiPolygon(simple2Data)); //correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(mink1Data), new MultiPolygon(mink2Data)); //correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(mink2Data), new MultiPolygon(mink1Data)); //correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(convex1Data), new MultiPolygon(convex2Data)); //correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(concave1Data), new MultiPolygon(concave2Data)); // correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(concave2Data), new MultiPolygon(concave1Data)); //correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(concave1Data), new MultiPolygon(convex2Data)); //correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(convex1Data), new MultiPolygon(concave2Data)); //correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc1Data), new MultiPolygon(triangleData));//correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc2Data),new MultiPolygon(interlockingConc3Data));//correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(holes2Data), new MultiPolygon(holes1Data)); //correct 2richtingen (zonder gaten)
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data));//correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data));
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(jigsaw1Data), new MultiPolygon(jigsaw2Data));
-			totalIts++;	
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data));//correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc2Data));//correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc3Data));//correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc2Data), new MultiPolygon(interlockingConc3Data));//correct
-			totalIts++;
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(holes1Data), new MultiPolygon(block2Data));//correct
-			totalIts++;	
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(simple2Data), new MultiPolygon(simple1Data)); //correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(simple1Data), new MultiPolygon(simple2Data)); //correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(concave1Data), new MultiPolygon(concave2Data)); // correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data));//correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data));
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data));//correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc1Data), new MultiPolygon(triangleData));//correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc2Data));
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc3Data));
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(holes1Data), new MultiPolygon(triangleData));
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(holes1Data), new MultiPolygon(holes2Data));
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc3Data), new MultiPolygon(interlockingConc2Data));
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc2Data), new MultiPolygon(interlockingConc3Data));
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(holes1Data), new MultiPolygon(block2Data));
+//			totalIts++;	
+//			
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(simple2Data), new MultiPolygon(simple1Data));
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(jigsaw1Data), new MultiPolygon(jigsaw2Data));
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(mink1Data), new MultiPolygon(mink2Data)); //correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(mink2Data), new MultiPolygon(mink1Data)); //correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(convex1Data), new MultiPolygon(convex2Data)); //correct
+//			totalIts++;
+			
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(concave2Data), new MultiPolygon(concave1Data)); //correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(concave1Data), new MultiPolygon(convex2Data)); //correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(convex1Data), new MultiPolygon(concave2Data)); //correct
+//			totalIts++;
+//			
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc2Data),new MultiPolygon(interlockingConc3Data));//correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(holes2Data), new MultiPolygon(holes1Data)); //correct 2richtingen (zonder gaten)
+//			totalIts++;
+//
+//			
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(jigsaw1Data), new MultiPolygon(jigsaw2Data));
+//			totalIts++;	
+//			
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc2Data));//correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc3Data));//correct
+//			totalIts++;
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(interlockingConc2Data), new MultiPolygon(interlockingConc3Data));//correct
+//			totalIts++;
+
+			endTime = System.currentTimeMillis();
+			duration = (endTime - startTime);
+			System.out.println("current total: " + totalIts);
+			System.out.println("fails: " + Minkowski.numberOfFails);
+			System.out.println("infinite stuck: " + Minkowski.numberStuckInfinite);		
+			System.out.println("duration: " + duration + " ms");
+			System.out.println("total itterations: " + totalIts);
+
+			System.out.println("average number of sides: " + MultiPolygon.totalCoords/(totalIts*2));
+			
+			Minkowski.numberOfFails = 0;
+			Minkowski.numberStuckInfinite = 0;
+			MultiPolygon.totalCoords = 0;
+			
+			System.out.println();
 		}
 				
 		
@@ -329,7 +422,6 @@ public class MinkMain {
 		int n = 0;
 		
 		List<MultiPolygon> polygonsList = new ArrayList<>();
-		rotations = 1;
 		int numberOfPolys = 100;
 		MultiPolygon original;
 		MultiPolygon inverse;
@@ -379,19 +471,23 @@ public class MinkMain {
 		
 
 		startTime = System.currentTimeMillis();
+		long startMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 		
 		for (MultiPolygon stat : polygonsList) {
 
 			for (MultiPolygon orb : polygonsList) {
-//				if(totalIts==106){
-					Minkowski.generateMinkowskiNFP(new MultiPolygon(stat), new MultiPolygon(orb));
-//				}
+//				System.out.println(totalIts);
+				
+//				if(totalIts == 228192)
+				Minkowski.generateMinkowskiNFP(new MultiPolygon(stat), new MultiPolygon(orb));
 				
 				totalIts++;
-//				System.out.println(totalIts);
 			}
 			
 		}
+		long endMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+		long diffMemory = endMemory - startMemory;
+		
 		endTime = System.currentTimeMillis();
 		duration = (endTime - startTime);
 		System.out.println("current total: " + totalIts);
@@ -399,8 +495,8 @@ public class MinkMain {
 		System.out.println("infinite stuck: " + Minkowski.numberStuckInfinite);		
 		System.out.println("duration: " + duration + " ms");
 		System.out.println("total itterations: " + totalIts);
-
-		System.out.println("average number of sides: " + MultiPolygon.totalCoords/(n*rotations));
+		System.out.println("Memory used: " + diffMemory);
+		System.out.println("average number of sides: " + MultiPolygon.totalCoords/(double)(n*rotations));
 		
 		Minkowski.numberOfFails = 0;
 		Minkowski.numberStuckInfinite = 0;

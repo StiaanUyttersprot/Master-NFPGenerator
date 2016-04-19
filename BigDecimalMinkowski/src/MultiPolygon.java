@@ -8,8 +8,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-import org.nevec.rjm.BigDecimalMath;
-
 import javafx.scene.shape.Polygon;
 
 /**
@@ -40,7 +38,7 @@ public class MultiPolygon {
 	private BigDecimal smallestY = new BigDecimal(Double.MAX_VALUE);
 	
 	private int scale = 10;
-	private MathContext mc = MathContext.DECIMAL128;
+	private MathContext mc = MathContext.DECIMAL32;
 	// constructor reads file to create a polygon
 	MultiPolygon(File file) throws FileNotFoundException {
 

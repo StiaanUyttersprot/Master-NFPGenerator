@@ -1,7 +1,5 @@
 import java.math.BigDecimal;
 
-import org.nevec.rjm.BigDecimalMath;
-
 /**
  *
  * @author Stiaan
@@ -16,9 +14,7 @@ public class Vector {
 	private int edgeNumber;
 
 	private boolean polygonA;
-	private static double roundingValue = 10000;
-	private static BigDecimal round = new BigDecimal(1);
-	private static int scale = 1000000000;
+
 	private Edge parentEdge;
 	
 	Vector(BigDecimal x, BigDecimal y) {
@@ -102,20 +98,6 @@ public class Vector {
 		BigDecimal dValue = dxab.multiply(dyap).subtract(dyab.multiply(dxap));
 		
 		return dValue;
-	}
-	
-	//check if the value is zero or not (trying to cope with very small deviation values)
-	public boolean dFunctionCheck(Vector startPoint, Vector endPoint) {
-		boolean touching = false;
-		BigDecimal dxab = startPoint.getxCoord().subtract(endPoint.getxCoord());
-		BigDecimal dyap = startPoint.getyCoord().subtract(yCoord);
-		BigDecimal dyab = startPoint.getyCoord().subtract(endPoint.getyCoord());
-		BigDecimal dxap = startPoint.getxCoord().subtract(xCoord);
-		
-		BigDecimal dValue = dxab.multiply(dyap).subtract(dyab.multiply(dxap));
-		
-		if((dValue.abs()).compareTo(round) < 0)touching = true;
-		return touching;
 	}
 
 	public void move(BigDecimal x, BigDecimal y) {

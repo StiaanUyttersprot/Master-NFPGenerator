@@ -16,8 +16,7 @@ public class Minkowski {
 	public static boolean drawFigures = false;
 	public static boolean drawNFP = false;
 	public static boolean handleError = true;
-	
-	private static MathContext mc = MathContext.DECIMAL128;
+
 	static Boolean clockwiseContainsTurningpoints;
 	
 	public static NoFitPolygon generateMinkowskiNFP(MultiPolygon polyA, MultiPolygon polyB) {
@@ -44,7 +43,7 @@ public class Minkowski {
 //		polyB.calcDeltaAngles();
 		
 //		polyB.changeEdgeAnglesCounterClockwise();
-		
+		PolygonPairStages.addPolygonPair(polyA, polyB);
 		List <Edge> polyASortList = new ArrayList<Edge>();
 		List <Edge> polyBSortList = new ArrayList<Edge>();
 		

@@ -8,8 +8,7 @@ public class Coordinate {
 	private double xCoord;
 	private double yCoord;
 	
-	private static double roundingAccuracy = 0.01;//the bigger the more accurate
-	private static double round = 1;
+	public static double round = 1;
 	
 	Coordinate(double x, double y) {
 		xCoord = x;
@@ -140,6 +139,14 @@ public class Coordinate {
 		if(Math.abs(dValue) <= round)touching = true;
 		return touching;
 	}
+	
+	public boolean dFunctionCheck(Edge e) {
+		boolean touching = false;
+		double dValue = (e.getStartPoint().getxCoord() - e.getEndPoint().getxCoord()) * (e.getStartPoint().getyCoord() - yCoord)
+				- (e.getStartPoint().getyCoord() - e.getEndPoint().getyCoord()) * (e.getStartPoint().getxCoord() - xCoord);
+		if(Math.abs(dValue) <= round)touching = true;
+		return touching;
+	}
 
 	public void move(double x, double y) {
 		xCoord += x;
@@ -190,11 +197,6 @@ public class Coordinate {
 	public void translate(Vector vector){
 		xCoord+=vector.getxCoord();
 		yCoord+=vector.getyCoord();
-	}
-	
-	public void roundCoord(){
-		xCoord = Math.round(xCoord*roundingAccuracy)/roundingAccuracy;
-		yCoord = Math.round(yCoord*roundingAccuracy)/roundingAccuracy;
 	}
 
 	public void replaceByNegative() {

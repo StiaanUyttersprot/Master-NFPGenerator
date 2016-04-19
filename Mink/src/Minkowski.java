@@ -15,6 +15,8 @@ public class Minkowski {
 	public static boolean drawNFP = false;
 	public static boolean handleError = true;
 	
+	private static double angleRound = 1e-5;
+	
 	static Boolean clockwiseContainsTurningpoints;
 	
 	public static NoFitPolygon generateMinkowskiNFP(MultiPolygon polyA, MultiPolygon polyB) {
@@ -189,7 +191,8 @@ public class Minkowski {
 		//make NFP and place it at right coordinates
 		
 		if(cycleList.size()==0 && handleError){
-			System.out.println("failed");
+//			System.out.println("failed");
+//			System.exit(0);
 			return null;
 		}
 		
@@ -216,10 +219,12 @@ public class Minkowski {
 		
 		
 		if(drawNFP){
-			System.out.println(nfp.toString());
+			
 			NoFitPolygonStages.addNFP(nfp);
 		}
-
+		if(printMinkData){
+			System.out.println(nfp.toString());
+		}
 		
 		return nfp;
 		
@@ -494,8 +499,6 @@ public class Minkowski {
 		mergeList.addAll(qList);
 		mergeList.addAll(rList);
 		Collections.sort(mergeList, new EdgeAngleComparator());
-		
-		int angleRound = 1000;
 	
 		if(printEdgeListData){
 			System.out.println();
@@ -570,8 +573,7 @@ public class Minkowski {
 									do{
 										z++;
 										checkPos = (position+z)%mergeList.size();
-										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*angleRound)==
-												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*angleRound)){
+										if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<angleRound){
 											if(!mergeList.get(checkPos).isPolygonA()){
 												helpEdge = new Edge(mergeList.get(checkPos));
 												helpEdge.changeEdgeNumber(direction);
@@ -597,8 +599,7 @@ public class Minkowski {
 										do{
 											z++;
 											checkPos = (position+z)%mergeList.size();
-											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*angleRound)==
-													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*angleRound)){
+											if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<angleRound){
 												if(!mergeList.get(checkPos).isPolygonA()){
 													helpEdge = new Edge(mergeList.get(checkPos));
 													helpEdge.changeEdgeNumber(direction);
@@ -667,8 +668,7 @@ public class Minkowski {
 										else{
 											checkPos = (position-z);
 										}
-										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*angleRound)==
-												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*angleRound)){
+										if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<angleRound){
 											if(!mergeList.get(checkPos).isPolygonA()){
 
 												helpEdge = new Edge(mergeList.get(checkPos));
@@ -702,9 +702,8 @@ public class Minkowski {
 											else{
 												checkPos = (position-z);
 											}
+											if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<angleRound){
 											
-											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*angleRound)==
-													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*angleRound)){
 												if(!mergeList.get(checkPos).isPolygonA()){
 
 													helpEdge = new Edge(mergeList.get(checkPos));
@@ -834,8 +833,6 @@ public class Minkowski {
 		mergeList.addAll(aList);
 		mergeList.addAll(bList);
 		
-		int angleRound = 1000;
-		
 		List<Edge> qList = new ArrayList<>();
 		qList.addAll(aList);
 		
@@ -921,8 +918,7 @@ public class Minkowski {
 									do{
 										z++;
 										checkPos = (position+z)%mergeList.size();
-										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*angleRound)==
-												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*angleRound)){
+										if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<angleRound){
 											if(!mergeList.get(checkPos).isPolygonA()){
 												helpEdge = new Edge(mergeList.get(checkPos));
 												helpEdge.changeEdgeNumber(direction);
@@ -948,8 +944,7 @@ public class Minkowski {
 										do{
 											z++;
 											checkPos = (position+z)%mergeList.size();
-											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*angleRound)==
-													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*angleRound)){
+											if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<angleRound){
 												if(!mergeList.get(checkPos).isPolygonA()){
 													helpEdge = new Edge(mergeList.get(checkPos));
 													helpEdge.changeEdgeNumber(direction);
@@ -1018,8 +1013,7 @@ public class Minkowski {
 										else{
 											checkPos = (position-z);
 										}
-										if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*angleRound)==
-												Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*angleRound)){
+										if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<angleRound){
 											if(!mergeList.get(checkPos).isPolygonA()){
 
 												helpEdge = new Edge(mergeList.get(checkPos));
@@ -1054,8 +1048,7 @@ public class Minkowski {
 												checkPos = (position-z);
 											}
 											
-											if(Math.round(Math.toDegrees(mergeList.get(checkPos).getEdgeAngle())*angleRound)==
-													Math.round(Math.toDegrees(mergeList.get(position).getEdgeAngle())*angleRound)){
+											if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<angleRound){
 												if(!mergeList.get(checkPos).isPolygonA()){
 
 													helpEdge = new Edge(mergeList.get(checkPos));
@@ -1525,7 +1518,7 @@ public class Minkowski {
 				s++;
 			}
 			
-			if(trip.get(0).getStartPoint().equals(trip.get(trip.size()-1).getEndPoint())){
+			if(trip.get(0).getStartPoint().equalValuesRounded(trip.get(trip.size()-1).getEndPoint())){
 				return trackLineTripList;
 			}
 		}
@@ -1566,11 +1559,11 @@ public class Minkowski {
 						edgeK = trackLineTripI.get(k);
 						edgeR = trackLineTripJ.get(r);
 						
-						if(edgeK.getStartPoint().equals(edgeR.getEndPoint()) && edgeK.getEndPoint().equals(edgeR.getStartPoint())){
+						if(edgeK.getStartPoint().equalValuesRounded(edgeR.getEndPoint()) && edgeK.getEndPoint().equalValuesRounded(edgeR.getStartPoint())){
 							intersectionList.add(new TripIntersection(edgeK.getStartPoint(),edgeK, false ));
 							intersectionList.add(new TripIntersection(edgeK.getEndPoint(),edgeK, true ));
 						}
-						if(edgeK.getStartPoint().equals(edgeR.getStartPoint())){
+						if(edgeK.getStartPoint().equalValuesRounded(edgeR.getStartPoint())){
 							if(k>0 && r>0){
 								if(edgeK.getEndPoint().dFunction(edgeR)>0){
 									Edge edgeKless = trackLineTripI.get(k-1);
@@ -1585,7 +1578,7 @@ public class Minkowski {
 								
 							}
 						}
-						if(edgeK.getStartPoint().equals(edgeR.getStartPoint())){
+						if(edgeK.getStartPoint().equalValuesRounded(edgeR.getStartPoint())){
 							if(i!=j || k!=r){//if they are from the same trip, they may not be the same edge
 								if(edgeK.getEndPoint().dFunction(edgeR)<=0){
 									intersectionList.add(new TripIntersection(edgeK.getStartPoint(),edgeK, false ));
@@ -1594,18 +1587,18 @@ public class Minkowski {
 								else if(edgeK.getEndPoint().dFunction(edgeR)>0);
 							}
 						}
-						else if(edgeK.getStartPoint().equals(edgeR.getEndPoint())){
+						else if(edgeK.getStartPoint().equalValuesRounded(edgeR.getEndPoint())){
 							if((i!=j || k!=r) && r == trackLineTripJ.size()-1){
 								intersectionList.add(new TripIntersection(edgeK.getStartPoint(),edgeK, false ));
 							}
 						}
-						else if(edgeK.getEndPoint().equals(edgeR.getStartPoint())){
+						else if(edgeK.getEndPoint().equalValuesRounded(edgeR.getStartPoint())){
 
 							if(i!=j ||(k!= r-1)){//if they are of the same trip, edgeK may not be the one before edgeR
 								intersectionList.add(new TripIntersection(edgeK.getEndPoint(),edgeK, true ));
 							}	
 						}
-						else if(edgeK.getEndPoint().equals(edgeR.getEndPoint())){
+						else if(edgeK.getEndPoint().equalValuesRounded(edgeR.getEndPoint())){
 							intersectionList.add(new TripIntersection(edgeK.getEndPoint(),edgeK, true ));
 						}
 						
@@ -1693,7 +1686,7 @@ public class Minkowski {
 							if(intersectionList.get(j+1).getIntersectionEdge().getTripSequenceNumber()!=intersectionList.get(j).getIntersectionEdge().getTripSequenceNumber()){
 								trimmedEdge = new Edge(trackLineTrip.get(k));
 								trimmedEdge.setEndPoint(intersectionList.get((j+1)%intersectionList.size()).getIntersectionPoint());
-								if(!trimmedEdge.getEndPoint().equals(trimmedEdge.getStartPoint()))fragment.add(trimmedEdge);
+								if(!trimmedEdge.getEndPoint().equalValuesRounded(trimmedEdge.getStartPoint()))fragment.add(trimmedEdge);
 							}
 						}
 		
@@ -1933,25 +1926,15 @@ public class Minkowski {
 			while(j<nfpCycleList.get(i).size() && !faultyCycle){
 				Coordinate nfpCoord = nfpCycleList.get(i).get(j);
 				
-				polyB.translate(nfpCoord.getxCoord()-polyB.getOuterPolygon()[0].getxCoord(), nfpCoord.getyCoord()-polyB.getOuterPolygon()[0].getyCoord());
+				polyB.translate(nfpCoord.getxCoord() - polyB.getOuterPolygon()[0].getxCoord(), nfpCoord.getyCoord() - polyB.getOuterPolygon()[0].getyCoord());
 				
 				j++;
 				faultyCycle = polyB.overlapping(polyA);
-				
 			}
 			if(faultyCycle){
+//				NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));
 				nfpCycleList.get(i).clear();
 			}
-//			for(Coordinate nfpCoord: nfpCycleList.get(i)){
-//				polyB.translate(nfpCoord.getxCoord(), nfpCoord.getyCoord());
-//				for(Edge edgeA: polyA.getOuterPolygonEdges()){
-//					for(Edge edgeB : polyB.getOuterPolygonEdges()){
-//						if(edgeA.testIntersect(edgeB)){
-//							faultyCycle = true;
-//						}
-//					}
-//				}
-//			}
 		}
 		f = 0;
 		while( f <nfpCycleList.size()){

@@ -11,8 +11,6 @@ public class Vector {
 	//the number of the edge that the vector slides over
 	private int edgeNumber;
 	private boolean fromStatEdge;
-
-	private static double roundingValue = 10000;
 	
 	private Edge parentEdge;
 	
@@ -184,17 +182,7 @@ public class Vector {
 		yCoord += y;
 	}
 
-	//check if two vectinates are equal (use round to make sure mistakes by rounding in the calculations are ignored
-	public boolean equalValuesRounded(Vector vect) {
-
-		if (Math.round(xCoord*roundingValue)/roundingValue != Math.round(vect.getxCoord()*roundingValue)/roundingValue)
-			return false;
-		if (Math.round(yCoord*roundingValue)/roundingValue != Math.round(vect.getyCoord()*roundingValue)/roundingValue)
-			return false;
-		return true;
-	}
-
-	// this vectinate minus the given vectinate
+	// this vector minus the given vector
 	public Vector subtract(Vector point) {
 
 		return new Vector(xCoord - point.getxCoord(), yCoord - point.getyCoord());

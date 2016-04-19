@@ -16,7 +16,7 @@ public class Edge {
 	private double smallY;
 	private double bigY;
 		
-	private int edgeLabel; //wordt momenteel niet gebruikt
+	private int edgeLabel; 
 	private boolean polygonA;
 	private boolean turningPoint;
 	private boolean additional = false; //this edge is additional and is not used for track line trips
@@ -457,8 +457,8 @@ public class Edge {
 	public boolean equalsComplexPolyEdge(Edge edge) {
 		if(edgeNumber!=edge.getEdgeNumber())return false;
 		if(polygonA!=edge.isPolygonA())return false;
-		if(!startPoint.equals(edge.getStartPoint()))return false;
-		if(!endPoint.equals(edge.getEndPoint()))return false;
+		if(!startPoint.equalValuesRounded(edge.getStartPoint()))return false;
+		if(!endPoint.equalValuesRounded(edge.getEndPoint()))return false;
 		return true;
 	}
 

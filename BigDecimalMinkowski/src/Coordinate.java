@@ -15,8 +15,7 @@ public class Coordinate {
 	private BigDecimal yCoord;
 	private static MathContext mc = MathContext.UNLIMITED;
 	
-	private static BigDecimal roundingValue = new BigDecimal(1);
-	private static BigDecimal round = new BigDecimal(1e-4);
+	public static BigDecimal round = new BigDecimal(1e-4);
 	
 	Coordinate(BigDecimal x, BigDecimal y) {
 		xCoord = x;

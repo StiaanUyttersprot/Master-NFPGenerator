@@ -371,7 +371,7 @@ public class MultiPolygon {
 		changedPolygon[0] = polygon[0];
 		for(int i = 1; i < polygon.length; i++){
 			changedPolygon[i] = polygon[polygon.length-i];
-			System.out.println("placing " + polygon[polygon.length-i].toString() + "to location " + i);
+//			System.out.println("placing " + polygon[polygon.length-i].toString() + "to location " + i);
 		}
 		for(int i = 0; i < polygon.length; i++){
 			polygon[i] = changedPolygon[i];
@@ -385,15 +385,6 @@ public class MultiPolygon {
 			System.out.println(e.toString());
 		}
 		System.out.println();
-	}
-	
-	private int getCoordinateIndexOf(Coordinate currentStartPoint) {
-		int i = 0;
-		for(Coordinate coord: outerPolygon){
-			if(coord.equals(currentStartPoint))return i;
-		}
-		i++;
-		return -1;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------------------
@@ -542,6 +533,7 @@ public class MultiPolygon {
 		int f = 0;
 		int k;
 		boolean overlap = false;
+		if(polygonsIntersectEdgeOverlap(polyA, this))return true;
 		while(f < polyA.getOuterPolygonEdges().length && !overlap){
 			Edge edgeA = polyA.getOuterPolygonEdges()[f];
 			f++;
@@ -729,6 +721,28 @@ public class MultiPolygon {
 		}
 		return false;
 
+	}
+	
+	private boolean polygonsIntersectEdgeOverlap(MultiPolygon polyA, MultiPolygon polyB) {
+		for(Edge e: polyA.getOuterPolygonEdges()){
+			for(Edge f: polyB.getOuterPolygonEdges()){
+				if(Math.abs(e.getEdgeAngle() - f.getEdgeAngle())%(Math.PI*2)==0){
+					if(!e.getStartPoint().equalValuesRounded(f.getEndPoint())&&!e.getEndPoint().equalValuesRounded(f.getStartPoint())){
+						if(e.getEndPoint().equalValuesRounded(f.getEndPoint())){
+							return true;
+						}
+						if(e.getStartPoint().equalValuesRounded(f.getStartPoint())){
+							return true;
+						}
+						if(e.containsPoint(f.getStartPoint())||e.containsPoint(f.getEndPoint())){
+							return true;
+						}
+						if(f.containsPoint(e.getStartPoint())||f.containsPoint(e.getEndPoint()))return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	public void shiftNinety() {

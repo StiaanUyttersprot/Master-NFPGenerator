@@ -1,7 +1,6 @@
 import java.math.BigDecimal;
 import java.math.MathContext;
 
-import org.nevec.rjm.BigDecimalMath;
 
 /**
  *
@@ -27,7 +26,7 @@ public class Edge {
 	
 	private int tripSequenceNumber;
 	
-	private static BigDecimal round = new BigDecimal(0);
+	public static BigDecimal round = new BigDecimal(0);
 	private static MathContext mc = MathContext.DECIMAL128;
 	//values for boundarySearch
 	private boolean positive;
