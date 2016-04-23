@@ -1,8 +1,8 @@
 /**
- *
+ * this class is used for storing points of a polygon
  * @author Stiaan
  * 
- *         this class is used for storing points of a polygon
+ *         
  */
 public class Vector {
 	private double xCoord;

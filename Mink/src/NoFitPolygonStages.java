@@ -63,7 +63,6 @@ public class NoFitPolygonStages {
 		List<Stage> nfpStageList = new ArrayList<>();
 		for (NoFitPolygon nfp : nfpToDraw) {
 			nfpStageList.add(drawNFP(nfp));
-			// drawPair(multiPolys);
 
 		}
 		return nfpStageList;
@@ -97,7 +96,6 @@ public class NoFitPolygonStages {
 		makeNFPScene(nfpGroup, nfp, biggestValue);
 		
 		stage.setScene(scene);
-		// stage.show();
 		return stage;
 	}
 

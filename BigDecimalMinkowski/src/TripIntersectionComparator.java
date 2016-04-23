@@ -1,6 +1,10 @@
 import java.math.BigDecimal;
 import java.util.Comparator;
 
+/**
+ * @author Stiaan Uyttersprot
+ *
+ */
 public class TripIntersectionComparator implements Comparator<TripIntersection>{
 
 	@Override

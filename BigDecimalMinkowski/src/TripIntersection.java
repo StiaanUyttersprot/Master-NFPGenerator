@@ -1,4 +1,8 @@
 
+/**
+ * @author Stiaan Uyttersprot
+ *
+ */
 public class TripIntersection {
 	private Coordinate intersectionPoint;
 	private Edge intersectionEdge;

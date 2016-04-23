@@ -3,6 +3,10 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Stiaan Uyttersprot
+ *
+ */
 public class MinkMain {
 
 	private static final String Terashima1 = "testsets\\Terashima1Polygons\\";
@@ -43,9 +47,9 @@ public class MinkMain {
 		Minkowski.drawNFP = true;
 		Minkowski.handleError = true;
 		
-		boolean testMass = false;
-		boolean testSpecial = true;
-		boolean testSpecific = true;
+		boolean testMass = true;
+		boolean testSpecial = false;
+		boolean testSpecific = false;
 		
 		int findIDimensionPoly = 228;
 		int findJDimensionPoly = 192;
@@ -197,16 +201,14 @@ public class MinkMain {
 		File[] swim = folder.listFiles();
 
 		if(testMass){
-//			System.out.println("Terashima1");
-//			System.out.println("---------------");
-//			generateNFPsForList(listOfFilesT1, 1);
-//			
-			Coordinate.round = 0.0;
+			Coordinate.round = 0;
 			System.out.println("Terashima1");
 			System.out.println("---------------");
 			generateNFPsForList(listOfFilesT1, 1);
 			
-			
+			System.out.println("Terashima1");
+			System.out.println("---------------");
+			generateNFPsForList(listOfFilesT1, 1);
 			
 			System.out.println("Terashima2");
 			System.out.println("---------------");
@@ -216,7 +218,6 @@ public class MinkMain {
 			System.out.println("---------------");
 			generateNFPsForList(albano, 4);
 			
-//			Coordinate.round = 10;
 			System.out.println("blaz");
 			System.out.println("---------------");
 			generateNFPsForList(blaz, 4);
@@ -268,8 +269,6 @@ public class MinkMain {
 			System.out.println("shirts");
 			System.out.println("---------------");
 			generateNFPsForList(shirts, 4);
-			
-			Coordinate.round = 1;
 			
 			System.out.println("swim");
 			System.out.println("---------------");
@@ -407,12 +406,6 @@ public class MinkMain {
 			
 			System.out.println();
 		}
-				
-		
-//		Edge testEdge = new Edge(new Coordinate(124, -138), new Coordinate(398, -268));
-//		Coordinate testCoordinate = new Coordinate(326, -234);
-//		System.out.println(testCoordinate.dFunction(testEdge));
-//		System.out.println(testCoordinate.shortestDistanceToEdge(testEdge));
 		
 		if(Minkowski.drawFigures || Minkowski.drawNFP){
 			drawTool.launchDrawer(args);
@@ -492,7 +485,7 @@ public class MinkMain {
 		duration = (endTime - startTime);
 		System.out.println("current total: " + totalIts);
 		System.out.println("fails: " + Minkowski.numberOfFails);
-		System.out.println("infinite stuck: " + Minkowski.numberStuckInfinite);		
+//		System.out.println("infinite stuck: " + Minkowski.numberStuckInfinite);		
 		System.out.println("duration: " + duration + " ms");
 		System.out.println("total itterations: " + totalIts);
 		System.out.println("Memory used: " + diffMemory);

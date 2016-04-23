@@ -1,8 +1,7 @@
 /**
  *
- * @author Stiaan
+ * @author Stiaan Uyttersprot
  * 
- *         this class is used for storing points of a polygon
  */
 public class Vector {
 	private double xCoord;
@@ -92,19 +91,6 @@ public class Vector {
 	public String toString() {
 		return "( " + xCoord + " , " + yCoord + " ) EdgeNumber: " + edgeNumber+ " translates over stationary: " + fromStatEdge;
 	}
-
-	
-
-	// double distanceTo(Coordinate vect){
-	//
-	// double distance =
-	// Math.sqrt((xCoord-vect.getxCoord())*(xCoord-vect.getxCoord())
-	// + (yCoord-vect.getyCoord())*(yCoord-vect.getyCoord()));
-	//
-	// return distance;
-	// }
-
-	
 
 	public double distanceTo(Vector vect) {
 		double dX = xCoord - vect.getxCoord();
@@ -284,17 +270,12 @@ public class Vector {
 		// has to
 		// be checked and the vector may need to be trimmed
 		if (edge.boundingBoxIntersect(testEdge)) {
-			// TODO: line intersection, trim vector to that
-			// distance
 			if (edge.lineIntersect(testEdge)) {
 				intersectionCoord = edge.calcIntersection(testEdge);
-				//System.out.println(intersectionCoord);
-				//System.out.println(edge + " " +  testEdge);
 				if(edge.containsIntersectionPoint(intersectionCoord)&&testEdge.containsIntersectionPoint(intersectionCoord)){
 					// trim the vector with
 					// endpoint = intersectionCoordinate
 					trimTo(intersectionCoord,coord);
-					//System.out.println(this);
 					trimmed = true;
 					//because the vector gets trimmed the testEdge changes, this will result in less intersection because of the shorter vector
 					//also the Vector will not be overwritten by every new intersection if the testEdge is changed, only when it has to be shorter

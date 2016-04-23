@@ -5,10 +5,9 @@ import java.math.MathContext;
 import org.nevec.rjm.BigDecimalMath;
 
 /**
- *
- * @author Stiaan
+ * this class is used for storing points of a polygon
+ * @author  Stiaan Uyttersprot
  * 
- *         this class is used for storing points of a polygon
  */
 public class Coordinate {
 	private BigDecimal xCoord;
@@ -107,18 +106,12 @@ public class Coordinate {
 	public BigDecimal calculateAngle(Coordinate coord2, Coordinate coord3) {
 
 		BigDecimal distA = coord2.distanceTo(coord3);
-		// System.out.println(distA);
 		BigDecimal distB = this.distanceTo(coord3);
-		// System.out.println(distB);
 		BigDecimal distC = this.distanceTo(coord2);
-		// System.out.println(distC);
 
 		BigDecimal cosAngleNum = (distB.multiply(distB).add(distC.multiply(distC)).subtract(distA.multiply(distA))); 
 		BigDecimal cosAngleDenom = (distB.multiply(distC)).multiply(new BigDecimal(2));
-		// System.out.println(cosAngle);
-//		System.out.println(Math.acos(cosAngleNum.divide(cosAngleDenom,MathContext.DECIMAL128).doubleValue()));
 		BigDecimal angle = BigDecimalMath.acos(cosAngleNum.divide(cosAngleDenom,MathContext.DECIMAL128));
-		// System.out.println(angle);
 		return angle;
 	}
 
@@ -132,9 +125,7 @@ public class Coordinate {
 		BigDecimal dyap = startPoint.getyCoord().subtract(yCoord);
 		BigDecimal dyab = startPoint.getyCoord().subtract(endPoint.getyCoord());
 		BigDecimal dxap = startPoint.getxCoord().subtract(xCoord);
-		
-		//BigDecimal dValue = ((startPoint.getxCoord().subtract(endPoint.getxCoord())).multiply(startPoint.getyCoord().subtract(yCoord))).subtract((startPoint.getyCoord().subtract(endPoint.getyCoord()).multiply((startPoint.getxCoord().subtract(xCoord)))));
-		
+				
 		BigDecimal dValue = dxab.multiply(dyap).subtract(dyab.multiply(dxap));
 		return dValue;
 	}
@@ -171,12 +162,6 @@ public class Coordinate {
 
 	//check if two coordinates are equal (use round to make sure mistakes by rounding in the calculations are ignored
 	public boolean equalValuesRounded(Coordinate coord) {
-		
-//		if(xCoord.abs().compareTo(BigDecimal.ZERO)==0)xCoord = xCoord.abs();
-//		if(yCoord.abs().compareTo(BigDecimal.ZERO)==0)yCoord = yCoord.abs();
-		
-//		if(coord.getxCoord().abs().compareTo(BigDecimal.ZERO)==0)coord.setxCoord(coord.getxCoord().abs());
-//		if(coord.getyCoord().abs().compareTo(BigDecimal.ZERO)==0)coord.setyCoord(coord.getyCoord().abs());
 		
 		if (((xCoord.subtract(coord.getxCoord())).abs()).compareTo(round)>0)
 			return false;
@@ -222,8 +207,6 @@ public BigDecimal getLengthSquared() {
 	}
 	
 	public void roundCoord(){
-//		xCoord = Math.round(xCoord*roundingValue)/roundingValue;
-//		yCoord = Math.round(yCoord*roundingValue)/roundingValue;
 		System.err.println("roundCoord bigdecimal not implemented");
 	}
 

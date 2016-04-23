@@ -2,9 +2,8 @@ import java.math.BigDecimal;
 
 /**
  *
- * @author Stiaan
+ * @author Stiaan Uyttersprot
  * 
- *         this class is used for storing points of a polygon
  */
 public class Vector {
 	private BigDecimal xCoord;

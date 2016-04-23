@@ -11,6 +11,10 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 
+/**
+ * @author Stiaan Uyttersprot
+ *
+ */
 public class NoFitPolygonStages {
 
 	static int aantalNFPStages = 0;
@@ -93,7 +97,6 @@ public class NoFitPolygonStages {
 		makeNFPPolygonScene(nfpGroup, nfp, biggestValue);
 //		makeNFPPolylineScene(nfpGroup, nfp, biggestValue);
 		stage.setScene(scene);
-		// stage.show();
 		return stage;
 	}
 

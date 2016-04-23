@@ -1,8 +1,8 @@
 /**
- *
- * @author Stiaan
+ * this class is used for storing points of a polygon
+ * @author Stiaan Uyttersprot
  * 
- *         this class is used for storing points of a polygon
+ *         
  */
 public class Coordinate {
 	private double xCoord;
@@ -88,16 +88,11 @@ public class Coordinate {
 	public double calculateAngle(Coordinate coord2, Coordinate coord3) {
 
 		double distA = coord2.distanceTo(coord3);
-		// System.out.println(distA);
 		double distB = this.distanceTo(coord3);
-		// System.out.println(distB);
 		double distC = this.distanceTo(coord2);
-		// System.out.println(distC);
 
 		double cosAngle = (distB * distB + distC * distC - distA * distA) / (2 * distB * distC);
-		// System.out.println(cosAngle);
 		double angle = Math.acos(cosAngle);
-		// System.out.println(angle);
 		return angle;
 	}
 

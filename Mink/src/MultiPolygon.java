@@ -8,11 +8,11 @@ import java.util.Scanner;
 import javafx.scene.shape.Polygon;
 
 /**
- *
- * @author Stiaan
- * 
  *         this class contains a polygon to be used to generate the no-fit
  *         polygon the polygon exists of coordinates and can have holes
+ * @author Stiaan Uyttersprot
+ * 
+ 
  */
 public class MultiPolygon {
 
@@ -37,7 +37,6 @@ public class MultiPolygon {
 	// constructor reads file to create a polygon
 	MultiPolygon(File file) throws FileNotFoundException {
 
-		// TODO: catch wrong input file format error
 
 		input = new Scanner(file);
 		nHoles = input.nextInt();
@@ -73,11 +72,11 @@ public class MultiPolygon {
 			
 		}
 		
-		if(checkClockwise(outerPolygon)){
+//		if(checkClockwise(outerPolygon)){
 			
 			//changeClockOrientation(outerPolygon);
 
-		}
+//		}
 
 		for (int i = 0; i < nHoles; i++) {
 
@@ -88,9 +87,9 @@ public class MultiPolygon {
 				holes[i][j] = new Coordinate(input.nextDouble(), input.nextDouble());
 			}
 			
-			if(!checkClockwise(holes[i])){
+//			if(!checkClockwise(holes[i])){
 				//changeClockOrientation(holes[i]);
-			}
+//			}
 		}
 		input.close();
 
@@ -245,9 +244,9 @@ public class MultiPolygon {
 
 		Polygon polygon = new Polygon();
 		for (Coordinate coord : outerPolygon) {
-			// add 300 to coord to move axis
+			// add xSize/2 to coord to move axis
 			polygon.getPoints().add(sizeFactor * coord.getxCoord() + xSize / 2);
-			// yCoord*-1 to invert to normal axis and add 700 to move axis
+			// yCoord*-1 to invert to normal axis and add ySize/2 to move axis
 			polygon.getPoints().add(-1 * sizeFactor * coord.getyCoord() + ySize / 2);
 		}
 
@@ -371,7 +370,6 @@ public class MultiPolygon {
 		changedPolygon[0] = polygon[0];
 		for(int i = 1; i < polygon.length; i++){
 			changedPolygon[i] = polygon[polygon.length-i];
-//			System.out.println("placing " + polygon[polygon.length-i].toString() + "to location " + i);
 		}
 		for(int i = 0; i < polygon.length; i++){
 			polygon[i] = changedPolygon[i];
@@ -396,7 +394,6 @@ public class MultiPolygon {
 
 	public boolean pointInPolygon(Coordinate coord) {
 
-		//System.out.println("is point in polygon? " + coord);
 		int polyCorners = outerPolygon.length;
 		int i, j = polyCorners - 1;
 		boolean oddNodes = false;
@@ -414,7 +411,6 @@ public class MultiPolygon {
 			}
 			j = i;
 		}
-		//System.out.println(oddNodes);
 		boolean inHole = false;
 		//if a hole contains the point it isn't contained by the polygon
 		if(nHoles != 0){
@@ -438,7 +434,6 @@ public class MultiPolygon {
 				if(inHole) return false;
 			}
 		}
-		//System.out.println(oddNodes);
 		return oddNodes;
 	}
 
@@ -558,16 +553,13 @@ public class MultiPolygon {
 	}
 	
 	public static boolean polygonsIntersectPointInPolygon(MultiPolygon statPoly, MultiPolygon orbPoly) {
-		//System.out.println("testing next location");
 		boolean isOnEdge;
 		boolean middlePointOnEdge;
 		boolean touchedOuterEdge = false;
 		boolean touchedHoleEdge = false;
 		int i= 1;
-		//orbPoly.printPolygonData();
 		if(polygonsIntersectEdgeIntersect(statPoly, orbPoly))return true;
 		for(Coordinate coord: orbPoly.getOuterPolygon()){
-			//System.out.println("checking coord" + coord);
 			isOnEdge = false;
 			for(Edge statEdge: statPoly.getOuterPolygonEdges()){
 				if(statEdge.containsPoint(coord)){
@@ -602,11 +594,9 @@ public class MultiPolygon {
 				}
 				
 				Coordinate middlePoint = edgeToTest.getMiddlePointEdge();
-				//System.out.println("calc the midpoint "+ middlePoint);
 				for(Edge statEdge: statPoly.getOuterPolygonEdges()){
 					if(statEdge.containsPoint(middlePoint)){
 						middlePointOnEdge = true;
-						//System.out.println("is on stat edge");
 					}
 					
 				}
@@ -614,12 +604,10 @@ public class MultiPolygon {
 					for(Edge statEdge: holes){
 						if(statEdge.containsPoint(middlePoint)){
 							middlePointOnEdge = true;
-							//System.out.println("is on stathole Edge");
 						}
 						
 					}
 				}
-				//System.out.println("is middlepoint on edge: " + middlePointOnEdge);
 				if(!middlePointOnEdge){
 					if(statPoly.pointInPolygon(middlePoint))return true;
 				}
@@ -629,7 +617,6 @@ public class MultiPolygon {
 		}
 		i = 1;
 		for(Coordinate coord: statPoly.getOuterPolygon()){
-			//System.out.println(" this one 2" + coord);
 			isOnEdge = false;
 			for(Edge statEdge: orbPoly.getOuterPolygonEdges()){
 				if(statEdge.containsPoint(coord))isOnEdge = true;
@@ -650,7 +637,6 @@ public class MultiPolygon {
 					}
 				}
 				Coordinate middlePoint = edgeToTest.getMiddlePointEdge();
-				//System.out.println("calc the midpoint "+ middlePoint);
 				for(Edge orbEdge: orbPoly.getOuterPolygonEdges()){
 					if(orbEdge.containsPoint(middlePoint)) middlePointOnEdge = true;
 				}
@@ -670,18 +656,10 @@ public class MultiPolygon {
 	}
 	public static boolean polygonsIntersectEdgeIntersect(MultiPolygon statPoly, MultiPolygon orbPoly) {
 		
-//		Vector placeOrbPolyVector;//the vector used to place the orbiting polygon in its starting position
-		
-			
-//		orbPoly.translate(placeOrbPolyVector);
-		//TODO kijken of het niet sneller is met een methode om te kijken of een punt binnen het polygon valt (sowieso)
-		//outside check 
-		//System.out.println("testing next location");
 		for(Edge outerStatEdge: statPoly.getOuterPolygonEdges()){
 			for(Edge outerOrbEdge : orbPoly.getOuterPolygonEdges()){
 				
 				if(outerOrbEdge.testIntersect(outerStatEdge)){
-					//System.out.println("intersection");
 					return true;
 				}
 			}

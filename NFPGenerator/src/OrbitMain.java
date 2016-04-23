@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  *
- * @author Stiaan
+ * @author Stiaan Uyttersprot
  */
 public class OrbitMain {
 
@@ -37,25 +37,12 @@ public class OrbitMain {
 	private static final String swim = "testsets\\swim\\";
 	private static final String shirts = "testsets\\shirts_2007-05-15\\";	
 	
-	/**
-	 * @param args
-	 *            the command line arguments
-	 * @throws java.io.FileNotFoundException
-	 */
-	
-	
 	public static void main(String[] args) throws FileNotFoundException {
 
 		DrawJavaFX drawTool = new DrawJavaFX();
 
-		
+		File folder;
 		System.out.println("Orbiting tests");
-		
-//		double round = 0;
-//		
-//		Coordinate.round = round;
-//		Edge.round = round;
-//		TouchingEdgePair.round = round;
 		
 		
 		File convex1Data = new File("Convex1.txt");
@@ -96,7 +83,7 @@ public class OrbitMain {
 		File jigsaw2Data = new File("Jigsaw2.txt");
 		
 		
-		File folder = new File(Terashima1);
+		folder = new File(Terashima1);
 		File[] listOfFilesT1 = folder.listFiles();
 		
 		folder = new File(Terashima2);
@@ -177,108 +164,109 @@ public class OrbitMain {
 		folder = new File(swim);
 		File[] swim = folder.listFiles();
 		
-		boolean testMass = true;
+		boolean testMass = false;
 		if(testMass){
-//			System.out.println("Terashima1");
-//			System.out.println("---------------");
-//			generateNFPsForList(listOfFilesT1, 1);
-//			
-//			System.out.println("Terashima1");
-//			System.out.println("---------------");
-//			generateNFPsForList(listOfFilesT1, 1);
-//			
+			
+			System.out.println("Terashima1");
+			System.out.println("---------------");
+			generateNFPsForList(listOfFilesT1, 1);
+			
+			System.out.println("Terashima1");
+			System.out.println("---------------");
+			generateNFPsForList(listOfFilesT1, 1);
+			
 			System.out.println("Terashima2");
 			System.out.println("---------------");
 			generateNFPsForList(listOfFilesT2, 1);
-//			
-//			System.out.println("albano");
-//			System.out.println("---------------");
-//			generateNFPsForList(albano, 4);
-//			
-//			System.out.println("blaz");
-//			System.out.println("---------------");
-//			generateNFPsForList(blaz, 4);
-//			
-//			System.out.println("dagli");
-//			System.out.println("---------------");
-//			generateNFPsForList(dagli, 4);
-//			
-//			System.out.println("dighe1");
-//			System.out.println("---------------");
-//			generateNFPsForList(dighe1, 4);
-//			
-//			System.out.println("dighe2");
-//			System.out.println("---------------");
-//			generateNFPsForList(dighe2, 4);
-//			
-//			System.out.println("fu");
-//			System.out.println("---------------");
-//			generateNFPsForList(fu, 4);
-//			
-//			System.out.println("han");
-//			System.out.println("---------------");
-//			generateNFPsForList(han, 4);
-//			
-//			System.out.println("jakobs1");
-//			System.out.println("---------------");
-//			generateNFPsForList(jakobs1, 4);
-//			
-//			System.out.println("jakobs2");
-//			System.out.println("---------------");
-//			generateNFPsForList(jakobs2, 4);
-//			
-//			System.out.println("mao");
-//			System.out.println("---------------");
-//			generateNFPsForList(mao, 4);
-//			
-//			System.out.println("marques");
-//			System.out.println("---------------");
-//			generateNFPsForList(marques, 4);
-//			
-//			System.out.println("shapes0");
-//			System.out.println("---------------");
-//			generateNFPsForList(shapes0, 4);
-//			
-//			System.out.println("shapes1");
-//			System.out.println("---------------");
-//			generateNFPsForList(shapes1, 4);
-//			
-//			System.out.println("shirts");
-//			System.out.println("---------------");
-//			generateNFPsForList(shirts, 4);
-//			
-//			System.out.println("swim");
-//			System.out.println("---------------");
-//			generateNFPsForList(swim, 4);
-//			
-//			System.out.println("polygons_3");
-//			System.out.println("---------------");
-//			generateNFPsForList(polygons_3, 4);
-//			
-//			System.out.println("polygons_5");
-//			System.out.println("---------------");
-//			generateNFPsForList(polygons_5, 4);
-//			
-//			System.out.println("polygons_7");
-//			System.out.println("---------------");
-//			generateNFPsForList(polygons_7, 4);
-//			
-//			System.out.println("polygons_10");
-//			System.out.println("---------------");
-//			generateNFPsForList(polygons_10, 4);
-//			
-//			System.out.println("polygons_20");
-//			System.out.println("---------------");
-//			generateNFPsForList(polygons_20, 4);
-//			
-//			System.out.println("polygons_50");
-//			System.out.println("---------------");
-//			generateNFPsForList(polygons_50, 2);
-//			
-//			System.out.println("polygons_100");
-//			System.out.println("---------------");
-//			generateNFPsForList(polygons_100, 1);
-//			
+			
+			System.out.println("albano");
+			System.out.println("---------------");
+			generateNFPsForList(albano, 4);
+			
+			System.out.println("blaz");
+			System.out.println("---------------");
+			generateNFPsForList(blaz, 4);
+			
+			System.out.println("dagli");
+			System.out.println("---------------");
+			generateNFPsForList(dagli, 4);
+			
+			System.out.println("dighe1");
+			System.out.println("---------------");
+			generateNFPsForList(dighe1, 4);
+			
+			System.out.println("dighe2");
+			System.out.println("---------------");
+			generateNFPsForList(dighe2, 4);
+			
+			System.out.println("fu");
+			System.out.println("---------------");
+			generateNFPsForList(fu, 4);
+			
+			System.out.println("han");
+			System.out.println("---------------");
+			generateNFPsForList(han, 4);
+			
+			System.out.println("jakobs1");
+			System.out.println("---------------");
+			generateNFPsForList(jakobs1, 4);
+			
+			System.out.println("jakobs2");
+			System.out.println("---------------");
+			generateNFPsForList(jakobs2, 4);
+			
+			System.out.println("mao");
+			System.out.println("---------------");
+			generateNFPsForList(mao, 4);
+			
+			System.out.println("marques");
+			System.out.println("---------------");
+			generateNFPsForList(marques, 4);
+			
+			System.out.println("shapes0");
+			System.out.println("---------------");
+			generateNFPsForList(shapes0, 4);
+			
+			System.out.println("shapes1");
+			System.out.println("---------------");
+			generateNFPsForList(shapes1, 4);
+			
+			System.out.println("shirts");
+			System.out.println("---------------");
+			generateNFPsForList(shirts, 4);
+			
+			System.out.println("swim");
+			System.out.println("---------------");
+			generateNFPsForList(swim, 4);
+			/*
+			System.out.println("polygons_3");
+			System.out.println("---------------");
+			generateNFPsForList(polygons_3, 4);
+			
+			System.out.println("polygons_5");
+			System.out.println("---------------");
+			generateNFPsForList(polygons_5, 4);
+			
+			System.out.println("polygons_7");
+			System.out.println("---------------");
+			generateNFPsForList(polygons_7, 4);
+			
+			System.out.println("polygons_10");
+			System.out.println("---------------");
+			generateNFPsForList(polygons_10, 4);
+			
+			System.out.println("polygons_20");
+			System.out.println("---------------");
+			generateNFPsForList(polygons_20, 4);
+			
+			System.out.println("polygons_50");
+			System.out.println("---------------");
+			generateNFPsForList(polygons_50, 2);
+			
+			System.out.println("polygons_100");
+			System.out.println("---------------");
+			generateNFPsForList(polygons_100, 1);
+	*/
 //			System.out.println("polygons_200");
 //			System.out.println("---------------");
 //			generateNFPsForList(polygons_200, 1);
@@ -299,21 +287,8 @@ public class OrbitMain {
 		
 
 		startTime = System.currentTimeMillis();
-
-//		int i = 0;
-//		for(MultiPolygon stat : randomList){
-//			int j = 0;
-//			
-//			for(MultiPolygon orb : randomList){
-//				j++;
-//				nfpList.add(Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb)));
-//				totalIts++;
-////				System.out.println("["+i+"]["+j+"]");
-//			}
-//			i++;
-//		}
 //		
-		boolean specialTestSet = false;
+		boolean specialTestSet = true;
 		if(specialTestSet){
 			System.out.println("speciale gevallen");
 			System.out.println("----------------------");
@@ -322,39 +297,40 @@ public class OrbitMain {
 //			testPoly.shiftNinety();
 //			Orbiting.generateNFP(testPoly, new MultiPolygon(concave2Data));
 //			totalIts++;
-			Orbiting.generateNFP(new MultiPolygon(concave1Data), new MultiPolygon(concave2Data));
-			totalIts++;
-			Orbiting.generateNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data));
-			totalIts++;
-			Orbiting.generateNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data));
-			totalIts++;
-			Orbiting.generateNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));
-			totalIts++;
-			Orbiting.generateNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data));
-			totalIts++;
-			Orbiting.generateNFP(new MultiPolygon(interlockingConc1Data), new MultiPolygon(triangleData));
-			totalIts++;
-			Orbiting.generateNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc2Data));
-			totalIts++;
-			Orbiting.generateNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc3Data));
-			totalIts++;
-			Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(triangleData));
-			totalIts++;
-			Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(holes2Data));
-			totalIts++;
-			Orbiting.generateNFP(new MultiPolygon(interlockingConc3Data), new MultiPolygon(interlockingConc2Data));
-			totalIts++;
-			Orbiting.generateNFP(new MultiPolygon(interlockingConc2Data), new MultiPolygon(interlockingConc3Data));
-			totalIts++;
-			Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(block2Data));
-			totalIts++;	
+//			Orbiting.generateNFP(new MultiPolygon(concave1Data), new MultiPolygon(concave2Data));
+//			totalIts++;
+//			Orbiting.generateNFP(new MultiPolygon(rectangle1Data), new MultiPolygon(rectangle1Data));
+//			totalIts++;
+//			Orbiting.generateNFP(new MultiPolygon(puzzle1Data), new MultiPolygon(puzzle2Data));
+//			totalIts++;
+//			Orbiting.generateNFP(new MultiPolygon(puzzle3Data), new MultiPolygon(block1Data));
+//			totalIts++;
+//			Orbiting.generateNFP(new MultiPolygon(sawtooth1Data), new MultiPolygon(sawtooth2Data));
+//			totalIts++;
+//			Orbiting.generateNFP(new MultiPolygon(interlockingConc1Data), new MultiPolygon(triangleData));
+//			totalIts++;
+//			Orbiting.generateNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc2Data));
+//			totalIts++;
+//			Orbiting.generateNFP(new MultiPolygon(triangleData), new MultiPolygon(interlockingConc3Data));
+//			totalIts++;
+//			Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(triangleData));
+//			totalIts++;
+//			Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(holes2Data));
+//			totalIts++;
+//			Orbiting.generateNFP(new MultiPolygon(interlockingConc3Data), new MultiPolygon(interlockingConc2Data));
+//			totalIts++;
+//			Orbiting.generateNFP(new MultiPolygon(interlockingConc2Data), new MultiPolygon(interlockingConc3Data));
+//			totalIts++;
+//			Orbiting.generateNFP(new MultiPolygon(holes1Data), new MultiPolygon(block2Data));
+//			totalIts++;	
+//			
+//			Orbiting.generateNFP(new MultiPolygon(simple2Data), new MultiPolygon(simple1Data));
+//			totalIts++;
+//			Orbiting.generateNFP(new MultiPolygon(jigsaw1Data), new MultiPolygon(jigsaw2Data));
+//			totalIts++;
 			
-			Orbiting.generateNFP(new MultiPolygon(simple2Data), new MultiPolygon(simple1Data));
-			totalIts++;
-			Orbiting.generateNFP(new MultiPolygon(jigsaw1Data), new MultiPolygon(jigsaw2Data));
-			totalIts++;
-			
-			Orbiting.generateNFP(new MultiPolygon(mink1Data), new MultiPolygon(mink2Data));
+			NoFitPolygon nfp = Orbiting.generateNFP(new MultiPolygon(mink1Data), new MultiPolygon(mink2Data));
+			System.out.println(nfp.toString());
 			totalIts++;	
 			
 			endTime = System.currentTimeMillis();
@@ -370,13 +346,6 @@ public class OrbitMain {
 			Orbiting.numberOfSecFails = 0;
 		}
 		
-			
-			//print the nfp's------------------------------------------------------------------------
-//			for(NoFitPolygon nfp : nfpList){
-//				System.out.println(nfp.toString());
-//			}
-			
-//		}
 		// ------------------------------------------------------------------------------------
 		// graphical representation
 		 
@@ -389,7 +358,7 @@ public class OrbitMain {
 		
 		List<MultiPolygon> polygonsList = new ArrayList<>();
 		
-		int numberOfPolys = 1000;
+		int numberOfPolys = 100;
 		MultiPolygon original;
 		MultiPolygon inverse;
 		MultiPolygon ninety;
@@ -398,7 +367,6 @@ public class OrbitMain {
 			if(n == numberOfPolys)break;
 			switch(rotations){
 			case 1:
-//				polygonsList.add(new MultiPolygon(polygon));
 				inverse = new MultiPolygon(polygon);
 				inverse.replaceByNegative();
 				
@@ -439,7 +407,7 @@ public class OrbitMain {
 
 		int totalIts = 0;
 
-		
+		NoFitPolygon nfp;
 
 		startTime = System.currentTimeMillis();
 
@@ -447,11 +415,10 @@ public class OrbitMain {
 		for (MultiPolygon stat : polygonsList) {
 
 			for (MultiPolygon orb : polygonsList) {
-//				if(totalIts==44)
-					Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb));				
+
+				nfp = Orbiting.generateNFP(new MultiPolygon(stat), new MultiPolygon(orb));				
 				
 				totalIts++;
-//				System.out.println(totalIts);
 			}
 			
 		}
@@ -461,7 +428,7 @@ public class OrbitMain {
 		duration = (endTime - startTime);
 		System.out.println("current total: " + totalIts);
 		System.out.println("fails: " + Orbiting.numberOfFails);
-		System.out.println("infinite stuck: " + Orbiting.numberStuckInfinite);		
+//		System.out.println("infinite stuck: " + Orbiting.numberStuckInfinite);		
 		System.out.println("duration: " + duration + " ms");
 		System.out.println("total itterations: " + totalIts);
 		System.out.println("Memory used: " + diffMemory);

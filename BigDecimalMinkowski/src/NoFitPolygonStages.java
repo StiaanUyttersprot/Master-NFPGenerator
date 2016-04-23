@@ -8,6 +8,10 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 
+/**
+ * @author Stiaan Uyttersprot
+ *
+ */
 public class NoFitPolygonStages {
 
 	static int aantalNFPStages = 0;
@@ -89,7 +93,6 @@ public class NoFitPolygonStages {
 		makeNFPScene(nfpGroup, nfp, biggestValue+50);
 		
 		stage.setScene(scene);
-		// stage.show();
 		return stage;
 	}
 

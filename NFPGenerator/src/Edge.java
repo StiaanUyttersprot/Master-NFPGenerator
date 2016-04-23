@@ -1,7 +1,7 @@
 
 /**
  *
- * @author Stiaan
+ * @author Stiaan Uyttersprot
  */
 public class Edge {
 	private boolean stationary = false;
@@ -450,11 +450,8 @@ public class Edge {
 		// if the bounding boxes intersect, line intersection
 		// has to be checked and the edge may need to be trimmed
 		if (boundingBoxIntersect(edge)) {
-			// TODO: line intersection, trim vector to that
-			// distance
 			if (lineIntersect(edge)) {
 				intersectionCoord = calcIntersection(edge);
-				//intersectionCoord.roundCoord();
 				if(containsIntersectionPoint(intersectionCoord)&&edge.containsIntersectionPoint(intersectionCoord)){
 					if(intersectionCoord.equalValuesRounded(edge.getStartPoint())||intersectionCoord.equalValuesRounded(edge.getEndPoint())
 							||intersectionCoord.equalValuesRounded(startPoint)||intersectionCoord.equalValuesRounded(endPoint)){

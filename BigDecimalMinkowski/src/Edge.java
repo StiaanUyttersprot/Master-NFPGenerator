@@ -4,7 +4,7 @@ import java.math.MathContext;
 
 /**
  *
- * @author Stiaan
+ * @author  Stiaan Uyttersprot
  */
 public class Edge {
 	private Coordinate startPoint;
@@ -49,7 +49,6 @@ public class Edge {
 		deltaAngle = edge.getDeltaAngle();
 		turningPoint = edge.isTurningPoint();
 		polygonA = edge.isPolygonA();
-//		additional = edge.isAdditional();
 		calculateRanges();
 	}
 	
@@ -170,19 +169,14 @@ public double getEdgeAngle() {
 	}
 
 	public void calcEdgeAngle(){
-		//edgeAngle = Math.atan2(endPoint.getyCoord()-startPoint.getyCoord(), endPoint.getxCoord()- startPoint.getxCoord());
 		double numerator = endPoint.getyCoord().doubleValue()- startPoint.getyCoord().doubleValue();
 		
 		double denominator = endPoint.getxCoord().doubleValue()- startPoint.getxCoord().doubleValue();
 
-//		double doubleEdge = Math.atan2(numerator.doubleValue(), denominator.doubleValue());
-//		System.out.println(doubleEdge);
 		edgeAngle = Math.atan2(numerator, denominator);
-//		System.out.println(edgeAngle);
 	}
 	
 	public void calcInverseEdgeAngle() {
-		//edgeAngle = Math.atan2(startPoint.getyCoord() - endPoint.getyCoord(), startPoint.getxCoord() - endPoint.getxCoord());
 		double numerator = startPoint.getyCoord().doubleValue() - endPoint.getyCoord().doubleValue();
 		double denominator = startPoint.getxCoord().doubleValue() - endPoint.getxCoord().doubleValue();
 		edgeAngle = Math.atan2(numerator,denominator);
@@ -326,19 +320,12 @@ public double getEdgeAngle() {
 		// if the bounding boxes intersect, line intersection
 		// has to be checked
 		if (boundingBoxIntersect(edge)) {
-//			System.out.println("bounding box");
 			if (lineIntersect(edge)) {
-//				System.out.println("lineIntersect");
 				intersectionCoord = calcIntersection(edge);
 				
 				if(containsIntersectionPoint(intersectionCoord)&&edge.containsIntersectionPoint(intersectionCoord)){
 					
 					intersection = true;
-//					if(intersectionCoord.equalValuesRounded(edge.getStartPoint())||intersectionCoord.equalValuesRounded(edge.getEndPoint())
-//							||intersectionCoord.equalValuesRounded(startPoint)||intersectionCoord.equalValuesRounded(endPoint)){
-//						System.out.println("endpoint");
-//					}
-//					else intersection = true;
 				}
 			}
 			
@@ -455,12 +442,8 @@ public double getEdgeAngle() {
 		// this means startPoint-endPoint in stead of endPoint-startPoint
 		vector = new Vector(endPoint.subtract(startPoint), eN, polygonA);
 		if(eN<0){
-//			System.out.println("negVector");
 			vector.setxCoord(vector.getxCoord().negate());
 			vector.setyCoord(vector.getyCoord().negate());
-		}
-		else{
-//			System.out.println("posVector");
 		}
 
 		return vector;
@@ -496,17 +479,13 @@ public double getEdgeAngle() {
 		// if the bounding boxes intersect, line intersection
 		// has to be checked
 		if (boundingBoxIntersect(edge)) {
-//			System.out.println("bounding box");
 			if (lineIntersect(edge)) {
-//				System.out.println("lineIntersect");
 				intersectionCoord = calcIntersection(edge);
 				
 				if(containsIntersectionPoint(intersectionCoord)&&edge.containsIntersectionPoint(intersectionCoord)){
 					
-//					intersection = true;
 					if(intersectionCoord.equalValuesRounded(edge.getStartPoint())||intersectionCoord.equalValuesRounded(edge.getEndPoint())
 							||intersectionCoord.equalValuesRounded(startPoint)||intersectionCoord.equalValuesRounded(endPoint)){
-						//System.out.println("endpoint");
 					}
 					else intersection = true;
 				}

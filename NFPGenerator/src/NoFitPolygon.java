@@ -4,6 +4,10 @@ import java.util.List;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Polyline;
 
+/**
+ * @author Stiaan Uyttersprot
+ *
+ */
 public class NoFitPolygon {
 
 	//a list of the polygons that are contained in the no-fit polygon
@@ -134,11 +138,6 @@ public class NoFitPolygon {
 			}
 			
 		}
-	}
-
-	public boolean pointOnEdge(Coordinate nextStartPoint) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	public boolean containsPoint(Coordinate coordinate) {

@@ -11,11 +11,10 @@ import java.util.Scanner;
 import javafx.scene.shape.Polygon;
 
 /**
- *
- * @author Stiaan
- * 
- *         this class contains a polygon to be used to generate the no-fit
- *         polygon the polygon exists of coordinates and can have holes
+ * this class contains a polygon to be used to generate the no-fit
+ *  polygon the polygon exists of coordinates and can have holes
+ * @author  Stiaan Uyttersprot
+ *      
  */
 public class MultiPolygon {
 
@@ -41,8 +40,6 @@ public class MultiPolygon {
 	private MathContext mc = MathContext.DECIMAL32;
 	// constructor reads file to create a polygon
 	MultiPolygon(File file) throws FileNotFoundException {
-
-		// TODO: catch wrong input file format error
 
 		input = new Scanner(file);
 		nHoles = input.nextInt();
@@ -79,11 +76,11 @@ public class MultiPolygon {
 			
 		}
 		
-		if(checkClockwise(outerPolygon)){
+//		if(checkClockwise(outerPolygon)){
 			
 			//changeClockOrientation(outerPolygon);
 
-		}
+//		}
 
 		for (int i = 0; i < nHoles; i++) {
 
@@ -94,9 +91,9 @@ public class MultiPolygon {
 				holes[i][j] = new Coordinate(new BigDecimal(input.nextDouble()), new BigDecimal(input.nextDouble()));
 			}
 			
-			if(!checkClockwise(holes[i])){
+//			if(!checkClockwise(holes[i])){
 				//changeClockOrientation(holes[i]);
-			}
+//			}
 		}
 		input.close();
 
@@ -401,7 +398,6 @@ public class MultiPolygon {
 
 	public boolean pointInPolygon(Coordinate coord) {
 
-		//System.out.println("is point in polygon? " + coord);
 		int polyCorners = outerPolygon.length;
 		int i, j = polyCorners - 1;
 		boolean oddNodes = false;
@@ -420,7 +416,6 @@ public class MultiPolygon {
 			}
 			j = i;
 		}
-		//System.out.println(oddNodes);
 		boolean inHole = false;
 		//if a hole contains the point it isn't contained by the polygon
 		if(nHoles != 0){
@@ -444,7 +439,6 @@ public class MultiPolygon {
 				if(inHole) return false;
 			}
 		}
-		//System.out.println(oddNodes);
 		return oddNodes;
 	}
 

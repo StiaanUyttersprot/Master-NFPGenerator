@@ -1,7 +1,7 @@
 
 /**
+ * @author Stiaan Uyttersprot
  *
- * @author Stiaan
  */
 public class Edge {
 	private Coordinate startPoint;
@@ -46,7 +46,6 @@ public class Edge {
 		deltaAngle = edge.getDeltaAngle();
 		turningPoint = edge.isTurningPoint();
 		polygonA = edge.isPolygonA();
-//		additional = edge.isAdditional();
 		calculateRanges();
 	}
 	
@@ -314,19 +313,12 @@ public class Edge {
 		// if the bounding boxes intersect, line intersection
 		// has to be checked
 		if (boundingBoxIntersect(edge)) {
-//			System.out.println("bounding box");
 			if (lineIntersect(edge)) {
-//				System.out.println("lineIntersect");
 				intersectionCoord = calcIntersection(edge);
 				
 				if(containsIntersectionPoint(intersectionCoord)&&edge.containsIntersectionPoint(intersectionCoord)){
 					
 					intersection = true;
-//					if(intersectionCoord.equalValuesRounded(edge.getStartPoint())||intersectionCoord.equalValuesRounded(edge.getEndPoint())
-//							||intersectionCoord.equalValuesRounded(startPoint)||intersectionCoord.equalValuesRounded(endPoint)){
-//						System.out.println("endpoint");
-//					}
-//					else intersection = true;
 				}
 			}
 			
@@ -341,17 +333,13 @@ public class Edge {
 		// if the bounding boxes intersect, line intersection
 		// has to be checked
 		if (boundingBoxIntersect(edge)) {
-//			System.out.println("bounding box");
 			if (lineIntersect(edge)) {
-//				System.out.println("lineIntersect");
 				intersectionCoord = calcIntersection(edge);
 				
 				if(containsIntersectionPoint(intersectionCoord)&&edge.containsIntersectionPoint(intersectionCoord)){
 					
-//					intersection = true;
 					if(intersectionCoord.equalValuesRounded(edge.getStartPoint())||intersectionCoord.equalValuesRounded(edge.getEndPoint())
 							||intersectionCoord.equalValuesRounded(startPoint)||intersectionCoord.equalValuesRounded(endPoint)){
-						//System.out.println("endpoint");
 					}
 					else intersection = true;
 				}
@@ -429,8 +417,6 @@ public class Edge {
 		boolean onLine;
 		onLine = intersectionCoord.dFunctionCheck(startPoint, endPoint);
 		if(onLine == false){
-//			double distanceToCoord = intersectionCoord.shortestDistanceToEdge(this);
-//			if(distanceToCoord>=0)return false;
 			return false;
 		};
 		if(intersectionCoord.getxCoord()<smallX-round){
@@ -467,15 +453,11 @@ public class Edge {
 		Vector vector;
 		// if the orbiting edge is being used for the vector, it needs to be
 		// inversed
-		// this means startPoint-endPoint in stead of endPoint-startPoint
+		// this means startPoint-endPoint instead of endPoint-startPoint
 		vector = new Vector(endPoint.subtract(startPoint), eN, polygonA);
 		if(eN<0){
-//			System.out.println("negVector");
 			vector.setxCoord(-vector.getxCoord());
 			vector.setyCoord(-vector.getyCoord());
-		}
-		else{
-//			System.out.println("posVector");
 		}
 
 		return vector;
