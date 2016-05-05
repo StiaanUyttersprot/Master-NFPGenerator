@@ -141,6 +141,51 @@ public class MultiPolygon {
 		createEdges();
 	}
 	
+	/**
+	 * Make a multipolygon using two arraylists containing the x and y-coordinates
+	 * @param xList list of x-coordinates
+	 * @param yList list of y-coordinates
+	 */
+	public MultiPolygon(List<Double> xList, List<Double> yList){
+
+		// used for autoscaling in drawtool
+		double readX;
+		double readY;
+
+		nHoles = 0;
+		int nPoints = xList.size();
+		outerPolygon = new Coordinate[nPoints];
+		holes = new Coordinate[nHoles][];
+
+		for (int i = 0; i < nPoints; i++) {
+
+			readX = xList.get(i);
+			readY = yList.get(i);
+			outerPolygon[i] = new Coordinate(readX, readY);
+
+			// -----------------------------------------------------
+			// values used for scaling in gui
+			if (readX > biggestX)
+				biggestX = readX;
+			else if (readX < smallestX)
+				smallestX = readX;
+			if (readY > biggestY)
+				biggestY = readY;
+			else if (readY < smallestY)
+				smallestY = readY;
+
+			// -----------------------------------------------------
+		}
+
+		if (checkClockwise(outerPolygon)) {
+
+			changeClockOrientation(outerPolygon);
+
+		}
+
+		createEdges();
+
+	}
 	private void createEdges() {
 		outerPolygonEdges = new Edge[outerPolygon.length];
 		holeEdges = new Edge[nHoles][];
