@@ -113,7 +113,7 @@ public class Coordinate {
 		boolean touching = false;
 		double dValue = (startPoint.getxCoord() - endPoint.getxCoord()) * (startPoint.getyCoord() - yCoord)
 				- (startPoint.getyCoord() - endPoint.getyCoord()) * (startPoint.getxCoord() - xCoord);
-		if(dValue < round && dValue > -round)touching = true;
+		if(dValue <= round && dValue >= -round)touching = true;
 		return touching;
 	}
 

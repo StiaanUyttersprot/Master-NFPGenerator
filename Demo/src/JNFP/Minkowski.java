@@ -1,28 +1,39 @@
-import java.awt.Checkbox;
+package JNFP;
+
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 /**
+ * This class is used in a static way to call the Minkowski sums method
  * @author Stiaan Uyttersprot
  *
  */
 public class Minkowski {
-	public static int numberOfFails = 0;
-	public static int numberStuckInfinite = 0;
+	protected static int numberOfFails = 0;
+	protected static int numberStuckInfinite = 0;
 	
-	public static boolean printMinkData = false;
-	public static boolean printEdgeListData = false;
-	public static boolean printBoundaryData = false;
-	public static boolean drawFigures = false;
-	public static boolean drawNFP = false;
-	public static boolean handleError = true;
+	protected static boolean printMinkData = false;
+	protected static boolean printEdgeListData = false;
+	protected static boolean printBoundaryData = false;
+	
+	protected static boolean handleError = true;
 	
 	private static double angleRound = 1e-5;
 	
-	static Boolean clockwiseContainsTurningpoints;
+	protected static Boolean clockwiseContainsTurningpoints;
 	
+	/**
+	 * Given two polygons, calculates the resulting no-fit polygon using the Minkowski sums method.
+	 * Make sure to configurate the round when using this method directly.
+	 * A good standard value for the round is 1(use method adjustRound(double round))
+	 * or use the Minkowski sums method provided in NFPTools.
+	 * @param polyA the first multipolygon
+	 * @param polyB the second multipolygon
+	 * @return the NFP of these polygons
+	 * @throws FileNotFoundException when the file is not found
+	 */
 	public static NoFitPolygon generateMinkowskiNFP(MultiPolygon polyA, MultiPolygon polyB) {
 		
 		NoFitPolygon nfp = null;
@@ -34,15 +45,16 @@ public class Minkowski {
 		
 		//polyA has to be counterclockwise
 		if(polyA.checkClockwise(polyA.getOuterPolygon()))
-			polyA.changeClockOrientation(polyA.getOuterPolygon());
+			MultiPolygon.changeClockOrientation(polyA.getOuterPolygon());
 		//polyB has to be counterclockwise
 		if(polyB.checkClockwise(polyB.getOuterPolygon()))
-			polyB.changeClockOrientation(polyB.getOuterPolygon());
+			MultiPolygon.changeClockOrientation(polyB.getOuterPolygon());
 	
 		polyA.labelCounterClockwise();
 		polyB.labelCounterClockwise();
 
-		polyB.replaceByNegative();
+		polyB.replaceByNegativeMink();
+
 		
 		List <Edge> polyASortList = new ArrayList<Edge>();
 		List <Edge> polyBSortList = new ArrayList<Edge>();
@@ -74,7 +86,6 @@ public class Minkowski {
 		List<Edge> turningGroupB = new ArrayList<>();
 		
 		boolean isConcaveB = false;
-		boolean isConcaveA = false;
 		
 		for(Edge e: polyBSortList){
 			if(e.isTurningPoint()){
@@ -82,17 +93,9 @@ public class Minkowski {
 				break;
 			}
 		}
-		for(Edge e: polyASortList){
-			if(e.isTurningPoint()){
-				isConcaveA = true;
-				break;
-			}
-		}
-		int i = 0;
-		int aantalToegevoegd = 0;
+
 		if(isConcaveB){
 			dividedListB = divideList(polyBSortList);
-			
 			
 		}
 		else{
@@ -105,10 +108,8 @@ public class Minkowski {
 		List<Edge> msEdgeList = new ArrayList<>();
 		
 		boolean firstSequence = true;
-		Edge helpEdge;
 		List<Edge> nextEdgeList;
-		
-		i = 0;
+	
 		
 		for(List<Edge> edgeListB: dividedListB){
 			if(clockwiseB(edgeListB)&&isConcaveB){
@@ -134,25 +135,16 @@ public class Minkowski {
 		}
 		
 		List<Edge> complexPolygonEdgeList = makeIntoPolygon(msEdgeList);
-		if(drawFigures){
-			ComplexPolygonStage.addComplexPolygon(complexPolygonEdgeList);
-		}
-		
+		ComplexPolygonStage.addComplexPolygon(complexPolygonEdgeList);
 		//---------------------------------------------------------------------------------------------------------------------------------------
 		//algorithm 2
 		List<List<Edge>> trackLineTripList;
 		trackLineTripList = makeTrackLineTrips(complexPolygonEdgeList);
-		
-		if(drawFigures){
-			ComplexPolygonStage.addTrackLineTrips(trackLineTripList);
-		}
-		
+		ComplexPolygonStage.addTrackLineTrips(trackLineTripList);
 		if(printMinkData){
 			for(List<Edge> trackLineTrip: trackLineTripList){
 				System.out.println("trackLineTrip");
-//				printEdgeList(trackLineTrip);
 				printGeoList(trackLineTrip);
-	//			printSimpleEdgeList(trackLineTrip);
 			}
 		}
 		
@@ -163,20 +155,18 @@ public class Minkowski {
 		List<List<Edge>> cycleList;
 
 		cycleList = boundarySearch(trackLineTripList);
-//		
 		if(printMinkData){
 			for(List<Edge> cycle: cycleList){
 				System.out.println("cycle");
 				printGeoList(cycle);
 			}
 		}
-		
+
 		//--------------------------------------------------------------------------------------------------------------------------------------
 		//make NFP and place it at right coordinates
 		
 		if(cycleList.size()==0 && handleError){
-//			System.out.println("failed");
-//			System.exit(0);
+			System.err.println("Minkowski method failed to generate polygon");
 			return null;
 		}
 		
@@ -187,7 +177,6 @@ public class Minkowski {
 				bottomCoord.getyCoord() - topCoord.getyCoord());
 		Coordinate startCoord = new Coordinate(polyB.getOuterPolygon()[0].translatedTo(translationVector));
 		nfp = makeNFP(cycleList, startCoord);
-//		nfp.removeExcessivePoints();
 		
 		nfp.setOrbitingPolygon(polyB);
 		nfp.setStationaryPolygon(polyA);
@@ -199,12 +188,6 @@ public class Minkowski {
 		polyB.translate(bottomCoord.getxCoord() - topCoord.getxCoord(),
 				bottomCoord.getyCoord() - topCoord.getyCoord());
 		
-		
-		
-		if(drawNFP){
-			
-			NoFitPolygonStages.addNFP(nfp);
-		}
 		if(printMinkData){
 			System.out.println(nfp.toString());
 		}
@@ -284,7 +267,7 @@ public class Minkowski {
 				turningGroupB = new ArrayList<>();
 			}
 		}
-		if(aantalToegevoegd>polyBSortList.size())System.err.println("teveel toegevoegd aan de dividedListB");
+		if(aantalToegevoegd>polyBSortList.size())System.err.println("error in list division");
 		return dividedListB;
 	}
 
@@ -293,9 +276,7 @@ public class Minkowski {
 		List<Edge> complexPolygonEdges = new ArrayList<>();
 		msVectorList = getVectorList(msEdgeList);
 		int startIndex = 0;
-		Coordinate startCoord;
-		
-		startCoord = new Coordinate(0,0);
+		Coordinate startCoord = new Coordinate(0,0);
 		
 		Edge complexEdge;
 		Coordinate startPoint;
@@ -321,7 +302,7 @@ public class Minkowski {
 		List<Vector> vectorList = new ArrayList<Vector>();
 		Vector vect;
 		for(Edge e: msEdgeList){
-			vect = e.makeFullVector(e.getEdgeNumber());
+			vect = e.makeVectorForMink(e.getEdgeNumber());
 			vectorList.add(vect);
 		}
 		return vectorList;
@@ -422,6 +403,7 @@ public class Minkowski {
 			}
 		}
 		for(int i = 0; i< polySortList.size();i++){
+
 			if(Math.signum(polySortList.get(i).getDeltaAngle())!= Math.signum(polySortList.get((i+1)%polySortList.size()).getDeltaAngle())){
 				polySortList.get(i).setTurningPoint(true);
 			}
@@ -457,7 +439,6 @@ public class Minkowski {
 		Edge helpEdge;
 		Edge qi;
 		boolean qiFound = false;
-		
 		sList.add(new Edge(qList.get(0)));
 		int mergeListStartPosition = 0;
 		while(!mergeList.get(mergeListStartPosition).isPolygonA() || mergeList.get(mergeListStartPosition).getEdgeNumber() != qList.get(0).getEdgeNumber()){
@@ -499,7 +480,7 @@ public class Minkowski {
 									do{
 										z++;
 										checkPos = (position+z)%mergeList.size();
-										if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<=angleRound){
+										if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<angleRound){
 											if(!mergeList.get(checkPos).isPolygonA()){
 												helpEdge = new Edge(mergeList.get(checkPos));
 												helpEdge.changeEdgeNumber(direction);
@@ -521,7 +502,7 @@ public class Minkowski {
 										do{
 											z++;
 											checkPos = (position+z)%mergeList.size();
-											if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<=angleRound){
+											if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<angleRound){
 												if(!mergeList.get(checkPos).isPolygonA()){
 													helpEdge = new Edge(mergeList.get(checkPos));
 													helpEdge.changeEdgeNumber(direction);
@@ -579,7 +560,7 @@ public class Minkowski {
 										else{
 											checkPos = (position-z);
 										}
-										if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<=angleRound){
+										if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<angleRound){
 											if(!mergeList.get(checkPos).isPolygonA()){
 
 												helpEdge = new Edge(mergeList.get(checkPos));
@@ -593,9 +574,11 @@ public class Minkowski {
 											sameAngle = false;
 										}
 									}while(sameAngle);
+									
 									sList.add(qi);
 									
 									direction= -1*direction;
+									
 									if(hasSameAngleB){
 										z = 0;
 										sameAngle = true;
@@ -607,7 +590,7 @@ public class Minkowski {
 											else{
 												checkPos = (position-z);
 											}
-											if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<=angleRound){
+											if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<angleRound){
 											
 												if(!mergeList.get(checkPos).isPolygonA()){
 
@@ -798,7 +781,7 @@ public class Minkowski {
 									do{
 										z++;
 										checkPos = (position+z)%mergeList.size();
-										if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<=angleRound){
+										if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<angleRound){
 											if(!mergeList.get(checkPos).isPolygonA()){
 												helpEdge = new Edge(mergeList.get(checkPos));
 												helpEdge.changeEdgeNumber(direction);
@@ -809,17 +792,18 @@ public class Minkowski {
 										}
 										else sameAngle = false;
 									}while(sameAngle);
-									
+
 									sList.add(qi);
 									
 									direction = -1*direction;
+
 									if(hasSameAngleB){
 										z = 0;
 										sameAngle = true;
 										do{
 											z++;
 											checkPos = (position+z)%mergeList.size();
-											if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<=angleRound){
+											if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<angleRound){
 												if(!mergeList.get(checkPos).isPolygonA()){
 													helpEdge = new Edge(mergeList.get(checkPos));
 													helpEdge.changeEdgeNumber(direction);
@@ -848,11 +832,14 @@ public class Minkowski {
 				
 			}
 			else if(direction<0){
+
 				//moving backwards through mergeList looking for Qi
 				while(!qiFound){
+
 					if(!mergeList.get(position).isPolygonA()){
 						helpEdge = new Edge(mergeList.get(position));
 						helpEdge.changeEdgeNumber(direction);
+
 						sList.add(helpEdge);
 						bCount++;
 					}
@@ -877,7 +864,7 @@ public class Minkowski {
 										else{
 											checkPos = (position-z);
 										}
-										if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<=angleRound){
+										if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<angleRound){
 											if(!mergeList.get(checkPos).isPolygonA()){
 
 												helpEdge = new Edge(mergeList.get(checkPos));
@@ -908,7 +895,7 @@ public class Minkowski {
 												checkPos = (position-z);
 											}
 											
-											if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<=angleRound){
+											if(Math.abs(mergeList.get(checkPos).getEdgeAngle()-mergeList.get(position).getEdgeAngle())<angleRound){
 												if(!mergeList.get(checkPos).isPolygonA()){
 
 													helpEdge = new Edge(mergeList.get(checkPos));
@@ -933,6 +920,7 @@ public class Minkowski {
 						}
 					}
 					position= (position + direction)%mergeList.size();
+
 					if(position < 0){
 						position = mergeList.size()-1;
 					}
@@ -984,7 +972,7 @@ public class Minkowski {
 						next = rList.size()-1;
 					}
 					if(next>rList.size()-1){
-						next = 0;	
+						next = 0;
 					}
 				}
 			}
@@ -1019,8 +1007,6 @@ public class Minkowski {
 	
 	private static void linkEdgeLists(List<Edge> msEdgeList, List<Edge> nextEdgeList, List<Edge> polyASortList, boolean closePolygon) {
 		
-		boolean printData = false;
-		
 		int i = 0;
 		Edge helpEdge;
 		
@@ -1034,6 +1020,7 @@ public class Minkowski {
 		i = msEdgeList.size()-1;
 		
 		if(msEdgeList.get(i).getEdgeNumber()<0&&msEdgeList.get(i).isPolygonA())excessiveEdgesAPositive = false;
+
 		while(i>=0 && !msEdgeList.get(i).isPolygonA()){
 			i--;
 		}
@@ -1280,8 +1267,6 @@ public class Minkowski {
 	private static List<List<Edge>> makeTrackLineTrips(List<Edge> mList) {
 		
 		int i = 0; //number of Minkowski sums obtained
-		int j = 0; //number of track line trips with nj number of edges in track line trip j;
-		int k = 0; //index of each track line trip
 		
 		List<List<Edge>> trackLineTripList = new ArrayList <>();
 		List<Edge> trackLineTrip = new ArrayList<>();
@@ -1301,13 +1286,11 @@ public class Minkowski {
 				tjk = mList.get(i);
 				trackLineTrip.add(tjk);
 				i++;
-				k++;
 				
 				while(i< mList.size() && !mList.get(i).isAdditional() && mList.get(i).getEdgeNumber()>0){
 					tjk = mList.get(i);
 					trackLineTrip.add(tjk);
 					i++;
-					k++;
 				}
 				
 			}
@@ -1445,7 +1428,7 @@ public class Minkowski {
 								intersectionList.add(new TripIntersection(edgeR.getEndPoint(),edgeK, false ));
 							}
 						}
-						else if(edgeK.testIntersect(edgeR)){
+						else if(edgeK.testIntersectMink(edgeR)){
 							
 							intersectionPoint = edgeK.calcIntersection(edgeR);
 							
@@ -1523,9 +1506,7 @@ public class Minkowski {
 			}
 			System.out.println(aantalFragmentEdges);
 		}
-		if(drawFigures){
-			ComplexPolygonStage.addTrackLineTrips(fragmentList);
-		}
+		ComplexPolygonStage.addTrackLineTrips(fragmentList);
 		//step 3
 		
 		int numberOfFragments = fragmentList.size();
@@ -1729,7 +1710,7 @@ public class Minkowski {
 		List<List<Coordinate>> nfpCycleList = nfp.getNfpPolygonsList();
 		
 		boolean faultyCycle = false;
-		int j, f, k;
+		int j, f;
 		
 		for(int i= 0; i< nfpCycleList.size(); i++){
 			faultyCycle = false;
@@ -1757,4 +1738,23 @@ public class Minkowski {
 		
 	}
 
+	/**
+	 * Enable the print data to print out all data and steps of the Minkowski sums method
+	 * @param print boolean to enable or disable printmode
+	 */
+	public static void enablePrintData(boolean print){
+		printMinkData = print;
+		printEdgeListData = print;
+		printBoundaryData = print;
+	}
+	
+	
+	/**
+	 * Configure the round if problems arise caused by rounding
+	 * 
+	 * @param round the new round
+	 */
+	public static void adjustRound(double round){
+		Coordinate.round = round;
+	}
 }

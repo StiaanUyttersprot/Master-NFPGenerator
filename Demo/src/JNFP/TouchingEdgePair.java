@@ -1,4 +1,4 @@
-package NFPGenerator;
+package JNFP;
 
 /**
  * Pairs of edges that are touching used in the orbiting method are

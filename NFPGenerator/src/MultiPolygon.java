@@ -861,12 +861,12 @@ public class MultiPolygon {
 					nextPossibleSpotVector.trimFeasibleVector(orbPoly, this, true);
 					nextPossibleSpotVector.trimFeasibleVector(this, orbPoly, false);
 					
-					if(nextPossibleSpotVector.getLengthSquared()<round)break;
+					if(nextPossibleSpotVector.getLengthSquared()<=round)break;
 					
 					orbPoly.translate(nextPossibleSpotVector);
 					currentStartPoint.translate(nextPossibleSpotVector);
 				}
-				if(nextPossibleSpotVector.getLengthSquared()<round){
+				if(nextPossibleSpotVector.getLengthSquared()<=round){
 					//it wil not lead to a start point
 				}
 				else if(currentStartPoint.equals(possibleStartEdge.getEndPoint())&&!polygonsIntersectPointInPolygon(this, orbPoly)){
@@ -935,8 +935,8 @@ public class MultiPolygon {
 						nextPossibleSpotVector.trimFeasibleVector(this, orbPoly, false);
 						orbPoly.translate(nextPossibleSpotVector);
 					}while(!currentStartPoint.equals(possibleStartOrbEdge.getEndPoint())&&(polygonsIntersectPointInPolygon(this, orbPoly))
-							&& nextPossibleSpotVector.getLengthSquared()>=round);
-					if(nextPossibleSpotVector.getLengthSquared()<round){
+							&& nextPossibleSpotVector.getLengthSquared()>round);
+					if(nextPossibleSpotVector.getLengthSquared()<=round){
 						//it wil not lead to a start point
 					}
 					else if(currentStartPoint.equals(possibleStartOrbEdge.getEndPoint())&&!polygonsIntersectPointInPolygon(this, orbPoly)){

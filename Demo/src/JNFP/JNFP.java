@@ -1,4 +1,4 @@
-package NFPGenerator;
+package JNFP;
 
 
 import java.io.File;
@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
  * @author Stiaan Uyttersprot
  *
  */
-public class NFPGenerator {
+public class JNFP {
 
 	/**
 	 * Generate the NFP using the orbiting method using a fixed round (1e-4).
@@ -25,8 +25,8 @@ public class NFPGenerator {
 		MultiPolygon statPoly = new MultiPolygon(statPolyFile);
 		MultiPolygon orbPoly = new MultiPolygon(orbPolyFile);
 		
-		String nfp = Orbiting.generateNFP(statPoly, orbPoly);
-		return nfp;
+		NoFitPolygon nfp = Orbiting.generateNFP(statPoly, orbPoly);
+		return nfp.toString();
 	}
 	
 	/**
@@ -40,8 +40,8 @@ public class NFPGenerator {
 		Orbiting.adjustRound(1e-4);
 		MultiPolygon statPoly = new MultiPolygon(statPolyFile);
 		MultiPolygon orbPoly = new MultiPolygon(orbPolyFile);
-		String nfp = Orbiting.generateNFP(statPoly, orbPoly);
-		return nfp;
+		NoFitPolygon nfp = Orbiting.generateNFP(statPoly, orbPoly);
+		return nfp.toString();
 	}
 	/**
 	 * Generate the NFP using the Minkowski sums method using a fixed round (1e-4)

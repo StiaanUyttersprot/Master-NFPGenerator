@@ -1,4 +1,4 @@
-package NFPGenerator;
+package JNFP;
 
 /**
  *	The Edge class describes an edge given by a start- and endpoint

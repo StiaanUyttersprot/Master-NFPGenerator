@@ -1,4 +1,4 @@
-package NFPGenerator;
+package JNFP;
 /**
  * this class describes a vector starting in the origin
  * @author Stiaan Uyttersprot

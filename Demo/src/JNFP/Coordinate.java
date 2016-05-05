@@ -1,4 +1,4 @@
-package NFPGenerator;
+package JNFP;
 
 /**
  * the class used for storing and using a coordinate

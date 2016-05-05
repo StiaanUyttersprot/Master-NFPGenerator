@@ -1,4 +1,4 @@
-package NFPGenerator;
+package JNFP;
 
 /**
  * Used in the Minkowski sums method.

@@ -203,7 +203,7 @@ public class BDMain {
 //			System.out.println("Terashima1");
 //			System.out.println("---------------");
 //			generateNFPsForList(listOfFilesT1, 1);
-//			
+			
 //			System.out.println("Terashima1");
 //			System.out.println("---------------");
 //			generateNFPsForList(listOfFilesT1, 1);
@@ -212,65 +212,65 @@ public class BDMain {
 //			System.out.println("---------------");
 //			generateNFPsForList(listOfFilesT2, 1);
 			
-			System.out.println("albano");
-			System.out.println("---------------");
-			generateNFPsForList(albano, 4);
-			
-			System.out.println("blaz");
-			System.out.println("---------------");
-			generateNFPsForList(blaz, 4);
-			
-			System.out.println("dagli");
-			System.out.println("---------------");
-			generateNFPsForList(dagli, 4);
-			
-			System.out.println("dighe1");
-			System.out.println("---------------");
-			generateNFPsForList(dighe1, 4);
-			
-			System.out.println("dighe2");
-			System.out.println("---------------");
-			generateNFPsForList(dighe2, 4);
-			
-			System.out.println("fu");
-			System.out.println("---------------");
-			generateNFPsForList(fu, 4);
-			
-			System.out.println("han");
-			System.out.println("---------------");
-			generateNFPsForList(han, 4);
-			
+//			System.out.println("albano");
+//			System.out.println("---------------");
+//			generateNFPsForList(albano, 4);
+//			
+//			System.out.println("blaz");
+//			System.out.println("---------------");
+//			generateNFPsForList(blaz, 4);
+//			
+//			System.out.println("dagli");
+//			System.out.println("---------------");
+//			generateNFPsForList(dagli, 4);
+//			
+//			System.out.println("dighe1");
+//			System.out.println("---------------");
+//			generateNFPsForList(dighe1, 4);
+//			
+//			System.out.println("dighe2");
+//			System.out.println("---------------");
+//			generateNFPsForList(dighe2, 4);
+//			
+//			System.out.println("fu");
+//			System.out.println("---------------");
+//			generateNFPsForList(fu, 4);
+//			
+//			System.out.println("han");
+//			System.out.println("---------------");
+//			generateNFPsForList(han, 4);
+//			
 			System.out.println("jakobs1");
 			System.out.println("---------------");
 			generateNFPsForList(jakobs1, 4);
-			
-			System.out.println("jakobs2");
-			System.out.println("---------------");
-			generateNFPsForList(jakobs2, 4);
-			
-			System.out.println("mao");
-			System.out.println("---------------");
-			generateNFPsForList(mao, 4);
-			
-			System.out.println("marques");
-			System.out.println("---------------");
-			generateNFPsForList(marques, 4);
-			
-			System.out.println("shapes0");
-			System.out.println("---------------");
-			generateNFPsForList(shapes0, 4);
-			
-			System.out.println("shapes1");
-			System.out.println("---------------");
-			generateNFPsForList(shapes1, 4);
-			
-			System.out.println("shirts");
-			System.out.println("---------------");
-			generateNFPsForList(shirts, 4);
-			
-			System.out.println("swim");
-			System.out.println("---------------");
-			generateNFPsForList(swim, 4);
+//			
+//			System.out.println("jakobs2");
+//			System.out.println("---------------");
+//			generateNFPsForList(jakobs2, 4);
+//			
+//			System.out.println("mao");
+//			System.out.println("---------------");
+//			generateNFPsForList(mao, 4);
+//			
+//			System.out.println("marques");
+//			System.out.println("---------------");
+//			generateNFPsForList(marques, 4);
+//			
+//			System.out.println("shapes0");
+//			System.out.println("---------------");
+//			generateNFPsForList(shapes0, 4);
+//			
+//			System.out.println("shapes1");
+//			System.out.println("---------------");
+//			generateNFPsForList(shapes1, 4);
+//			
+//			System.out.println("shirts");
+//			System.out.println("---------------");
+//			generateNFPsForList(shirts, 4);
+//			
+//			System.out.println("swim");
+//			System.out.println("---------------");
+//			generateNFPsForList(swim, 4);
 //			
 //			System.out.println("polygons_3");
 //			System.out.println("---------------");
@@ -410,7 +410,7 @@ public class BDMain {
 		int n = 0;
 		
 		List<MultiPolygon> polygonsList = new ArrayList<>();
-		int numberOfPolys = 100;
+		int numberOfPolys = 10000;
 		MultiPolygon original;
 		MultiPolygon inverse;
 		MultiPolygon ninety;
@@ -481,7 +481,7 @@ public class BDMain {
 		System.out.println("infinite stuck: " + Minkowski.numberStuckInfinite);		
 		System.out.println("duration: " + duration + " ms");
 		System.out.println("total itterations: " + totalIts);
-		System.out.println("Memory used: " + diffMemory);
+		System.out.println("Memory used: " + endMemory);
 		Minkowski.numberOfFails = 0;
 		Minkowski.numberStuckInfinite = 0;
 		

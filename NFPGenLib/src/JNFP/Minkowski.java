@@ -1,4 +1,4 @@
-package NFPGenerator;
+package JNFP;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

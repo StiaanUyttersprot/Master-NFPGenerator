@@ -1,4 +1,4 @@
-package NFPGenerator;
+package JNFP;
 import java.util.ArrayList;
 import java.util.List;
 

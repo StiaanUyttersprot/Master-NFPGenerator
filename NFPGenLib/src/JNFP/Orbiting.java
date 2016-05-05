@@ -1,4 +1,4 @@
-package NFPGenerator;
+package JNFP;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -277,5 +277,8 @@ public class Orbiting {
 	 */
 	public static void adjustRound(double round){
 		Coordinate.round = round;
+		Edge.round = round;
+		MultiPolygon.round = round;
+		TouchingEdgePair.round = round;
 	}
 }

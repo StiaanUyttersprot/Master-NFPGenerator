@@ -75,7 +75,7 @@ public class MinkMain {
 
 		
 		List<NoFitPolygon> nfpList = new ArrayList<>();
-		
+	/*	
 		File thesisAData = new File("thesisexA.txt");
 		File thesisBData = new File("thesisexB.txt");
 		
@@ -118,11 +118,11 @@ public class MinkMain {
 		
 		List<MultiPolygon> polygonsT1 = new ArrayList<>();
 		List<MultiPolygon> polygonsT2 = new ArrayList<>();
-		
+		*/
 		File folder = new File(Terashima1);
 		File[] listOfFilesT1 = folder.listFiles();
 		
-		folder = new File(Terashima2);
+		/*folder = new File(Terashima2);
 		File[] listOfFilesT2 = folder.listFiles();
 		
 		folder = new File(albano);
@@ -199,13 +199,13 @@ public class MinkMain {
 		
 		folder = new File(swim);
 		File[] swim = folder.listFiles();
-
+*/
 		if(testMass){
-			Coordinate.round = 0;
+			Coordinate.round = 1;
 			System.out.println("Terashima1");
 			System.out.println("---------------");
 			generateNFPsForList(listOfFilesT1, 1);
-			
+			/*
 			System.out.println("Terashima1");
 			System.out.println("---------------");
 			generateNFPsForList(listOfFilesT1, 1);
@@ -273,7 +273,7 @@ public class MinkMain {
 			System.out.println("swim");
 			System.out.println("---------------");
 			generateNFPsForList(swim, 4);
-			
+			*/
 //			System.out.println("polygons_3");
 //			System.out.println("---------------");
 //			generateNFPsForList(polygons_3, 4);
@@ -320,10 +320,10 @@ public class MinkMain {
 		
 		if(testSpecial){
 			
-			System.out.println("speciale gevallen");
-			System.out.println("----------------------");
-			Minkowski.generateMinkowskiNFP(new MultiPolygon(thesisAData), new MultiPolygon(thesisBData)); //correct
-			totalIts++;
+//			System.out.println("speciale gevallen");
+//			System.out.println("----------------------");
+//			Minkowski.generateMinkowskiNFP(new MultiPolygon(thesisAData), new MultiPolygon(thesisBData)); //correct
+//			totalIts++;
 			
 //			Minkowski.generateMinkowskiNFP(new MultiPolygon(simple2Data), new MultiPolygon(simple1Data)); //correct
 //			totalIts++;
@@ -415,7 +415,7 @@ public class MinkMain {
 		int n = 0;
 		
 		List<MultiPolygon> polygonsList = new ArrayList<>();
-		int numberOfPolys = 100;
+		int numberOfPolys = 10000;
 		MultiPolygon original;
 		MultiPolygon inverse;
 		MultiPolygon ninety;
@@ -479,7 +479,6 @@ public class MinkMain {
 			
 		}
 		long endMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-		long diffMemory = endMemory - startMemory;
 		
 		endTime = System.currentTimeMillis();
 		duration = (endTime - startTime);
@@ -488,7 +487,7 @@ public class MinkMain {
 //		System.out.println("infinite stuck: " + Minkowski.numberStuckInfinite);		
 		System.out.println("duration: " + duration + " ms");
 		System.out.println("total itterations: " + totalIts);
-		System.out.println("Memory used: " + diffMemory);
+		System.out.println("Memory used: " + endMemory);
 		System.out.println("average number of sides: " + MultiPolygon.totalCoords/(double)(n*rotations));
 		
 		Minkowski.numberOfFails = 0;

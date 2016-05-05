@@ -44,7 +44,13 @@ public class OrbitMain {
 		File folder;
 		System.out.println("Orbiting tests");
 		
+		double round = 0;
+		Coordinate.round = round;
+		Edge.round = round;
+		MultiPolygon.round = 1e-14;
+		TouchingEdgePair.round = round;
 		
+/*	
 		File convex1Data = new File("Convex1.txt");
 		File convex2Data = new File("Convex2.txt");
 
@@ -82,10 +88,10 @@ public class OrbitMain {
 		File jigsaw1Data = new File("Jigsaw1.txt");
 		File jigsaw2Data = new File("Jigsaw2.txt");
 		
-		
-		folder = new File(Terashima1);
+		*/
+		folder = new File(Terashima2);
 		File[] listOfFilesT1 = folder.listFiles();
-		
+		/*
 		folder = new File(Terashima2);
 		File[] listOfFilesT2 = folder.listFiles();
 		
@@ -122,6 +128,18 @@ public class OrbitMain {
 		folder = new File(marques);
 		File[] marques = folder.listFiles();
 		
+		folder = new File(shapes0);
+		File[] shapes0 = folder.listFiles();
+		
+		folder = new File(shapes1);
+		File[] shapes1 = folder.listFiles();
+		
+		folder = new File(shirts);
+		File[] shirts = folder.listFiles();
+		
+		folder = new File(swim);
+		File[] swim = folder.listFiles();
+		
 		folder = new File(polygons_3);
 		File[] polygons_3 = folder.listFiles();
 		
@@ -152,25 +170,15 @@ public class OrbitMain {
 		folder = new File(polygons_1000);
 		File[] polygons_1000 = folder.listFiles();
 		
-		folder = new File(shapes0);
-		File[] shapes0 = folder.listFiles();
 		
-		folder = new File(shapes1);
-		File[] shapes1 = folder.listFiles();
-		
-		folder = new File(shirts);
-		File[] shirts = folder.listFiles();
-		
-		folder = new File(swim);
-		File[] swim = folder.listFiles();
-		
-		boolean testMass = false;
+*/		
+		boolean testMass = true;
 		if(testMass){
 			
 			System.out.println("Terashima1");
 			System.out.println("---------------");
 			generateNFPsForList(listOfFilesT1, 1);
-			
+			/*
 			System.out.println("Terashima1");
 			System.out.println("---------------");
 			generateNFPsForList(listOfFilesT1, 1);
@@ -288,7 +296,7 @@ public class OrbitMain {
 
 		startTime = System.currentTimeMillis();
 //		
-		boolean specialTestSet = true;
+		boolean specialTestSet = false;
 		if(specialTestSet){
 			System.out.println("speciale gevallen");
 			System.out.println("----------------------");
@@ -329,9 +337,9 @@ public class OrbitMain {
 //			Orbiting.generateNFP(new MultiPolygon(jigsaw1Data), new MultiPolygon(jigsaw2Data));
 //			totalIts++;
 			
-			NoFitPolygon nfp = Orbiting.generateNFP(new MultiPolygon(mink1Data), new MultiPolygon(mink2Data));
-			System.out.println(nfp.toString());
-			totalIts++;	
+//			NoFitPolygon nfp = Orbiting.generateNFP(new MultiPolygon(mink1Data), new MultiPolygon(mink2Data));
+//			System.out.println(nfp.toString());
+//			totalIts++;	
 			
 			endTime = System.currentTimeMillis();
 			duration = (endTime - startTime);
@@ -358,7 +366,7 @@ public class OrbitMain {
 		
 		List<MultiPolygon> polygonsList = new ArrayList<>();
 		
-		int numberOfPolys = 100;
+		int numberOfPolys = 1000;
 		MultiPolygon original;
 		MultiPolygon inverse;
 		MultiPolygon ninety;
@@ -411,7 +419,6 @@ public class OrbitMain {
 
 		startTime = System.currentTimeMillis();
 
-		long startMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 		for (MultiPolygon stat : polygonsList) {
 
 			for (MultiPolygon orb : polygonsList) {
@@ -423,7 +430,6 @@ public class OrbitMain {
 			
 		}
 		long endMemory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-		long diffMemory = endMemory - startMemory;
 		endTime = System.currentTimeMillis();
 		duration = (endTime - startTime);
 		System.out.println("current total: " + totalIts);
@@ -431,7 +437,7 @@ public class OrbitMain {
 //		System.out.println("infinite stuck: " + Orbiting.numberStuckInfinite);		
 		System.out.println("duration: " + duration + " ms");
 		System.out.println("total itterations: " + totalIts);
-		System.out.println("Memory used: " + diffMemory);
+		System.out.println("Memory used: " + endMemory);
 		Orbiting.numberOfFails = 0;
 		Orbiting.numberStuckInfinite = 0;
 		Orbiting.numberOfSecFails = 0;

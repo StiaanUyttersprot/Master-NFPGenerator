@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.canvas.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="781.0" prefWidth="1033.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainStageListener">
+   <children>
+      <SplitPane dividerPositions="0.75" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="734.0" prefWidth="1010.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="626.0" prefWidth="1028.0">
+               <children>
+                  <SplitPane fx:id="mainSplitPane" dividerPositions="0.5" layoutX="-7.0" layoutY="-2.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="514.0" prefWidth="1031.0" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                      <AnchorPane fx:id="poly1Anchor" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="504.0" />
+                      <AnchorPane fx:id="poly2Anchor" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="532.0" prefWidth="504.0" />
+                    </items>
+                  </SplitPane>
+                  <Button fx:id="startOrbButton" layoutX="181.0" layoutY="534.0" mnemonicParsing="false" onAction="#startOrbEvent" text="start" />
+                  <Button fx:id="nextOrbButton" layoutX="261.0" layoutY="534.0" mnemonicParsing="false" onAction="#nextOrbEvent" text="next" />
+                  <Button fx:id="prevOrbButton" layoutX="221.0" layoutY="534.0" mnemonicParsing="false" onAction="#prevOrbEvent" text="prev" />
+                  <Button fx:id="endOrbButton" layoutX="300.0" layoutY="534.0" mnemonicParsing="false" onAction="#endOrbEvent" text="end" />
+                  <Button fx:id="startMinkButton" layoutX="687.0" layoutY="534.0" mnemonicParsing="false" onAction="#startMinkEvent" text="start" />
+                  <Button fx:id="prevMinkButton" layoutX="727.0" layoutY="534.0" mnemonicParsing="false" onAction="#prevMinkEvent" text="prev" />
+                  <Button fx:id="nextMinkButton" layoutX="767.0" layoutY="534.0" mnemonicParsing="false" onAction="#nextMinkEvent" text="next" />
+                  <Button fx:id="endMinkButton" layoutX="806.0" layoutY="534.0" mnemonicParsing="false" onAction="#endMinkEvent" text="end" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="261.0" prefWidth="1028.0">
+               <children>
+                  <SplitPane dividerPositions="0.29797979797979796" layoutX="132.0" layoutY="-7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="194.0" prefWidth="1008.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <Button fx:id="generateButton" layoutX="80.0" layoutY="24.0" mnemonicParsing="false" onAction="#onGenerateClickEvent" prefHeight="49.0" prefWidth="138.0" text="Generate NFP" />
+                              <Button fx:id="clearButton" layoutX="80.0" layoutY="95.0" mnemonicParsing="false" onAction="#onClearClickEvent" prefHeight="57.0" prefWidth="138.0" text="Clear" />
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <SplitPane dividerPositions="0.5" layoutX="235.0" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="192.0" prefWidth="703.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <items>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                       <children>
+                                          <TitledPane animated="false" layoutX="73.0" layoutY="-8.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="190.0" prefWidth="348.0" text="Orbiting Info" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <content>
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                   <children>
+                                                      <TextArea fx:id="orbText" editable="false" layoutX="35.0" layoutY="-29.0" prefHeight="162.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                         <font>
+                                                            <Font size="18.0" />
+                                                         </font></TextArea>
+                                                   </children></AnchorPane>
+                                            </content>
+                                          </TitledPane>
+                                       </children>
+                                    </AnchorPane>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                       <children>
+                                          <TitledPane animated="false" layoutX="51.0" layoutY="-16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="190.0" prefWidth="347.0" text="Minkowski info" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <content>
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                   <children>
+                                                      <TextArea fx:id="minkText" editable="false" layoutX="41.0" layoutY="-19.0" prefHeight="162.0" prefWidth="353.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                         <font>
+                                                            <Font size="18.0" />
+                                                         </font></TextArea>
+                                                   </children></AnchorPane>
+                                            </content>
+                                          </TitledPane>
+                                       </children>
+                                    </AnchorPane>
+                                </items>
+                              </SplitPane>
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
