@@ -156,6 +156,9 @@ public class MainStageListener implements Initializable {
 			long duration = endTime - startTime;
 			String orbInfo = "duration: " + duration + "ms\n";
 			orbText.setText(orbInfo);
+			if(Orbiting.fault){
+				orbText.appendText("error caused by rounding mistake");
+			}
 
 			NoFitPolygonStages.drawAllNFP();
 			groupOrbList = new ArrayList<>();
@@ -179,6 +182,9 @@ public class MainStageListener implements Initializable {
 			duration = endTime - startTime;
 			String minkInfo = "duration: " + duration + "ms\n";
 			minkText.setText(minkInfo);
+			if(Minkowski.biggestCycle<2){
+				minkText.appendText("error caused by rounding mistake");
+			}
 
 			ComplexPolygonStage.drawAllComplexPolygons();
 			groupMinkList = new ArrayList<>();

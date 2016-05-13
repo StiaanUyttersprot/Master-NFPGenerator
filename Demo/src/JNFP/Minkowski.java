@@ -23,6 +23,7 @@ public class Minkowski {
 	private static double angleRound = 1e-5;
 	
 	protected static Boolean clockwiseContainsTurningpoints;
+	public static int biggestCycle = 0;
 	
 	/**
 	 * Given two polygons, calculates the resulting no-fit polygon using the Minkowski sums method.
@@ -38,7 +39,7 @@ public class Minkowski {
 		
 		NoFitPolygon nfp = null;
 		clockwiseContainsTurningpoints = null;
-
+		biggestCycle = 0;
 		
 		//---------------------------------------------------------------------------------------------
 		//Generate Minkowski sum edge list
@@ -1726,15 +1727,20 @@ public class Minkowski {
 			}
 			if(faultyCycle){
 				nfpCycleList.get(i).clear();
-			}
+			} 
 		}
 		f = 0;
 		while( f <nfpCycleList.size()){
 			if(nfpCycleList.get(f).size()==0){
 				nfpCycleList.remove(f);
 			}
-			else f++;	
+			else f++;
 		}
+		for(List<Coordinate> cycle:nfpCycleList){
+			if(cycle.size()>biggestCycle)biggestCycle = cycle.size();
+		}
+		
+		
 		
 	}
 

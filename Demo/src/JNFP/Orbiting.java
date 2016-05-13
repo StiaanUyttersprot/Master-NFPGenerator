@@ -16,6 +16,7 @@ public class Orbiting {
 	protected static int numberOfFails = 0;
 	protected static int numberOfSecFails = 0;
 	protected static int numberStuckInfinite = 0;
+	public static boolean fault = false;
 
 	/**
 	 * Given two polygons, calculates the resulting no-fit polygon using the Orbiting method.
@@ -28,6 +29,8 @@ public class Orbiting {
 	 */
 	public static NoFitPolygon generateNFP(MultiPolygon statPoly, MultiPolygon orbPoly){
 
+		fault = false;
+		
 		Coordinate bottomCoord = statPoly.findBottomCoord();
 		Coordinate topCoord = orbPoly.findTopCoord();
 		
@@ -126,7 +129,7 @@ public class Orbiting {
 		Coordinate startPoint = new Coordinate(orbPoly.getOuterPolygon()[0]);
 		Coordinate currentPoint = orbPoly.getOuterPolygon()[0];
 
-		int aantalStappen = 10000;
+		int aantalStappen = 100;
 		int stap = 0;
 		// start the orbiting
 		do{
@@ -230,6 +233,7 @@ public class Orbiting {
 				if(outer){
 					System.err.println("Something went wrong\n forming the outer path of the NFP, no feasible vectors were found");
 					numberOfFails++;
+					fault = true;
 				}
 				else{
 //					System.out.println("stuck inner, mostly marks a perfect fit");
@@ -266,6 +270,8 @@ public class Orbiting {
 			System.err.println("stuck, the startpoint is never reached when orbiting");
 			numberOfFails++;
 			numberStuckInfinite++;
+			fault = true;
+//			NoFitPolygonStages.nfpToDraw = new ArrayList<>();
 		}
 		nfp.removeLastDoubleCoordinate();
 		//NoFitPolygonStages.addNFP(new NoFitPolygon(nfp));

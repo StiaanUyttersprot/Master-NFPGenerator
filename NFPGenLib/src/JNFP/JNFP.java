@@ -44,7 +44,7 @@ public class JNFP {
 		return nfp;
 	}
 	/**
-	 * Generate the NFP using the Minkowski sums method using a fixed round (1e-4)
+	 * Generate the NFP using the Minkowski sums method using a fixed round (1e-1)
 	 * @param polyAFile polygon A
 	 * @param polyBFile polygon B
 	 * @return the NFP in string form
@@ -55,6 +55,46 @@ public class JNFP {
 		MultiPolygon polyA = new MultiPolygon(polyAFile);
 		MultiPolygon polyB = new MultiPolygon(polyBFile);
 		
+		NoFitPolygon nfp = Minkowski.generateMinkowskiNFP(polyA, polyB);
+		return nfp.toString();
+	}
+	
+	/**
+	 * Generate the NFP using the orbiting method using a fixed round (1e-4).
+	 * This is the general method, the orbiting method provides the best results, so it is also used here.
+	 * @param statPoly the stationary polygon
+	 * @param orbPoly the orbiting polygon 
+	 * @return the NFP in string form
+	 * @throws FileNotFoundException when the file is not found
+	 */
+	public static String GenerateNFP(MultiPolygon statPoly, MultiPolygon orbPoly) throws FileNotFoundException{
+		Orbiting.adjustRound(1e-4);
+		
+		String nfp = Orbiting.generateNFP(statPoly, orbPoly);
+		return nfp;
+	}
+	
+	/**
+	 * Generate the NFP using the orbiting method using a fixed round (1e-4)
+	 * @param statPoly the stationary polygon
+	 * @param orbPoly the orbiting polygon
+	 * @return the NFP in string form
+	 * @throws FileNotFoundException when the file is not found
+	 */
+	public static String GenerateOrbitingNFP(MultiPolygon statPoly, MultiPolygon orbPoly) throws FileNotFoundException{
+		Orbiting.adjustRound(1e-4);
+		String nfp = Orbiting.generateNFP(statPoly, orbPoly);
+		return nfp;
+	}
+	/**
+	 * Generate the NFP using the Minkowski sums method using a fixed round (1e-1)
+	 * @param polyA polygon A
+	 * @param polyB polygon B
+	 * @return the NFP in string form
+	 * @throws FileNotFoundException when the file is not found
+	 */
+	public static String GenerateMinkowskiNFP(MultiPolygon polyA, MultiPolygon polyB) throws FileNotFoundException{
+		Minkowski.adjustRound(0.1);
 		NoFitPolygon nfp = Minkowski.generateMinkowskiNFP(polyA, polyB);
 		return nfp.toString();
 	}
